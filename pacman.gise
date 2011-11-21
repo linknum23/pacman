@@ -26,13 +26,13 @@
     <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="dot.prj"/>
     <file xil_pn:fileType="FILE_XST_STX" xil_pn:name="dot.stx"/>
     <file xil_pn:fileType="FILE_XST" xil_pn:name="dot.xst"/>
-    <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="dot_tb_beh.prj"/>
     <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_ISIM_EXE" xil_pn:name="dot_tb_isim_beh.exe"/>
-    <file xil_pn:fileType="FILE_ISIM_MISC" xil_pn:name="dot_tb_isim_beh.wdb"/>
     <file xil_pn:fileType="FILE_LOG" xil_pn:name="fuse.log"/>
     <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="isim"/>
     <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_CMD" xil_pn:name="isim.cmd"/>
-    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_LOG" xil_pn:name="isim.log"/>
+    <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="vga1024x768_tb_beh.prj"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_ISIM_EXE" xil_pn:name="vga1024x768_tb_isim_beh.exe"/>
+    <file xil_pn:fileType="FILE_ISIM_MISC" xil_pn:name="vga1024x768_tb_isim_beh.wdb"/>
     <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_INI" xil_pn:name="xilinxsim.ini"/>
     <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="xst"/>
   </files>
@@ -42,24 +42,23 @@
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
     </transform>
-    <transform xil_pn:end_ts="1321901531" xil_pn:in_ck="-869252212730481345" xil_pn:name="TRAN_copyAbstractToPostAbstractSimulation" xil_pn:start_ts="1321901531">
+    <transform xil_pn:end_ts="1321911909" xil_pn:in_ck="2544309009464820815" xil_pn:name="TRAN_copyAbstractToPostAbstractSimulation" xil_pn:start_ts="1321911909">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
-      <status xil_pn:value="OutOfDateForInputs"/>
-      <status xil_pn:value="OutOfDateForOutputs"/>
-      <status xil_pn:value="InputAdded"/>
-      <status xil_pn:value="InputChanged"/>
-      <status xil_pn:value="OutputChanged"/>
+      <outfile xil_pn:name="big_dot.vhd"/>
       <outfile xil_pn:name="clock_divider.vhd"/>
       <outfile xil_pn:name="dot.vhd"/>
       <outfile xil_pn:name="dot_tb.vhd"/>
+      <outfile xil_pn:name="game_grid.vhd"/>
       <outfile xil_pn:name="top_level.vhd"/>
+      <outfile xil_pn:name="vga1024x768.vhd"/>
+      <outfile xil_pn:name="vga1024x768_tb.vhd"/>
     </transform>
-    <transform xil_pn:end_ts="1321901061" xil_pn:name="TRAN_xawsToSimhdl" xil_pn:prop_ck="740533422754737116" xil_pn:start_ts="1321901061">
+    <transform xil_pn:end_ts="1321911630" xil_pn:name="TRAN_xawsToSimhdl" xil_pn:prop_ck="-6608377395769432361" xil_pn:start_ts="1321911630">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
     </transform>
-    <transform xil_pn:end_ts="1321901061" xil_pn:name="TRAN_schematicsToHdlSim" xil_pn:prop_ck="1312729728972763934" xil_pn:start_ts="1321901061">
+    <transform xil_pn:end_ts="1321911630" xil_pn:name="TRAN_schematicsToHdlSim" xil_pn:prop_ck="-2579185324421255463" xil_pn:start_ts="1321911630">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
     </transform>
@@ -67,45 +66,32 @@
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
     </transform>
-    <transform xil_pn:end_ts="1321901531" xil_pn:in_ck="-869252212730481345" xil_pn:name="TRAN_copyPostAbstractToPreSimulation" xil_pn:start_ts="1321901531">
+    <transform xil_pn:end_ts="1321911909" xil_pn:in_ck="2544309009464820815" xil_pn:name="TRAN_copyPostAbstractToPreSimulation" xil_pn:start_ts="1321911909">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
-      <status xil_pn:value="OutOfDateForInputs"/>
-      <status xil_pn:value="OutOfDateForPredecessor"/>
-      <status xil_pn:value="OutOfDateForOutputs"/>
-      <status xil_pn:value="InputChanged"/>
-      <status xil_pn:value="OutputChanged"/>
+      <outfile xil_pn:name="big_dot.vhd"/>
       <outfile xil_pn:name="clock_divider.vhd"/>
       <outfile xil_pn:name="dot.vhd"/>
       <outfile xil_pn:name="dot_tb.vhd"/>
+      <outfile xil_pn:name="game_grid.vhd"/>
       <outfile xil_pn:name="top_level.vhd"/>
+      <outfile xil_pn:name="vga1024x768.vhd"/>
+      <outfile xil_pn:name="vga1024x768_tb.vhd"/>
     </transform>
-    <transform xil_pn:end_ts="1321901535" xil_pn:in_ck="-869252212730481345" xil_pn:name="TRAN_ISimulateBehavioralModelRunFuse" xil_pn:prop_ck="-1261638197112095984" xil_pn:start_ts="1321901531">
+    <transform xil_pn:end_ts="1321911914" xil_pn:in_ck="2544309009464820815" xil_pn:name="TRAN_ISimulateBehavioralModelRunFuse" xil_pn:prop_ck="-7316530750843492442" xil_pn:start_ts="1321911909">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
-      <status xil_pn:value="OutOfDateForInputs"/>
-      <status xil_pn:value="OutOfDateForProperties"/>
-      <status xil_pn:value="OutOfDateForPredecessor"/>
-      <status xil_pn:value="OutOfDateForOutputs"/>
-      <status xil_pn:value="InputChanged"/>
-      <status xil_pn:value="OutputChanged"/>
-      <outfile xil_pn:name="dot_tb_beh.prj"/>
-      <outfile xil_pn:name="dot_tb_isim_beh.exe"/>
       <outfile xil_pn:name="fuse.log"/>
       <outfile xil_pn:name="isim"/>
-      <outfile xil_pn:name="isim.log"/>
+      <outfile xil_pn:name="vga1024x768_tb_beh.prj"/>
+      <outfile xil_pn:name="vga1024x768_tb_isim_beh.exe"/>
       <outfile xil_pn:name="xilinxsim.ini"/>
     </transform>
-    <transform xil_pn:end_ts="1321901536" xil_pn:in_ck="-2927016347430545461" xil_pn:name="TRAN_ISimulateBehavioralModel" xil_pn:prop_ck="-7170749188670814509" xil_pn:start_ts="1321901535">
+    <transform xil_pn:end_ts="1321911914" xil_pn:in_ck="-2068907698808833103" xil_pn:name="TRAN_ISimulateBehavioralModel" xil_pn:prop_ck="-5145924362089204919" xil_pn:start_ts="1321911914">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
-      <status xil_pn:value="OutOfDateForProperties"/>
-      <status xil_pn:value="OutOfDateForPredecessor"/>
-      <status xil_pn:value="OutOfDateForOutputs"/>
-      <status xil_pn:value="OutputChanged"/>
-      <outfile xil_pn:name="dot_tb_isim_beh.wdb"/>
       <outfile xil_pn:name="isim.cmd"/>
-      <outfile xil_pn:name="isim.log"/>
+      <outfile xil_pn:name="vga1024x768_tb_isim_beh.wdb"/>
     </transform>
   </transforms>
 

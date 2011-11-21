@@ -1,1 +1,1 @@
--intstyle "ise" -incremental -o "/home/bryant/ise_projects/pacman/dot_tb_isim_beh.exe" -prj "/home/bryant/ise_projects/pacman/dot_tb_beh.prj" "work.dot_tb" 
+-intstyle "ise" -incremental -o "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/vga1024x768_tb_isim_beh.exe" -prj "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/vga1024x768_tb_beh.prj" "work.vga1024x768_tb" 

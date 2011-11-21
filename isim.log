@@ -1,5 +1,5 @@
 ISim log file
-Running: /home/bryant/ise_projects/pacman/dot_tb_isim_beh.exe -intstyle ise -gui -tclbatch isim.cmd -wdb /home/bryant/ise_projects/pacman/dot_tb_isim_beh.wdb 
+Running: /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/vga1024x768_tb_isim_beh.exe -intstyle ise -gui -tclbatch isim.cmd -wdb /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/vga1024x768_tb_isim_beh.wdb 
 ISim O.76xd (signature 0x8ddf5b5d)
 WARNING: A WEBPACK license was found.
 WARNING: Please use Xilinx License Configuration Manager to check out a full ISim license.
@@ -11,5 +11,123 @@ Time resolution is 1 ps
 # run 1000 ns
 Simulator is doing circuit initialization process.
 Finished circuit initialization process.
-# exit 0
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# restart
+# run 10.00us
+Simulator is doing circuit initialization process.
+Finished circuit initialization process.
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# restart
+# run 10.00us
+Simulator is doing circuit initialization process.
+Finished circuit initialization process.
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 10.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run all
+Stopped at time : 19804492404 ps : File "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/vga1024x768.vhd" Line 49
 # exit 0
