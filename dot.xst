@@ -1,0 +1,5 @@
+set -tmpdir "/home/bryant/ise_projects/pacman/xst/projnav.tmp"
+set -xsthdpdir "/home/bryant/ise_projects/pacman/xst"
+elaborate
+-ifn dot.prj
+-ifmt mixed

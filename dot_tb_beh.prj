@@ -1,0 +1,2 @@
+vhdl work "dot.vhd"
+vhdl work "dot_tb.vhd"

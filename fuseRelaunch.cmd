@@ -1,0 +1,1 @@
+-intstyle "ise" -incremental -o "/home/bryant/ise_projects/pacman/dot_tb_isim_beh.exe" -prj "/home/bryant/ise_projects/pacman/dot_tb_beh.prj" "work.dot_tb" 

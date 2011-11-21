@@ -1,0 +1,25 @@
+Running: /opt/Xilinx/13.3/ISE_DS/ISE/bin/lin/unwrapped/fuse -intstyle ise -incremental -o /home/bryant/ise_projects/pacman/dot_tb_isim_beh.exe -prj /home/bryant/ise_projects/pacman/dot_tb_beh.prj work.dot_tb 
+ISim O.76xd (signature 0x8ddf5b5d)
+Number of CPUs detected in this system: 2
+Turning on mult-threading, number of parallel sub-compilation jobs: 4 
+Determining compilation order of HDL files
+Parsing VHDL file "/home/bryant/ise_projects/pacman/dot.vhd" into library work
+Parsing VHDL file "/home/bryant/ise_projects/pacman/dot_tb.vhd" into library work
+Starting static elaboration
+Completed static elaboration
+Fuse Memory Usage: 37408 KB
+Fuse CPU Usage: 1450 ms
+Compiling package standard
+Compiling package std_logic_1164
+Compiling package std_logic_arith
+Compiling package std_logic_unsigned
+Compiling package numeric_std
+Compiling architecture behavioral of entity dot [dot_default]
+Compiling architecture behavior of entity dot_tb
+Time Resolution for simulation is 1ps.
+Waiting for 3 sub-compilation(s) to finish...
+Compiled 8 VHDL Units
+Built simulation executable /home/bryant/ise_projects/pacman/dot_tb_isim_beh.exe
+Fuse Memory Usage: 87972 KB
+Fuse CPU Usage: 1670 ms
+GCC CPU Usage: 5030 ms
