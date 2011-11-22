@@ -10,7 +10,7 @@
          <spirit:componentRef spirit:vendor="xilinx.com" spirit:library="ip" spirit:name="dcm_sp" spirit:version="13.1" />
          <spirit:configurableElementValues>
             <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.COMPONENT_NAME">dcm</spirit:configurableElementValue>
-            <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.XAWFILENAME">/home/bryant/ise_projects/pacman/ipcore_dir/dcm.xaw</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.XAWFILENAME">/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/ipcore_dir/dcm.xaw</spirit:configurableElementValue>
          </spirit:configurableElementValues>
          <spirit:vendorExtensions>
             <xilinx:instanceProperties xmlns:xilinx="http://www.xilinx.com">
@@ -59,9 +59,9 @@
                      <xilinx:name>./dcm_flist.txt</xilinx:name>
                      <xilinx:userFileType>txtFlist</xilinx:userFileType>
                      <xilinx:userFileType>txt</xilinx:userFileType>
-                     <xilinx:timeStamp>Mon Nov 21 20:54:50 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Tue Nov 22 04:54:37 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xA5192DCF</xilinx:checkSum>
-                     <xilinx:generationId>generationid_2185497719</xilinx:generationId>
+                     <xilinx:generationId>generationid_2212576300</xilinx:generationId>
                   </xilinx:file>
                </xilinx:fileSet>
             </xilinx:generationHistory>

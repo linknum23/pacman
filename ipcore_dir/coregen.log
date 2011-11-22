@@ -4,7 +4,9 @@ CoreGen has not been configured with any user repositories.
 CoreGen has been configured with the following Xilinx repositories:
  - '/opt/Xilinx/13.3/ISE_DS/ISE/coregen/' [using existing xil_index.xml]
 The IP Catalog has been reloaded.
-Opening project file /home/bryant/ise_projects/pacman/ipcore_dir/coregen.cgp.
+Opening project file
+/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/ipcore_dir/cor
+egen.cgp.
 Recustomize and Generate (Under Original Project Settings)INFO:sim - Generating component instance 'dcm' of 'xilinx.com:ip:dcm_sp:13.1'
    from '/opt/Xilinx/13.3/ISE_DS/ISE/bin/lin/arwz'.
 Customizing IP...
@@ -19,3 +21,18 @@ INFO:sim - Finished FLIST file generation.
 Moving files to output directory...
 Finished moving files to output directory
 Saved CGP file for project 'coregen'.
+Recustomize and Generate (Under Original Project Settings)INFO:sim - Generating component instance 'dcm' of 'xilinx.com:ip:dcm_sp:13.1'
+   from '/opt/Xilinx/13.3/ISE_DS/ISE/bin/lin/arwz'.
+Customizing IP...
+Architecture Wizard completed successfully.
+Finished Customizing.
+Resolving generic values...
+Finished resolving generic values.
+INFO:sim - The selected IP does not support an ASY schematic symbol.
+INFO:sim - Finished generation of ASY schematic symbol.
+Generating FLIST file...
+INFO:sim - Finished FLIST file generation.
+Moving files to output directory...
+Finished moving files to output directory
+Saved CGP file for project 'coregen'.
+Closed project file.

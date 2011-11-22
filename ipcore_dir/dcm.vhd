@@ -7,11 +7,11 @@
 -- \   \   \/     Version : 13.3
 --  \   \         Application : xaw2vhdl
 --  /   /         Filename : dcm.vhd
--- /___/   /\     Timestamp : 11/21/2011 15:54:49
+-- /___/   /\     Timestamp : 11/21/2011 23:54:35
 -- \   \  /  \ 
 --  \___\/\___\ 
 --
---Command: xaw2vhdl-st /home/bryant/ise_projects/pacman/ipcore_dir/./dcm.xaw /home/bryant/ise_projects/pacman/ipcore_dir/./dcm
+--Command: xaw2vhdl-st /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/ipcore_dir/./dcm.xaw /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/ipcore_dir/./dcm
 --Design Name: dcm
 --Device: xc3s500e-5fg320
 --
