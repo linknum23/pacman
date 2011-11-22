@@ -117,6 +117,16 @@ NET "vsync"  LOC = "U3"  ;
 NET "PS2C"  LOC = "R12"  ;
 NET "PS2D"  LOC = "P11"  ;
 
+# PMOD JA
+NET "J<0>"  LOC = "L15"  ;
+NET "J<1>"  LOC = "K12"  ;
+NET "J<2>"  LOC = "L17"  ;
+NET "J<3>"  LOC = "M15"  ;
+NET "J<4>"  LOC = "K13"  ;
+NET "J<5>"  LOC = "L16"  ;
+NET "J<6>"  LOC = "M14"  ;
+NET "J<7>"  LOC = "M16"  ;
+
 #PACE: Start of PACE Area Constraints
 
 #PACE: Start of PACE Prohibit Constraints
