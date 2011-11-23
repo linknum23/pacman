@@ -1,24 +1,51 @@
-Running: /opt/Xilinx/13.3/ISE_DS/ISE/bin/lin/unwrapped/fuse -intstyle ise -incremental -o /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/vga1024x768_tb_isim_beh.exe -prj /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/vga1024x768_tb_beh.prj work.vga1024x768_tb 
+Running: /opt/Xilinx/13.3/ISE_DS/ISE/bin/lin/unwrapped/fuse -intstyle ise -incremental -o /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/top_level_tb_isim_beh.exe -prj /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/top_level_tb_beh.prj work.top_level_tb 
 ISim O.76xd (signature 0x8ddf5b5d)
 Number of CPUs detected in this system: 2
 Turning on mult-threading, number of parallel sub-compilation jobs: 4 
 Determining compilation order of HDL files
+Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/pacage.vhd" into library work
+Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/grid.vhd" into library work
+Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/game_grid.vhd" into library work
 Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/vga1024x768.vhd" into library work
-Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/vga1024x768_tb.vhd" into library work
+Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/ipcore_dir/dcm.vhd" into library work
+Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/grid_display.vhd" into library work
+Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/clock_divider.vhd" into library work
+Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/top_level.vhd" into library work
+Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/top_level_tb.vhd" into library work
 Starting static elaboration
 Completed static elaboration
-Fuse Memory Usage: 36496 KB
-Fuse CPU Usage: 1420 ms
+Fuse Memory Usage: 48152 KB
+Fuse CPU Usage: 1700 ms
 Compiling package standard
 Compiling package std_logic_1164
+Compiling package numeric_std
+Compiling package pacage
 Compiling package std_logic_arith
 Compiling package std_logic_unsigned
+Compiling package vcomponents
+Compiling architecture behavioral of entity clock_divider [clock_divider_default]
+Compiling package textio
+Compiling package vital_timing
+Compiling package vital_primitives
+Compiling package vpkg
+Compiling architecture bufg_v of entity BUFG [bufg_default]
+Compiling architecture ibufg_v of entity IBUFG [\IBUFG("DONT_CARE","0",true,"DEF...]
+Compiling architecture dcm_sp_clock_divide_by_2_v of entity dcm_sp_clock_divide_by_2 [dcm_sp_clock_divide_by_2_default]
+Compiling architecture dcm_sp_maximum_period_check_v of entity dcm_sp_maximum_period_check [\dcm_sp_maximum_period_check("*"...]
+Compiling architecture dcm_sp_maximum_period_check_v of entity dcm_sp_maximum_period_check [\dcm_sp_maximum_period_check("*"...]
+Compiling architecture dcm_sp_clock_lost_v of entity dcm_sp_clock_lost [dcm_sp_clock_lost_default]
+Compiling architecture dcm_sp_v of entity DCM_SP [\DCM_SP(true,"*",true,false,2.0,...]
+Compiling architecture behavioral of entity dcm [dcm_default]
 Compiling architecture behavioral of entity vga_1024x768 [vga_1024x768_default]
-Compiling architecture behavior of entity vga1024x768_tb
+Compiling architecture behavioral of entity game_grid [game_grid_default]
+Compiling architecture behavioral of entity grid_roms [grid_roms_default]
+Compiling architecture behavioral of entity grid_display [grid_display_default]
+Compiling architecture behavioral of entity top_level [top_level_default]
+Compiling architecture behavior of entity top_level_tb
 Time Resolution for simulation is 1ps.
-Waiting for 2 sub-compilation(s) to finish...
-Compiled 7 VHDL Units
-Built simulation executable /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/vga1024x768_tb_isim_beh.exe
-Fuse Memory Usage: 83524 KB
-Fuse CPU Usage: 1540 ms
-GCC CPU Usage: 3070 ms
+Waiting for 9 sub-compilation(s) to finish...
+Compiled 40 VHDL Units
+Built simulation executable /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/top_level_tb_isim_beh.exe
+Fuse Memory Usage: 113936 KB
+Fuse CPU Usage: 2260 ms
+GCC CPU Usage: 2500 ms

@@ -77,7 +77,7 @@ begin
            and vcs >= v_front_offset and vcs < v_back_offset else '0';
 
                                         -- output horizontal and vertical counters
-  hc <= hcs;
-  vc <= vcs;
+  hc <= hcs - h_front_offset - 1 when h_front_offset < hcs else (others=>'1');
+  vc <= vcs - v_front_offset - 1 when v_front_offset < vcs else (others=>'1');
 
 end Behavioral;

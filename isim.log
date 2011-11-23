@@ -1,5 +1,5 @@
 ISim log file
-Running: /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/vga1024x768_tb_isim_beh.exe -intstyle ise -gui -tclbatch isim.cmd -wdb /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/vga1024x768_tb_isim_beh.wdb 
+Running: /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/top_level_tb_isim_beh.exe -intstyle ise -gui -tclbatch isim.cmd -wdb /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/top_level_tb_isim_beh.wdb 
 ISim O.76xd (signature 0x8ddf5b5d)
 WARNING: A WEBPACK license was found.
 WARNING: Please use Xilinx License Configuration Manager to check out a full ISim license.
@@ -10,124 +10,33 @@ Time resolution is 1 ps
 # wave add /
 # run 1000 ns
 Simulator is doing circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/board/roms/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
 Finished circuit initialization process.
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
+at 0 ps, Instance /top_level_tb/uut/board/roms/ : Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+at 0 ps, Instance /top_level_tb/uut/board/roms/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
 # restart
-# run 10.00us
+# run 100.00us
 Simulator is doing circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/board/roms/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
 Finished circuit initialization process.
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
+at 0 ps, Instance /top_level_tb/uut/board/roms/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
 # restart
-# run 10.00us
+# run 100.00us
 Simulator is doing circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/board/roms/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
 Finished circuit initialization process.
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
-# run 10.00us
+at 0 ps, Instance /top_level_tb/uut/board/roms/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
 # run 100.00us
 # run 100.00us
 # run 100.00us
-# run 100.00us
-# run 100.00us
-# run 100.00us
-# run 100.00us
-# run 100.00us
-# run 100.00us
-# run 100.00us
-# run 100.00us
-# run 100.00us
-# run 100.00us
-# run 100.00us
-# run 100.00us
-# run 100.00us
-# run 100.00us
-# run 100.00us
-# run 100.00us
-# run 100.00us
-# run 100.00us
-# run 100.00us
-# run 100.00us
-# run 100.00us
-# run 100.00us
-# run 100.00us
-# run 100.00us
-# run 100.00us
-# run 100.00us
-# run 100.00us
-# run 100.00us
-# run 100.00us
-# run all
-Stopped at time : 19804492404 ps : File "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/vga1024x768.vhd" Line 49
+# run 1000.00us
+# run 3000.00us
+# run 3000.00us
+# run 3000.00us
 # exit 0

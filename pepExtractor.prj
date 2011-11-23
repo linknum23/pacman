@@ -1,1 +1,3 @@
-work	"vga1024x768.vhd"
+work	"game_grid.vhd"
+work	"grid_display.vhd"
+work	"pacage.vhd"

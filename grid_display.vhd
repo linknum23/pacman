@@ -1,261 +1,117 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date:    20:39:49 11/21/2011 
--- Design Name: 
--- Module Name:    grid_display - Behavioral 
--- Project Name: 
--- Target Devices: 
--- Tool versions: 
--- Description: 
---
--- Dependencies: 
---
--- Revision: 
--- Revision 0.01 - File Created
--- Additional Comments: 
---
-----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
+use ieee.std_logic_unsigned.all;
 use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx primitives in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
+use work.pacage.all;
 
 entity grid_display is
-    Port ( dtype : in  STD_LOGIC_VECTOR (4 downto 0);
-           grid_on : in  STD_LOGIC;
-           xpix : in  STD_LOGIC_VECTOR (3 downto 0);
-           ypix : in  STD_LOGIC_VECTOR (3 downto 0);
-           R : out  STD_LOGIC_VECTOR (2 downto 0);
-           G : out  STD_LOGIC_VECTOR (2 downto 0);
-           B : out  STD_LOGIC_VECTOR (1 downto 0));
+    Port ( 
+      clk : in std_logic;
+      rst : in std_logic;
+      current_draw_location : in POINT;
+      pacman_location : in POINT;
+      mode : in std_logic_vector(2 downto 0);
+      valid_location : out std_logic;
+      data_type : out std_logic_vector(4 downto 0);
+      data : out COLOR
+      );
 end grid_display;
 
-
 architecture Behavioral of grid_display is
-type rom_array is array (integer range <>)  
-               of STD_LOGIC_VECTOR (7 downto 0);
-constant rom: rom_array := (
-	--topleft
-	"00000000", 		 
-	"00000000", 		
-	"00000000", 		
-	"00000000", 		
-	"00000011", 		
-	"00000100", 		
-	"00001000", 		
-	"00001000",
-	--top
-	"00000000", 		
-	"00000000", 		
-	"00000000", 		
-	"00000000", 		
-	"11111111", 		
-	"00000000", 		
-	"00000000", 		
-	"00000000",
-	--topright
-	"00000000", 		
-	"00000000", 		
-	"00000000", 		
-	"00000000", 		
-	"11000000", 		
-	"00100000", 		
-	"00010000", 		
-	"00010000",	
-	--right
-	"00010000", 		
-	"00010000", 		
-	"00010000", 		
-	"00010000", 		
-	"00010000", 		
-	"00010000", 		
-	"00010000", 		
-	"00010000",
-	--botright		
-	"00010000", 		
-	"00010000", 		
-	"00100000", 		
-	"11000000",	
-	"00000000", 		
-	"00000000", 		
-	"00000000", 		
-	"00000000",
-	--bot
-	"00000000",
-	"00000000",
-	"00000000",
-	"00000000",
-	"00000000",
-	"11111111",
-	"00000000",
-	"00000000",
-	"00000000",
-	--botleft
-	"00001000",
-	"00001000",
-	"00000100",
-	"00000011",
-	"00000000",
-	"00000000",
-	"00000000",
-	"00000000",
-	"00000000",
-	--left
-	"00001000",
-	"00001000",
-	"00001000",
-	"00001000",
-	"00001000",
-	"00001000",
-	"00001000",
-	"00001000",
-	"00001000",
-	--outertopleft
-	"00001111", 		
-	"00110000", 		 		
-	"01000000", 		
-	"01000111", 		
-	"10001000", 		
-	"10010000", 		
-	"10010000",
-   "10010000",
-	--outertop
-	"11111111",
-	"00000000", 		
-	"00000000", 		
-	"11111111", 		
-	"00000000", 		
-	"00000000", 		
-	"00000000", 		
-	"00000000",
-	--outertopright
-	"11110000", 		
-	"00001100", 		
-	"00000010", 		
-	"11100010", 		
-	"00010001", 		
-	"00001001", 		
-	"00001001", 		
-	"00001001",	
-	--outerright
-	"00001001", 		
-	"00001001", 		
-	"00001001", 		
-	"00001001", 		
-	"00001001", 		
-	"00001001", 		
-	"00001001", 		
-	"00001001",
-	--outerbotright		
-	"00001001", 		
-	"00001001", 		
-	"00001001", 		
-	"00010001",	
-	"11100010", 		
-	"00000010", 		
-	"00001100", 		
-	"11110000",
-	--outerbot
-	"00000000",
-	"00000000",
-	"00000000",
-	"00000000",
-	"00000000",
-	"11111111",
-	"00000000",
-	"00000000",
-	"11111111",
-	--outerbotleft
-	"10000000",
-	"10000000",
-	"10000000",
-	"10000000",
-	"01000000",
-	"01000000",
-	"00110000",
-	"00001111",
-	--outerleft
-	"10010000",
-	"10010000",
-	"10010000",
-	"10010000",
-	"10010000",
-	"10010000",
-	"10010000",
-	"10010000",
-	--blank
-	"00000000",
-	"00000000",
-	"00000000",
-	"00000000",
-	"00000000",
-	"00000000",
-	"00000000",
-	"00000000",
-	--dot
-	"00000000",
-	"00000000",
-	"00000000",
-	"00011000",
-	"00011000",
-	"00000000",
-	"00000000",
-	"00000000",
-	--bigdot
-	"00111100",
-	"01111110",
-	"11111111",
-	"11111111",
-	"11111111",
-	"11111111",
-	"01111110",
-	"00111100" 		
-	);
-begin
+   component game_grid is
+      port(
+         addr : in POINT;
+         data : out std_logic_vector(4 downto 0)
+      );
+   end component;
+   
+   component grid_roms is
+      port(
+         addr : in  std_logic_vector(7 downto 0);
+         data_type : in std_logic_vector(4 downto 0);
+         data : out std_logic
+      );
+   end component;
 
-translator: process(xpix,ypix,dtype)
-variable dindex : std_logic_vector(6 downto 0):=(others => '0');
-variable drow : std_logic_vector(7 downto 0);
-variable pix_val : std_logic;
+   
+   constant GAME_SIZE : POINT := (448,496);
+   constant GAME_OFFSET : POINT := ( (1024-GAME_SIZE.X)/2,(768-GAME_SIZE.Y)/2);
+   constant TILE_SIZE : POINT := (4,4);--in bits
+   constant TILE_OFFSET_MASK : std_logic_vector(TILE_SIZE.X-1 downto 0) := (others=>'1');
+   
+   signal game_location : POINT := (0,0);
+   signal tile_location : POINT := (0,0);
+   signal valid : std_logic := '0';
+   signal addr : std_logic_vector(9 downto 0);
+   signal grid_data : std_logic_vector(4 downto 0) := (others=>'0');
+   signal rom_addr : std_logic_vector(7 downto 0);
+   signal grid_rom_bit : std_logic;
+   signal clocks : std_logic_vector(22 downto 0) := (others=>'0');
 begin
-	-- display black by default
-	--black
-	R <= "000";
-	G <= "000";
-	B <= "00";
-	dindex := (others => '0');
-	
-	if dtype(4) = '1' then
-		dindex := dtype(3 downto 0)&ypix(3 downto 1);
-		drow := rom(to_integer(unsigned(dindex)));
-		pix_val := drow(to_integer(unsigned(xpix)));
-		if pix_val = '1' and dtype < "10011" then
-			if dtype(4) = '1' then
-				--display dot
-				--white
-				R <= "111";
-				G <= "111";
-				B <= "11";
-			else
-				--display wall
-				--blue
-				R <= "000";
-				G <= "000";
-				B <= "11";
-			end if;
-		end if;
-	end if;
-end process;
-
+   --determine if we are in the range of the game board
+   valid <= '1' when current_draw_location.X >= GAME_OFFSET.X
+               and current_draw_location.X < GAME_OFFSET.X + GAME_SIZE.X
+               and current_draw_location.Y >= GAME_OFFSET.Y
+               and current_draw_location.Y < GAME_OFFSET.Y + GAME_SIZE.Y else '0';
+   valid_location <= valid;
+   
+   --location minus the offsets
+   game_location.X <= current_draw_location.X - GAME_OFFSET.X when valid = '1' else 0;
+   game_location.Y <= current_draw_location.Y - GAME_OFFSET.Y when valid = '1' else 0;
+   
+   --get tile locations
+   tile_location.X <= to_integer(to_unsigned(game_location.X,11) srl TILE_SIZE.X) when valid = '1' else 0;
+   tile_location.Y <= to_integer(to_unsigned(game_location.Y,11) srl TILE_SIZE.Y) when valid = '1' else 0;
+   
+   data_type <= grid_data;
+   
+   the_grid : game_grid
+   port map(
+      addr.X => tile_location.X,
+      addr.Y => tile_location.Y,
+      data => grid_data
+   );
+   
+   --register the grid data
+   process(game_location)
+   variable y,x : std_logic_vector(11 downto 0) := (others=>'0');
+   begin
+         y := std_logic_vector(to_unsigned(game_location.Y,12));
+         x := std_logic_vector(to_unsigned(game_location.X,12));
+         rom_addr <= y(3 downto 0) & x(3 downto 0);
+   end process;
+     
+   roms : grid_roms
+   port map(
+      addr => rom_addr,
+      data_type => grid_data, 
+      data => grid_rom_bit
+   );
+   
+   process(valid, grid_data, grid_rom_bit)
+   begin
+      data.R <= "000";
+      data.G <= "000";
+      data.B <= "00";
+      if valid = '1' then
+         if grid_rom_bit = '1' then
+            if grid_data < 16 and clocks(22) = '1'then               
+               data.B <= "11";
+            else
+               data.R <= "111";
+               data.G <= "101";
+               data.B <= "10";
+            end if;
+         end if;
+      end if;         
+   end process;
+   
+   process(clk)
+   begin
+      if clk = '1' and clk'event then
+         clocks <= clocks + 1;
+      end if;
+   end process;
 
 end Behavioral;
 
