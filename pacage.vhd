@@ -22,9 +22,10 @@ package pacage is
   
   type GHOST_INFO is
   record
-	LOC : POINT;
+	PT : POINT;
 	DIR : DIRECTION;
 	MODE : GHOST_DISP_MODE;
+	CAGED : boolean;
   end record;
 
 end package;
