@@ -13,7 +13,7 @@ ARCHITECTURE behavior OF top_level_tb IS
          mclk : IN  std_logic;
          hsync : OUT  std_logic;
          vsync : OUT  std_logic;
-         btn : in std_logic_vector(0 downto 0);
+         btn : in std_logic_vector(3 downto 0);
          red : OUT  std_logic_vector(2 downto 0);
          green : OUT  std_logic_vector(2 downto 0);
          blue : OUT  std_logic_vector(1 downto 0)
@@ -42,7 +42,7 @@ BEGIN
           mclk => mclk,
           hsync => hsync,
           vsync => vsync,
-          btn => "0",
+          btn => "1000",
           red => red,
           green => green,
           blue => blue

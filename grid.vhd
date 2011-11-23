@@ -352,7 +352,7 @@ begin
   process(y,x)
   begin
    data <= '0';
-    if y < 304 and y >= 0 then
+    if y < 304 and y >= 0 and x >= 0 and x < 16 then
       data <= rom(y)(x);
     end if;
   end process;
