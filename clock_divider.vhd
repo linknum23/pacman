@@ -11,21 +11,21 @@ entity clock_divider is
 end clock_divider;
 
 architecture Behavioral of clock_divider is
-  signal count : std_logic_vector(0 downto 0) := (others => '0');
+  signal count : std_logic_vector(3 downto 0) := (others => '0');
 begin
 
   process(clk_50mhz)
   begin
     if clk_50mhz = '1' and clk_50mhz'event then
       if rst = '1' then
-         count <= "0";
+         count <= (others=>'0');
       else
          count <= count + 1;
       end if;
     end if;
   end process;
 
-  clk_25mhz <= count(0);
+  clk_25mhz <= count(3);
 
 end Behavioral;
 

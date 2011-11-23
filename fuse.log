@@ -4,18 +4,21 @@ Number of CPUs detected in this system: 2
 Turning on mult-threading, number of parallel sub-compilation jobs: 4 
 Determining compilation order of HDL files
 Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/pacage.vhd" into library work
+Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/pacman_rom.vhd" into library work
 Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/grid.vhd" into library work
 Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/game_grid.vhd" into library work
+Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/pacman_manager.vhd" into library work
+Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/grid_display.vhd" into library work
 Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/vga1024x768.vhd" into library work
 Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/ipcore_dir/dcm.vhd" into library work
-Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/grid_display.vhd" into library work
+Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/display_manager.vhd" into library work
 Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/clock_divider.vhd" into library work
 Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/top_level.vhd" into library work
 Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/top_level_tb.vhd" into library work
 Starting static elaboration
 Completed static elaboration
-Fuse Memory Usage: 48152 KB
-Fuse CPU Usage: 1700 ms
+Fuse Memory Usage: 48232 KB
+Fuse CPU Usage: 1680 ms
 Compiling package standard
 Compiling package std_logic_1164
 Compiling package numeric_std
@@ -39,13 +42,16 @@ Compiling architecture behavioral of entity dcm [dcm_default]
 Compiling architecture behavioral of entity vga_1024x768 [vga_1024x768_default]
 Compiling architecture behavioral of entity game_grid [game_grid_default]
 Compiling architecture behavioral of entity grid_roms [grid_roms_default]
-Compiling architecture behavioral of entity grid_display [grid_display_default]
+Compiling architecture behavioral of entity grid_display [\grid_display((1,1),(448,496))\]
+Compiling architecture behavioral of entity pacman_rom [pacman_rom_default]
+Compiling architecture behavioral of entity pacman_manager [\pacman_manager((1,1))\]
+Compiling architecture behavioral of entity display_manager [display_manager_default]
 Compiling architecture behavioral of entity top_level [top_level_default]
 Compiling architecture behavior of entity top_level_tb
 Time Resolution for simulation is 1ps.
-Waiting for 9 sub-compilation(s) to finish...
-Compiled 40 VHDL Units
+Waiting for 20 sub-compilation(s) to finish...
+Compiled 46 VHDL Units
 Built simulation executable /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/top_level_tb_isim_beh.exe
-Fuse Memory Usage: 113936 KB
-Fuse CPU Usage: 2260 ms
-GCC CPU Usage: 2500 ms
+Fuse Memory Usage: 113080 KB
+Fuse CPU Usage: 2250 ms
+GCC CPU Usage: 12690 ms

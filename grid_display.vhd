@@ -5,11 +5,14 @@ use IEEE.NUMERIC_STD.ALL;
 use work.pacage.all;
 
 entity grid_display is
+generic (
+         GAME_OFFSET : POINT;
+         GAME_SIZE : POINT
+      );
     Port ( 
       clk : in std_logic;
       rst : in std_logic;
       current_draw_location : in POINT;
-      pacman_location : in POINT;
       mode : in std_logic_vector(2 downto 0);
       valid_location : out std_logic;
       data_type : out std_logic_vector(4 downto 0);
@@ -33,11 +36,7 @@ architecture Behavioral of grid_display is
       );
    end component;
 
-   
-   constant GAME_SIZE : POINT := (448,496);
-   constant GAME_OFFSET : POINT := ( (1024-GAME_SIZE.X)/2,(768-GAME_SIZE.Y)/2);
    constant TILE_SIZE : POINT := (4,4);--in bits
-   constant TILE_OFFSET_MASK : std_logic_vector(TILE_SIZE.X-1 downto 0) := (others=>'1');
    
    signal game_location : POINT := (0,0);
    signal tile_location : POINT := (0,0);
@@ -52,16 +51,17 @@ begin
    valid <= '1' when current_draw_location.X >= GAME_OFFSET.X
                and current_draw_location.X < GAME_OFFSET.X + GAME_SIZE.X
                and current_draw_location.Y >= GAME_OFFSET.Y
-               and current_draw_location.Y < GAME_OFFSET.Y + GAME_SIZE.Y else '0';
+               and current_draw_location.Y < GAME_OFFSET.Y + GAME_SIZE.Y 
+               and grid_rom_bit = '1' else '0';
    valid_location <= valid;
    
    --location minus the offsets
-   game_location.X <= current_draw_location.X - GAME_OFFSET.X when valid = '1' else 0;
-   game_location.Y <= current_draw_location.Y - GAME_OFFSET.Y when valid = '1' else 0;
+   game_location.X <= current_draw_location.X - GAME_OFFSET.X;
+   game_location.Y <= current_draw_location.Y - GAME_OFFSET.Y;
    
    --get tile locations
-   tile_location.X <= to_integer(to_unsigned(game_location.X,11) srl TILE_SIZE.X) when valid = '1' else 0;
-   tile_location.Y <= to_integer(to_unsigned(game_location.Y,11) srl TILE_SIZE.Y) when valid = '1' else 0;
+   tile_location.X <= to_integer(to_unsigned(game_location.X,11) srl TILE_SIZE.X);
+   tile_location.Y <= to_integer(to_unsigned(game_location.Y,11) srl TILE_SIZE.Y);
    
    data_type <= grid_data;
    
@@ -71,14 +71,13 @@ begin
       addr.Y => tile_location.Y,
       data => grid_data
    );
-   
-   --register the grid data
+
    process(game_location)
    variable y,x : std_logic_vector(11 downto 0) := (others=>'0');
    begin
          y := std_logic_vector(to_unsigned(game_location.Y,12));
          x := std_logic_vector(to_unsigned(game_location.X,12));
-         rom_addr <= y(3 downto 0) & x(3 downto 0);
+         rom_addr <= y(TILE_SIZE.Y-1 downto 0) & x(TILE_SIZE.X-1 downto 0);
    end process;
      
    roms : grid_roms
@@ -88,21 +87,26 @@ begin
       data => grid_rom_bit
    );
    
-   process(valid, grid_data, grid_rom_bit)
+   process(valid, grid_data, rom_addr)
    begin
-      data.R <= "000";
-      data.G <= "000";
-      data.B <= "00";
       if valid = '1' then
-         if grid_rom_bit = '1' then
-            if grid_data < 16 and clocks(22) = '1'then               
-               data.B <= "11";
-            else
-               data.R <= "111";
-               data.G <= "101";
-               data.B <= "10";
-            end if;
+         if grid_data < 16 then --and clocks(22) = '1'then  
+            data.R <= "000";
+            data.G <= "000";         
+            data.B <= "11";
+         else
+            data.R <= "111";
+            data.G <= "101";
+            data.B <= "10";
          end if;
+      elsif rom_addr(7 downto 4) = 0 or rom_addr(3 downto 0) = 0 then
+         data.R <= "000";
+         data.G <= "101";
+         data.B <= "01";
+      else
+         data.R <= "000";
+         data.G <= "000";
+         data.B <= "00";
       end if;         
    end process;
    

@@ -12,31 +12,18 @@ Time resolution is 1 ps
 Simulator is doing circuit initialization process.
 at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
 at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-at 0 ps, Instance /top_level_tb/uut/board/roms/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
 Finished circuit initialization process.
-at 0 ps, Instance /top_level_tb/uut/board/roms/ : Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
-at 0 ps, Instance /top_level_tb/uut/board/roms/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
 # restart
-# run 100.00us
-Simulator is doing circuit initialization process.
-at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-at 0 ps, Instance /top_level_tb/uut/board/roms/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-Finished circuit initialization process.
-at 0 ps, Instance /top_level_tb/uut/board/roms/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-# restart
-# run 100.00us
-Simulator is doing circuit initialization process.
-at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-at 0 ps, Instance /top_level_tb/uut/board/roms/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-Finished circuit initialization process.
-at 0 ps, Instance /top_level_tb/uut/board/roms/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-# run 100.00us
-# run 100.00us
-# run 100.00us
 # run 1000.00us
-# run 3000.00us
-# run 3000.00us
-# run 3000.00us
+Simulator is doing circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+Finished circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
 # exit 0
