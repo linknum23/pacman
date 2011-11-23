@@ -55,7 +55,7 @@ architecture Behavioral of ghost_ai is
 	signal do_calc_targets : std_logic;
 	signal do_calc_move : std_logic;
 
-	component targets is 
+	component ghost_target_updater is 
 		port ( 
 			clk : in  STD_LOGIC;
 			en : in  STD_LOGIC;
@@ -63,12 +63,34 @@ architecture Behavioral of ghost_ai is
 			rom_addr : out  STD_LOGIC_VECTOR (8 downto 0);
 			rom_data : in  STD_LOGIC;
 			done : out  STD_LOGIC;
-			pman_loc : POINT;
+			pman_loc : in POINT;
+			ghost_mode : in GHOST_MODE;
 			blinky_target : out POINT;
 			pinky_target : out  POINT;
 			inky_target : out  POINT;
 			clyde_target : out  POINT
+
 		);
+	end component;
+	
+	component move_ghost is 
+	port ( 
+		clk : in  STD_LOGIC;
+		en : in  STD_LOGIC;
+		rst : in  STD_LOGIC;
+		rom_addr : out  STD_LOGIC_VECTOR (8 downto 0);
+		rom_data : in  STD_LOGIC;
+		done : out  STD_LOGIC;
+		ghost_mode : GHOST_MODE;
+		blinky_target : in POINT;
+		pinky_target : in POINT;
+		inky_target : in  POINT;
+		clyde_target : in  POINT;
+		blinky_info : out GHOST_INFO;
+		pinky_info : out GHOST_INFO;
+		inky_info : out GHOST_INFO;
+		clyde_info : out GHOST_INFO
+	);
 	end component;
 
 begin
