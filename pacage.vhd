@@ -17,12 +17,14 @@ package pacage is
   end record;
   
   type DIRECTION is (L,R,UP,DOWN,NONE);
-  type GMODE is (NORM,SCATTER,EYES);
+  type GHOST_MODE is (NORMAL, SCATTER);
+  type GHOST_DISP_MODE is (NORM,SCATTER,EYES);
   
   type GHOST_INFO is
+  record
 	LOC : POINT;
 	DIR : DIRECTION;
-	MODE : GMODE;
+	MODE : GHOST_DISP_MODE;
   end record;
 
 end package;

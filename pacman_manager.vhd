@@ -6,7 +6,7 @@ use work.pacage.all;
 
 entity pacman_manager is
    port(
-      clk : std_logic;
+      clk : std_logic
       
    );
 end pacman_manager;
