@@ -34,6 +34,7 @@ architecture Behavioral of top_level is
       vsync : out std_logic;
       hc    : out std_logic_vector(10 downto 0);
       vc    : out std_logic_vector(10 downto 0);
+		in_vbp: out std_logic;
       vidon : out std_logic
       );
   end component;

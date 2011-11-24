@@ -9,6 +9,7 @@ entity vga_1024x768 is
     vsync : out std_logic;
     hc    : out std_logic_vector(10 downto 0);
     vc    : out std_logic_vector(10 downto 0);
+	 in_vbp : out std_logic;
     vidon : out std_logic
     );
 end vga_1024x768;
@@ -67,6 +68,8 @@ begin
       end if;
     end if;
   end process;
+  
+  in_vbp <= '1' when vcs < v_back_porch else '0';
 
                                         --sync pulses
   hsync <= '0' when hcs < h_sync_pulse else '1';

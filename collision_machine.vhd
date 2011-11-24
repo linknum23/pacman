@@ -12,6 +12,7 @@ entity collision_machine is
     pinky_tile_location  : in  POINT;
     inky_tile_location   : in  POINT;
     clyde_tile_location  : in  POINT;
+	 collision_index 	    : out natural range 0 to 3;
     collision            : out std_logic
     );
 end collision_machine;
@@ -25,9 +26,18 @@ begin
   process(clk)
   begin
     if clk = '1' and clk'event then
-      if pacman_tile_location = blinky_tile_location or pacman_tile_location = pinky_tile_location
-        or pacman_tile_location = inky_tile_location or pacman_tile_location = clyde_tile_location then
+      if pacman_tile_location = blinky_tile_location then
+			collision <= '1';
+			collision_index <= 3;
+		elsif pacman_tile_location = pinky_tile_location then 
+			collision <= '1';
+			collision_index <= 2;
+		elsif pacman_tile_location = inky_tile_location then
+			collision <= '1';
+			collision_index <= 1;
+		elsif pacman_tile_location = clyde_tile_location then
         collision <= '1';
+		collision_index <= 0;
       else
         collision <= '0';
       end if;

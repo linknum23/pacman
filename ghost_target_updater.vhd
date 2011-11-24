@@ -51,6 +51,12 @@ architecture Behavioral of ghost_target_updater is
 
 begin
 
+--lets fake it out for now
+done <= '1';
+blinky_target <= (X => 0, Y => 0);
+pinky_target <= (X => 0, Y => 0);
+inky_target <= (X => 0, Y => 0);
+clyde_target <= (X => 0, Y => 0);
 
 end Behavioral;
 

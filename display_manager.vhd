@@ -7,8 +7,10 @@ entity display_manager is
   port (
     clk                        : in  std_logic;
     rst                        : in  std_logic; 
+	 in_vbp							 : in std_logic;
     current_draw_location      : in  POINT;
     pacman_direction_selection : in  DIRECTION; 
+	 is
     data                       : out COLOR
     );
 end display_manager;
@@ -53,19 +55,25 @@ architecture Behavioral of display_manager is
       rom_request              : out std_logic
       );
   end component;
-
-  component collision_machine is
-    port(
-      clk                  : in  std_logic;
-      rst                  : in  std_logic;
-      pacman_tile_location : in  POINT;
-      blinky_tile_location : in  POINT;
-      pinky_tile_location  : in  POINT;
-      inky_tile_location   : in  POINT;
-      clyde_tile_location  : in  POINT;
-      collision            : out std_logic
-      );
-  end component;
+  
+  component ghost_ai is
+    Port ( clk : in  STD_LOGIC;
+           en : in  STD_LOGIC;
+           rst : in  STD_LOGIC;
+           rom_addr : out POINT;
+           rom_data : in  STD_LOGIC;
+           dots_eaten : in  STD_LOGIC_VECTOR (7 downto 0);
+           level : in  STD_LOGIC_VECTOR (8 downto 0);
+			  ghost_mode : in  STD_LOGIC;
+			  pman_loc : POINT;
+           done : out  STD_LOGIC;
+			  blinky_info : out GHOST_INFO;
+			  pinky_info : out GHOST_INFO;
+			  inky_info : out GHOST_INFO;
+			  clyde_info : out GHOST_INFO;
+			  collision : out std_logic
+			  );
+	end component;
 
   component game_grid is
     port(
@@ -142,24 +150,29 @@ begin
       pacman_rom_tile_location => pacman_rom_tile_location,
       pacman_direction         => pacman_direction,
       data                     => pacman_color_data,
-      valid_location           => pacman_valid,
+      valid_location           => space_valid,
       rom_request_response     => pacman_rom_request_response,
       rom_request              => pacman_rom_request
       );
 
-  collision_check : collision_machine
-    port map(
-      clk                  => clk,
-      rst                  => rst,
-      pacman_tile_location => pacman_tile_location,
-      blinky_tile_location => blinky_tile_location,
-      pinky_tile_location  => pinky_tile_location,
-      inky_tile_location   => inky_tile_location,
-      clyde_tile_location  => clyde_tile_location,
-      collision            => collision
-      );
-
-
+	ai : ghost_ai
+	port map (
+		clk => slow_clk,
+		en  => ai_calc_en,
+		rst => rst,
+		rom_addr => ghost_rom_request,
+		rom_data => space_valid,
+		dots_eaten => dots_eaten,
+		level => level,
+		ghost_mode => ghost_mode,
+		pman_loc => pacman_tile_location,
+		done => ai_calc_done,
+		blinky_info => blinky,
+		pinky_info => pinky,
+		inky_info => inky,
+		clyde_info => clyde,
+		collision => collision
+	);
 
   -------------------------------------------------
   --grid and its mux
@@ -186,13 +199,27 @@ begin
     end if;
   end process;
 
+------------------------------------------------
+-- basic state controller for pacman
+--  this should be put in a seperate file when it gets bigger
+-------------------------------------------------------
+	
+
 
 -------------------------------------------------
   --mux the output color for the display
   -------------------------------------------------
   process(pacman_color_data, pacman_valid, grid_color_data, grid_valid)
   begin
-    if pacman_valid = '1' then
+    if blinky_valid = '1' then
+		data <= blinky_color_data;
+	elsif pinky_valid = '1' then
+		data <= pinky_color_data;
+	elsif inky_valid = '1' then
+		data <= inky_color_data;
+	elsif clyde_valid = '1' then
+		data <= clyde_color_data;
+    elsif pacman_valid = '1' then
       data <= pacman_color_data;
     elsif grid_valid = '1' then
       data <= grid_color_data;
