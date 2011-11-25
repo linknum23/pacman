@@ -26,39 +26,19 @@ architecture Behavioral of direction_manager is
   signal direction_reg       : DIRECTION  := NONE;
   signal address_to_check    : POINT;
   signal tile_lined_up       : std_logic  := '0';
-  signal attempted_selection : DIRECTION  := NONE;
-  signal counter             : std_logic_vector(23 downto 0);
-  signal direction_time_zone : std_logic  := '0';
 begin
 
   --check to see if we are at a tile border
   tile_lined_up <= '1' when ((direction_selection = L or direction_selection = R) and pacman_current_tile_offset.Y = 0)
                    or ((direction_selection = UP or direction_selection = DOWN) and pacman_current_tile_offset.X = 0) else '0';
-
-  process(clk)
-  begin
-    if clk = '1' and clk'event then
-      attempted_selection <= direction_selection;
-      --shift register for the last direction press
-      if counter(23) = '0' then
-        counter             <= counter + 1;
-        direction_time_zone <= '1';
-      else
-        direction_time_zone <= '0';
-      end if;
-      if attempted_selection /= direction_selection then
-        counter <= (others => '0');
-      end if;
-    end if;
-  end process;
-
+  
   process(clk)
   begin
     if clk'event and clk = '1' then
       rom_use_done <= '0';
       case state is
         when WAIT_FOR_DIRECTION =>
-          if direction_selection /= last_used_selection and tile_lined_up = '1' and direction_time_zone = '1' then
+          if direction_selection /= last_used_selection and tile_lined_up = '1' then
             --if we have a changed direction and our direction change will line up properly then wait for rom access
             direction_reg <= direction_selection;
 

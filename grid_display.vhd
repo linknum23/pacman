@@ -84,8 +84,11 @@ begin
                                         --check the type of data returned from the rom and color accordingly
   process(valid, data_type)
   begin
+      data.R <= "000";
+      data.G <= "000";
+      data.B <= "00";
     if valid = '1' then
-      if data_type < 16 then            --and clocks(22) = '1'then
+      if data_type <= 16 then            --and clocks(22) = '1'then
         data.R <= "000";
         data.G <= "000";
         data.B <= "11";
@@ -98,10 +101,6 @@ begin
       --  data.R <= "000";
       --  data.G <= "101";
       --  data.B <= "01";
-    else
-      data.R <= "000";
-      data.G <= "000";
-      data.B <= "00";
     end if;
   end process;
 

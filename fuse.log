@@ -1,26 +1,32 @@
-Running: /opt/Xilinx/13.3/ISE_DS/ISE/bin/lin/unwrapped/fuse -intstyle ise -incremental -o /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/top_level_tb_isim_beh.exe -prj /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/top_level_tb_beh.prj work.top_level_tb 
-ISim O.76xd (signature 0x8ddf5b5d)
-Number of CPUs detected in this system: 2
-Turning on mult-threading, number of parallel sub-compilation jobs: 4 
+Running: fuse.exe -relaunch -intstyle "ise" -incremental -o "C:/projects/Pacman/pacman/top_level_tb_isim_beh.exe" -prj "C:/projects/Pacman/pacman/top_level_tb_beh.prj" "top_level_tb" 
+ISim O.76xd (signature 0x2f00eba5)
+Number of CPUs detected in this system: 4
+Turning on mult-threading, number of parallel sub-compilation jobs: 8 
 Determining compilation order of HDL files
-Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/pacage.vhd" into library work
-Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/pacman_target_selection.vhd" into library work
-Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/pacman_rom.vhd" into library work
-Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/grid.vhd" into library work
-Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/pacman_manager.vhd" into library work
-Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/grid_display.vhd" into library work
-Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/game_grid.vhd" into library work
-Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/direction_manager.vhd" into library work
-Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/vga1024x768.vhd" into library work
-Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/ipcore_dir/dcm.vhd" into library work
-Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/display_manager.vhd" into library work
-Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/clock_divider.vhd" into library work
-Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/top_level.vhd" into library work
-Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/top_level_tb.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/pacage.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/pacman_target_selection.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/pacman_rom.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/move_ghost.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/grid.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/ghost_target_updater.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/ghost_rom.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/collision_machine.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/pacman_manager.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/grid_display.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/ghost_display.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/ghost_ai.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/game_grid.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/direction_manager.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/vga1024x768.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/ipcore_dir/dcm.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/display_manager.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/clock_divider.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/top_level.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/top_level_tb.vhd" into library work
 Starting static elaboration
 Completed static elaboration
-Fuse Memory Usage: 48452 KB
-Fuse CPU Usage: 1610 ms
+Fuse Memory Usage: 75592 KB
+Fuse CPU Usage: 390 ms
 Compiling package standard
 Compiling package std_logic_1164
 Compiling package numeric_std
@@ -47,15 +53,20 @@ Compiling architecture behavioral of entity grid_display [\grid_display((288,136
 Compiling architecture behavioral of entity pacman_target_selection [pacman_target_selection_default]
 Compiling architecture behavioral of entity pacman_rom [pacman_rom_default]
 Compiling architecture behavioral of entity pacman_manager [\pacman_manager((288,136))\]
+Compiling architecture behavioral of entity ghost_rom [ghost_rom_default]
+Compiling architecture behavioral of entity ghost_display [\ghost_display((288,136))\]
+Compiling architecture behavioral of entity collision_machine [collision_machine_default]
+Compiling architecture behavioral of entity ghost_target_updater [ghost_target_updater_default]
+Compiling architecture behavioral of entity move_ghost [move_ghost_default]
+Compiling architecture behavioral of entity ghost_ai [ghost_ai_default]
 Compiling architecture behavioral of entity direction_manager [direction_manager_default]
 Compiling architecture behavioral of entity game_grid [game_grid_default]
 Compiling architecture behavioral of entity display_manager [display_manager_default]
 Compiling architecture behavioral of entity top_level [top_level_default]
 Compiling architecture behavior of entity top_level_tb
 Time Resolution for simulation is 1ps.
-Waiting for 14 sub-compilation(s) to finish...
-Compiled 50 VHDL Units
-Built simulation executable /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/top_level_tb_isim_beh.exe
-Fuse Memory Usage: 114296 KB
-Fuse CPU Usage: 2180 ms
-GCC CPU Usage: 2970 ms
+Waiting for 1 sub-compilation(s) to finish...
+Compiled 62 VHDL Units
+Built simulation executable C:/projects/Pacman/pacman/top_level_tb_isim_beh.exe
+Fuse Memory Usage: 111692 KB
+Fuse CPU Usage: 1093 ms

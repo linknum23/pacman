@@ -47,13 +47,14 @@ architecture Behavioral of top_level is
       );
   end component;
 
+
   component display_manager is
     port (
       clk                      : in  std_logic;
       rst                      : in  std_logic;
       in_vbp                   : in  std_logic;
-      current_draw_location    : in  POINT;
       user_direction_selection : in  DIRECTION;
+      current_draw_location    : in  POINT;
       data                     : out COLOR
       );
   end component;
@@ -67,15 +68,14 @@ architecture Behavioral of top_level is
   signal current_draw_location           : POINT;
   signal rst                             : std_logic := '0';
   signal direction                       : DIRECTION := NONE;
-
+  
 begin
-
+  
   rst <= btn(1) and btn(0);
 
-  red   <= color_data.R; --when vidon = '1' else "000";
-  green <= color_data.G; --when vidon = '1' else "000";
-  blue  <= color_data.B; --when vidon = '1' else "00";
-
+  red   <= color_data.R when vidon = '1' else "000";
+  green <= color_data.G when vidon = '1' else "000";
+  blue  <= color_data.B when vidon = '1' else "00";
 
   clks : clock_divider
     port map (
@@ -104,9 +104,10 @@ begin
       in_vbp => open,
       vidon  => vidon
       );
+
+  in_vbp                  <= not vidon;
   current_draw_location.X <= to_integer(unsigned(hc));
   current_draw_location.Y <= to_integer(unsigned(vc));
-  in_vbp                  <= not(vidon);
 
   display : display_manager
     port map (
@@ -116,8 +117,7 @@ begin
       current_draw_location    => current_draw_location,
       user_direction_selection => direction,
       data                     => color_data
-      );
-
+      ); 
 
   process(clk_25mhz)
   begin
@@ -130,11 +130,11 @@ begin
         direction <= UP;
       elsif btn(3) = '1' then
         direction <= L;
-        else
+      else
         direction <= NONE;
       end if;
     end if;
   end process;
-
+  
 end Behavioral;
 

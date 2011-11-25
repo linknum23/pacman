@@ -6,7 +6,8 @@ use work.pacage.all;
 
 entity pacman_manager is
   generic (
-    GAME_OFFSET : POINT
+    GAME_OFFSET : POINT;
+    GAME_SIZE   : POINT
     );
   port(
     clk                         : in  std_logic;
@@ -84,7 +85,8 @@ begin
   process(clk)
   begin
     if clk = '1' and clk'event then
-      if direction_select /= NONE then
+      if direction_select /= NONE and current_position.X >= GAME_OFFSET.X
+        and current_position.X < GAME_OFFSET.X + GAME_SIZE.X then
         current_direction <= direction_select;
       end if;
     end if;
@@ -121,21 +123,14 @@ begin
       elsif current_direction = DOWN then
         current_position.Y <= current_position.Y + to_integer(unsigned(speed));
       end if;
-      --elsif current_position.X > -32 and current_position.X < 1055 then
-      --toggle y
-      if current_position.Y <= -32 then
-        current_position.Y <= 798;
-      elsif current_position.Y >= 799 then
-        current_position.Y <= 0-31;
+
+      --toggle x for the wrap around
+      if current_position.X < GAME_OFFSET.X +8 then
+        current_position.X <= GAME_OFFSET.X + GAME_SIZE.X -24 ;
+      elsif current_position.X > GAME_OFFSET.X + GAME_SIZE.X - 24 then
+        current_position.X <= GAME_OFFSET.X + 8;
       end if;
 
-      if current_position.X <= -32 then
-        current_position.X <= 1054;
-      elsif current_position.X >= 1055 then
-        current_position.X <= 0-31;
-      end if;
-
-      --end if;
     end if;
   end process;
 
@@ -216,13 +211,13 @@ begin
 
 --based on the wacka speed,
 --toggle back an forth for mouth movement
-  process(wacka_clk, speed, current_direction)
+  process(wacka_clk,current_direction,speed)
   begin
     if wacka_clk = '1' and current_direction /= STILL then
-      offset.Y <= PAC_OPEN_OFFSET;
-    elsif speed > 0 then
-      offset.Y <= PAC_CLOSED_OFFSET;
-    end if;
+        offset.Y <= PAC_OPEN_OFFSET;
+      elsif speed > 0 then
+        offset.Y <= PAC_CLOSED_OFFSET;
+      end if;
   end process;
 
 --output mux for the colors of pacman,
