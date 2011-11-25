@@ -10,7 +10,6 @@ entity display_manager is
 	 in_vbp							 : in std_logic;
     current_draw_location      : in  POINT;
     pacman_direction_selection : in  DIRECTION; 
-	 is
     data                       : out COLOR
     );
 end display_manager;
@@ -87,6 +86,7 @@ architecture Behavioral of display_manager is
 
   --valid signals
   signal grid_valid   : std_logic := '0';
+  signal space_valid   : std_logic := '0';
   signal pacman_valid : std_logic := '0';
 
   --color signals
@@ -192,7 +192,6 @@ begin
 
   process(vga_en, ghost_en, pacman_en, direction_en)
   begin
-case gstate is 
 	if vga_en = '1' then
 		rom_tile_location<= grid_tile_location;
 	elsif ghost_en = '1' then
@@ -213,18 +212,18 @@ case gstate is
 process(clk,clr) 
 begin
 	if clk'event and clk = '1' then 
-		if invbp == '0' then 
+		if invbp = '0' then 
 			vga_en <= '1';
 			gstate <= VGA_READ;
 		else
-			case gstate is 
 				vga_en <= '0';
 				ghost_en <= '0';
 				pacman_en <= '0';
 				direction_en <= '0';
+			case gstate is 
 				when VGA_READ =>
 					vga_en <= '1';
-					if invbp == '1' then 
+					if invbp = '1' then 
 						gstate <= GHOST_UPDATE;
 						ghost_en <= '1';
 					else
@@ -259,7 +258,7 @@ begin
 			end case;
 		end if;
 	end if;
-end if;
+end process;
 
 
 -------------------------------------------------
