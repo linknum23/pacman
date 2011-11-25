@@ -1,104 +1,120 @@
-V3 56
+V3 63
 FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/clock_divider.vhd 2011/11/23.00:50:33 O.76xd
-EN work/clock_divider 1322079538 \
+EN work/clock_divider 1322191393 \
       FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/clock_divider.vhd \
       PB ieee/std_logic_1164 1317710503 PB ieee/STD_LOGIC_UNSIGNED 1317710506
-AR work/clock_divider/Behavioral 1322079539 \
+AR work/clock_divider/Behavioral 1322191394 \
       FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/clock_divider.vhd \
-      EN work/clock_divider 1322079538
-FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/collision_machine.vhd 2011/11/23.14:16:17 O.76xd
-EN work/collision_machine 1322079534 \
+      EN work/clock_divider 1322191393
+FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/collision_machine.vhd 2011/11/25.00:27:04 O.76xd
+EN work/collision_machine 1322199875 \
       FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/collision_machine.vhd \
       PB ieee/std_logic_1164 1317710503 PB ieee/NUMERIC_STD 1317710508 \
-      PH work/pacage 1322079523
-AR work/collision_machine/Behavioral 1322079535 \
+      PH work/pacage 1322199874
+AR work/collision_machine/Behavioral 1322199876 \
       FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/collision_machine.vhd \
-      EN work/collision_machine 1322079534
-FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/display_manager.vhd 2011/11/23.14:18:04 O.76xd
-EN work/display_manager 1322079544 \
+      EN work/collision_machine 1322199875
+FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/direction_manager.vhd 2011/11/23.21:54:20 O.76xd
+EN work/direction_manager 1322103267 \
+      FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/direction_manager.vhd \
+      PB ieee/std_logic_1164 1317710503 PB ieee/NUMERIC_STD 1317710508 \
+      PB ieee/STD_LOGIC_UNSIGNED 1317710506 PH work/pacage 1322199874
+AR work/direction_manager/Behavioral 1322103268 \
+      FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/direction_manager.vhd \
+      EN work/direction_manager 1322103267
+FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/display_manager.vhd 2011/11/23.21:57:26 O.76xd
+EN work/display_manager 1322191399 \
       FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/display_manager.vhd \
       PB ieee/std_logic_1164 1317710503 PB ieee/NUMERIC_STD 1317710508 \
-      PH work/pacage 1322079523
-AR work/display_manager/Behavioral 1322079545 \
+      PH work/pacage 1322199874
+AR work/display_manager/Behavioral 1322191400 \
       FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/display_manager.vhd \
-      EN work/display_manager 1322079544 CP grid_display CP pacman_manager \
-      CP collision_machine CP game_grid
+      EN work/display_manager 1322191399 CP grid_display CP pacman_manager \
+      CP ghost_ai CP game_grid
 FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/game_grid.vhd 2011/11/22.21:28:56 O.76xd
-EN work/game_grid 1322079536 \
+EN work/game_grid 1322191391 \
       FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/game_grid.vhd \
       PB ieee/std_logic_1164 1317710503 PB ieee/STD_LOGIC_UNSIGNED 1317710506 \
-      PB ieee/NUMERIC_STD 1317710508 PH work/pacage 1322079523
-AR work/game_grid/Behavioral 1322079537 \
+      PB ieee/NUMERIC_STD 1317710508 PH work/pacage 1322199874
+AR work/game_grid/Behavioral 1322191392 \
       FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/game_grid.vhd \
-      EN work/game_grid 1322079536
+      EN work/game_grid 1322191391
+FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/ghost_ai.vhd 2011/11/25.00:30:09 O.76xd
+EN work/ghost_ai 0 \
+      FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/ghost_ai.vhd \
+      PB ieee/std_logic_1164 1317710503 PB ieee/STD_LOGIC_UNSIGNED 1317710506 \
+      PH work/pacage 1322199874 PB ieee/NUMERIC_STD 1317710508
+AR work/ghost_ai/Behavioral 0 \
+      FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/ghost_ai.vhd \
+      EN work/ghost_ai 0 CP collision_machine
 FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/grid.vhd 2011/11/23.14:31:29 O.76xd
-EN work/grid_roms 1322079528 \
+EN work/grid_roms 1322199881 \
       FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/grid.vhd \
       PB ieee/std_logic_1164 1317710503 PB ieee/STD_LOGIC_UNSIGNED 1317710506 \
       PB ieee/NUMERIC_STD 1317710508
-AR work/grid_roms/Behavioral 1322079529 \
+AR work/grid_roms/Behavioral 1322199882 \
       FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/grid.vhd \
-      EN work/grid_roms 1322079528
+      EN work/grid_roms 1322199881
 FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/grid_display.vhd 2011/11/23.14:12:44 O.76xd
-EN work/grid_display 1322079530 \
+EN work/grid_display 1322199883 \
       FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/grid_display.vhd \
       PB ieee/std_logic_1164 1317710503 PB ieee/STD_LOGIC_UNSIGNED 1317710506 \
-      PB ieee/NUMERIC_STD 1317710508 PH work/pacage 1322079523
-AR work/grid_display/Behavioral 1322079531 \
+      PB ieee/NUMERIC_STD 1317710508 PH work/pacage 1322199874
+AR work/grid_display/Behavioral 1322199884 \
       FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/grid_display.vhd \
-      EN work/grid_display 1322079530 CP grid_roms
+      EN work/grid_display 1322199883 CP grid_roms
 FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/ipcore_dir/dcm.vhd 2011/11/21.23:54:35 O.76xd
-EN work/dcm 1322079540 \
+EN work/dcm 1322191395 \
       FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/ipcore_dir/dcm.vhd \
       PB ieee/std_logic_1164 1317710503 PB ieee/NUMERIC_STD 1317710508 LB UNISIM \
       PH unisim/VCOMPONENTS 1317710510
-AR work/dcm/BEHAVIORAL 1322079541 \
+AR work/dcm/BEHAVIORAL 1322191396 \
       FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/ipcore_dir/dcm.vhd \
-      EN work/dcm 1322079540 CP BUFG CP IBUFG CP DCM_SP
-FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/pacage.vhd 2011/11/23.03:24:16 O.76xd
-PH work/pacage 1322079523 \
+      EN work/dcm 1322191395 CP BUFG CP IBUFG CP DCM_SP
+FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/pacage.vhd 2011/11/25.00:40:56 O.76xd
+PH work/pacage 1322199874 \
       FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/pacage.vhd \
       PB ieee/std_logic_1164 1317710503
-FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/pacman_manager.vhd 2011/11/23.15:18:32 O.76xd
-EN work/pacman_manager 1322079532 \
+FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/pacman_manager.vhd 2011/11/23.20:31:33 O.76xd
+EN work/pacman_manager 1322199885 \
       FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/pacman_manager.vhd \
       PB ieee/std_logic_1164 1317710503 PB ieee/STD_LOGIC_UNSIGNED 1317710506 \
-      PB ieee/NUMERIC_STD 1317710508 PH work/pacage 1322079523
-AR work/pacman_manager/Behavioral 1322079533 \
+      PB ieee/NUMERIC_STD 1317710508 PH work/pacage 1322199874
+AR work/pacman_manager/Behavioral 1322199886 \
       FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/pacman_manager.vhd \
-      EN work/pacman_manager 1322079532 CP pacman_target_selection CP pacman_rom
+      EN work/pacman_manager 1322199885 CP pacman_target_selection CP pacman_rom
 FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/pacman_rom.vhd 2011/11/23.03:18:11 O.76xd
-EN work/pacman_rom 1322079526 \
+EN work/pacman_rom 1322199879 \
       FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/pacman_rom.vhd \
       PB ieee/std_logic_1164 1317710503 PB ieee/STD_LOGIC_UNSIGNED 1317710506 \
-      PB ieee/NUMERIC_STD 1317710508 PH work/pacage 1322079523
-AR work/pacman_rom/Behavioral 1322079527 \
+      PB ieee/NUMERIC_STD 1317710508 PH work/pacage 1322199874
+AR work/pacman_rom/Behavioral 1322199880 \
       FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/pacman_rom.vhd \
-      EN work/pacman_rom 1322079526
-FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/pacman_target_selection.vhd 2011/11/23.14:40:46 O.76xd
-EN work/pacman_target_selection 1322079524 \
+      EN work/pacman_rom 1322199879
+FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/pacman_target_selection.vhd 2011/11/24.22:19:48 O.76xd
+EN work/pacman_target_selection 1322199877 \
       FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/pacman_target_selection.vhd \
       PB ieee/std_logic_1164 1317710503 PB ieee/STD_LOGIC_UNSIGNED 1317710506 \
-      PB ieee/NUMERIC_STD 1317710508 PH work/pacage 1322079523
-AR work/pacman_target_selection/Behavioral 1322079525 \
+      PB ieee/NUMERIC_STD 1317710508 PH work/pacage 1322199874
+AR work/pacman_target_selection/Behavioral 1322199878 \
       FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/pacman_target_selection.vhd \
-      EN work/pacman_target_selection 1322079524
-FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/top_level.vhd 2011/11/23.14:33:39 O.76xd
-EN work/top_level 1322079546 \
+      EN work/pacman_target_selection 1322199877
+FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/top_level.vhd 2011/11/24.22:22:07 O.76xd
+EN work/top_level 1322191401 \
       FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/top_level.vhd \
       PB ieee/std_logic_1164 1317710503 PB ieee/NUMERIC_STD 1317710508 \
-      PH work/pacage 1322079523
-AR work/top_level/Behavioral 1322079547 \
+      PH work/pacage 1322199874
+AR work/top_level/Behavioral 1322191402 \
       FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/top_level.vhd \
-      EN work/top_level 1322079546 CP clock_divider CP dcm CP vga_1024x768 \
+      EN work/top_level 1322191401 CP clock_divider CP dcm CP vga_1024x768 \
       CP display_manager
 FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/vga1024x768.vhd 2011/11/22.21:22:48 O.76xd
-EN work/vga_1024x768 1322079542 \
+EN work/vga_1024x768 1322191397 \
       FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/vga1024x768.vhd \
       PB ieee/std_logic_1164 1317710503 PB ieee/STD_LOGIC_UNSIGNED 1317710506
-AR work/vga_1024x768/Behavioral 1322079543 \
+AR work/vga_1024x768/Behavioral 1322191398 \
       FL /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/vga1024x768.vhd \
-      EN work/vga_1024x768 1322079542
+      EN work/vga_1024x768 1322191397
 FL /home/bryant/ise_projects/pacman/dot.vhd 2011/11/21.13:41:26 O.76xd
 EN work/dot 1321900893 FL /home/bryant/ise_projects/pacman/dot.vhd \
       PB ieee/std_logic_1164 1317710503 PB ieee/NUMERIC_STD 1317710508

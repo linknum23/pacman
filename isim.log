@@ -17,6 +17,7 @@ at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD.T
 at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
 Finished circuit initialization process.
 at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 235 ns(7), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
 # restart
 # run 1.00us
 Simulator is doing circuit initialization process.
@@ -26,34 +27,46 @@ at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD.T
 at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
 Finished circuit initialization process.
 at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 010.00us
-# run 010.00us
-# run 010.00us
-# run 010.00us
-# run 010.00us
-# run 010.00us
-# run 010.00us
-# run 010.00us
-# run 010.00us
-# run 010.00us
-# run 010.00us
-# run 010.00us
-# run 010.00us
-# run 010.00us
-# run 010.00us
-# run 010.00us
-# run 010.00us
-# run 010.00us
-# run 010.00us
-# run 010.00us
+at 235 ns(7), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run 100.00us
+# run all
+at 4108622692 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4118961152 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4129299612 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4139638076 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4149976536 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4160315 ns(10), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4170653460 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4180991920 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4191330384 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4201668844 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4212007304 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4222345768 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4232684228 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4243022692 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4253361152 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4263699612 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4274038076 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4284376536 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4294715 ns(10), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4305053460 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4315391920 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4325730384 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4336068844 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4346407304 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4356745768 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4367084228 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4377422692 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4387761152 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4398099612 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4408438076 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4418776536 ps(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 4429115 ns(10), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+Stopped at time : 5715738076 ps : File "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/grid_display.vhd" Line 77
 # exit 0

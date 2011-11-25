@@ -52,23 +52,23 @@ architecture Behavioral of pacman_rom is
     "0000000000000000"
     );
 
-    signal why : unsigned(5 downto 0);
-    signal ex : unsigned(4 downto 0);
+  signal why : unsigned(5 downto 0);
+  signal ex  : unsigned(4 downto 0);
 
 begin
 
-    why <= to_unsigned(offset.Y + addr.Y,why'length);
-    ex <= to_unsigned(addr.X,ex'length);
+  why <= to_unsigned(offset.Y + addr.Y, why'length);
+  ex  <= to_unsigned(addr.X, ex'length);
 
   process(why, ex, offset)
-  variable newy : unsigned(why'high downto 0);
-  variable newx : unsigned(ex'high downto 0);
+    variable newy : unsigned(why'high downto 0);
+    variable newx : unsigned(ex'high downto 0);
   begin
     data <= '0';
     newy := '0' & why(why'high downto 1);
     newx := '0' & ex(ex'high downto 1);
     if newy < 32 and newy >= 0 and newx < 16 and newx >= 0 then
-      data <= rom( to_integer(newy) )(to_integer(newx));
+      data <= rom(to_integer(newy))(to_integer(newx));
     end if;
   end process;
 

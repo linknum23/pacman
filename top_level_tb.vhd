@@ -1,74 +1,75 @@
-LIBRARY ieee;
-USE ieee.std_logic_1164.ALL;
- 
-ENTITY top_level_tb IS
-END top_level_tb;
- 
-ARCHITECTURE behavior OF top_level_tb IS 
- 
-    -- Component Declaration for the Unit Under Test (UUT)
- 
-    COMPONENT top_level
-    PORT(
-         mclk : IN  std_logic;
-         hsync : OUT  std_logic;
-         vsync : OUT  std_logic;
-         btn : in std_logic_vector(3 downto 0);
-         red : OUT  std_logic_vector(2 downto 0);
-         green : OUT  std_logic_vector(2 downto 0);
-         blue : OUT  std_logic_vector(1 downto 0)
-        );
-    END COMPONENT;
-    
+library ieee;
+use ieee.std_logic_1164.all;
 
-   --Inputs
-   signal mclk : std_logic := '0';
+entity top_level_tb is
+end top_level_tb;
 
- 	--Outputs
-   signal hsync : std_logic;
-   signal vsync : std_logic;
-   signal red : std_logic_vector(2 downto 0);
-   signal green : std_logic_vector(2 downto 0);
-   signal blue : std_logic_vector(1 downto 0);
-   signal j : std_logic_vector(0 downto 0);
+architecture behavior of top_level_tb is
 
-   -- Clock period definitions
-   constant mclk_period : time := 10 ns;
- 
-BEGIN
- 
-	-- Instantiate the Unit Under Test (UUT)
-   uut: top_level PORT MAP (
-          mclk => mclk,
-          hsync => hsync,
-          vsync => vsync,
-          btn => "1000",
-          red => red,
-          green => green,
-          blue => blue
-        );
+  -- Component Declaration for the Unit Under Test (UUT)
+  
+  component top_level
+    port(
+      mclk  : in  std_logic;
+      hsync : out std_logic;
+      vsync : out std_logic;
+      btn   : in  std_logic_vector(3 downto 0);
+      red   : out std_logic_vector(2 downto 0);
+      green : out std_logic_vector(2 downto 0);
+      blue  : out std_logic_vector(1 downto 0)
+      );
+  end component;
 
-   -- Clock process definitions
-   mclk_process :process
-   begin
-		mclk <= '0';
-		wait for mclk_period/2;
-		mclk <= '1';
-		wait for mclk_period/2;
-   end process;
- 
 
-   -- Stimulus process
-   stim_proc: process
-   begin		
-      -- hold reset state for 100 ns.
-      wait for 100 ns;	
+  --Inputs
+  signal mclk : std_logic := '0';
 
-      wait for mclk_period*10;
+  --Outputs
+  signal hsync : std_logic;
+  signal vsync : std_logic;
+  signal red   : std_logic_vector(2 downto 0);
+  signal green : std_logic_vector(2 downto 0);
+  signal blue  : std_logic_vector(1 downto 0);
+  signal j     : std_logic_vector(0 downto 0);
+  signal dir   : std_logic_vector(3 downto 0);
 
-      -- insert stimulus here 
+  -- Clock period definitions
+  constant mclk_period : time := 10 ns;
+  
+begin
 
-      wait;
-   end process;
+  -- Instantiate the Unit Under Test (UUT)
+  uut : top_level port map (
+    mclk  => mclk,
+    hsync => hsync,
+    vsync => vsync,
+    btn   => dir,
+    red   => red,
+    green => green,
+    blue  => blue
+    );
 
-END;
+  -- Clock process definitions
+  mclk_process : process
+  begin
+    mclk <= '0';
+    wait for mclk_period/2;
+    mclk <= '1';
+    wait for mclk_period/2;
+  end process;
+
+
+  -- Stimulus process
+  stim_proc : process
+  begin
+    dir <= "0001";
+    --wait for 3ms;     
+    --dir <= "0010";
+    --wait for 3ms;
+    --dir <= "0100";
+    --wait for 3ms;
+    --dir <= "1000";
+    wait;
+  end process;
+
+end;

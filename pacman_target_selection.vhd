@@ -9,6 +9,7 @@ entity pacman_target_selection is
     clk                  : in  std_logic;
     current_direction    : in  DIRECTION;
     current_location     : in  POINT;
+    current_tile_point   : in  POINT;
     rom_data_type        : in  std_logic_vector(4 downto 0);
     rom_request_response : in  std_logic;
     rom_location         : out POINT;
@@ -21,31 +22,32 @@ architecture Behavioral of pacman_target_selection is
   type   STATE_TYPE is (NONE, REQUEST_MOVE, CHECK_MOVE);
   signal state : STATE_TYPE := NONE;
 
-  signal next_location         : POINT := (0, 0);
-  signal last_current_location : POINT := (0, 0);
+  signal next_location          : POINT     := (0, 0);
+  signal last_current_location  : POINT     := (0, 0);
+  signal last_current_direction : DIRECTION := NONE;
+  signal edge                   : std_logic := '0';
+  signal enable_move            : std_logic := '0';
 
 begin
   --check the next location in our direction and set the speed to 0 or 1.
   process(clk)
   begin
     if clk = '1' and clk'event then
-      
-      rom_request  <= '0';
+      rom_request <= '0';
       case state is
         when NONE =>
           rom_request <= '0';
           state       <= NONE;
-          if current_location /= last_current_location then
+          if current_location /= last_current_location or current_direction /= last_current_direction then
             --direction change
             state <= REQUEST_MOVE;
-            speed <= "0";
           end if;
         when REQUEST_MOVE =>
           if current_direction /= NONE then
             ---request rom access
-            rom_request <= '1';
+            rom_request  <= '1';
             rom_location <= next_location;
-            state       <= CHECK_MOVE;
+            state        <= CHECK_MOVE;
           else
             state <= REQUEST_MOVE;
           end if;
@@ -54,7 +56,9 @@ begin
             --response from rom
             if rom_data_type >= 16 then
               --we have a blank or dot
-              speed <= "1";
+              enable_move <= '1';
+            else
+              enable_move <= '0';
             end if;
             state <= NONE;
           else
@@ -62,6 +66,27 @@ begin
           end if;
         when others => null;
       end case;
+    end if;
+  end process;
+
+  process(enable_move, edge)
+  begin
+    if enable_move = '1' then
+      speed <= "1";
+    elsif enable_move = '0' and edge = '0' then
+      --diabled but havent hit the edge yet
+      speed <= "1";
+    else
+      speed <= "0";
+    end if;
+  end process;
+
+  process(current_tile_point)
+  begin
+    if current_tile_point.X = 0 then
+      edge <= '1';
+    else
+      edge <= '0';
     end if;
   end process;
 
@@ -90,7 +115,8 @@ begin
   process(clk)
   begin
     if clk = '1' and clk'event then
-      last_current_location <= current_location;
+      last_current_location  <= current_location;
+      last_current_direction <= current_direction;
     end if;
   end process;
 

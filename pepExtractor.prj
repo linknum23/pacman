@@ -1,4 +1,2 @@
+work	"direction_manager.vhd"
 work	"pacage.vhd"
-work	"pacman_manager.vhd"
-work	"pacman_rom.vhd"
-work	"pacman_target_selection.vhd"

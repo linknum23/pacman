@@ -64,7 +64,7 @@ begin
 
   process(addr)
   begin
-   data <= "10000";
+    data <= "10000";
     if addr.Y < 31 and addr.X < 28 and addr.Y >= 0 and addr.X >= 0 then
       data <= grid(addr.Y)(addr.X);
     end if;

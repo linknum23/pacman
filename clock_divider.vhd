@@ -5,7 +5,7 @@ use IEEE.STD_LOGIC_UNSIGNED.all;
 entity clock_divider is
   port(
     clk_50mhz : in  std_logic;
-    rst : in std_logic;
+    rst       : in  std_logic;
     clk_25mhz : out std_logic
     );
 end clock_divider;
@@ -18,9 +18,9 @@ begin
   begin
     if clk_50mhz = '1' and clk_50mhz'event then
       if rst = '1' then
-         count <= (others=>'0');
+        count <= (others => '0');
       else
-         count <= count + 1;
+        count <= count + 1;
       end if;
     end if;
   end process;

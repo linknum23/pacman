@@ -4,13 +4,13 @@ use IEEE.STD_LOGIC_UNSIGNED.all;
 
 entity vga_1024x768 is
   port (
-    clk   : in  std_logic;
-    hsync : out std_logic;
-    vsync : out std_logic;
-    hc    : out std_logic_vector(10 downto 0);
-    vc    : out std_logic_vector(10 downto 0);
-	 in_vbp : out std_logic;
-    vidon : out std_logic
+    clk    : in  std_logic;
+    hsync  : out std_logic;
+    vsync  : out std_logic;
+    hc     : out std_logic_vector(10 downto 0);
+    vc     : out std_logic_vector(10 downto 0);
+    in_vbp : out std_logic;
+    vidon  : out std_logic
     );
 end vga_1024x768;
 
@@ -46,9 +46,9 @@ begin
     if(clk'event and clk = '1') then
       if hcs = h_whole_line - 1 then
                                         --The counter has reached the end of pixel count
-        hcs      <= "00000000000";--reset the counter
+        hcs <= "00000000000";           --reset the counter
       else
-        hcs      <= hcs + 1; --Increment the horizontal counter
+        hcs <= hcs + 1;                 --Increment the horizontal counter
       end if;
     end if;
   end process;
@@ -68,7 +68,7 @@ begin
       end if;
     end if;
   end process;
-  
+
   in_vbp <= '1' when vcs < v_back_porch else '0';
 
                                         --sync pulses
@@ -80,7 +80,7 @@ begin
            and vcs >= v_front_offset and vcs < v_back_offset else '0';
 
                                         -- output horizontal and vertical counters
-  hc <= hcs - h_front_offset - 1 when h_front_offset < hcs else (others=>'1');
-  vc <= vcs - v_front_offset - 1 when v_front_offset < vcs else (others=>'1');
+  hc <= hcs - h_front_offset - 1 when h_front_offset < hcs else (others => '1');
+  vc <= vcs - v_front_offset - 1 when v_front_offset < vcs else (others => '1');
 
 end Behavioral;

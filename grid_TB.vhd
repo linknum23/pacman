@@ -1,81 +1,81 @@
-LIBRARY ieee;
-USE ieee.std_logic_1164.ALL;
+library ieee;
+use ieee.std_logic_1164.all;
 use work.pacage.all;
 
-ENTITY grid_TB IS
-END grid_TB;
- 
-ARCHITECTURE behavior OF grid_TB IS 
- 
-    -- Component Declaration for the Unit Under Test (UUT)
- 
-    COMPONENT grid_display
-    PORT(
-         clk : IN  std_logic;
-         current_location : IN  POINT;
-         mode : IN  std_logic_vector(2 downto 0);
-         valid_location : OUT  std_logic;
-         data : OUT  COLOR
-        );
-    END COMPONENT;
-    
+entity grid_TB is
+end grid_TB;
 
-   --Inputs
-   signal clk : std_logic := '0';
-   signal current_location : POINT;
-   signal mode : std_logic_vector(2 downto 0) := (others => '0');
+architecture behavior of grid_TB is
 
- 	--Outputs
-   signal valid_location : std_logic;
-   signal data : COLOR;
+  -- Component Declaration for the Unit Under Test (UUT)
+  
+  component grid_display
+    port(
+      clk              : in  std_logic;
+      current_location : in  POINT;
+      mode             : in  std_logic_vector(2 downto 0);
+      valid_location   : out std_logic;
+      data             : out COLOR
+      );
+  end component;
 
-   -- Clock period definitions
-   constant clk_period : time := 10 ns;
- 
-BEGIN
- 
-	-- Instantiate the Unit Under Test (UUT)
-   uut: grid_display PORT MAP (
-          clk => clk,
-          current_location => current_location,
-          mode => mode,
-          valid_location => valid_location,
-          data => data
-        );
 
-   -- Clock process definitions
-   clk_process :process
-   begin
-		clk <= '0';
-		wait for clk_period/2;
-		clk <= '1';
-		wait for clk_period/2;
-   end process;
- 
+  --Inputs
+  signal clk              : std_logic                    := '0';
+  signal current_location : POINT;
+  signal mode             : std_logic_vector(2 downto 0) := (others => '0');
 
-   -- Stimulus process
-   process(clk)
-   begin
-      if clk = '1' and clk'event then
-         if current_location.X < 1023 then
-            current_location.X <= current_location.X + 1;
-         else 
-            current_location.X <= 0;
-         end if;
+  --Outputs
+  signal valid_location : std_logic;
+  signal data           : COLOR;
+
+  -- Clock period definitions
+  constant clk_period : time := 10 ns;
+  
+begin
+
+  -- Instantiate the Unit Under Test (UUT)
+  uut : grid_display port map (
+    clk              => clk,
+    current_location => current_location,
+    mode             => mode,
+    valid_location   => valid_location,
+    data             => data
+    );
+
+  -- Clock process definitions
+  clk_process : process
+  begin
+    clk <= '0';
+    wait for clk_period/2;
+    clk <= '1';
+    wait for clk_period/2;
+  end process;
+
+
+  -- Stimulus process
+  process(clk)
+  begin
+    if clk = '1' and clk'event then
+      if current_location.X < 1023 then
+        current_location.X <= current_location.X + 1;
+      else
+        current_location.X <= 0;
       end if;
-   end process;
-   
-   process(clk)
-   begin
-      if clk = '1' and clk'event then
-         if current_location.X >= 1023 then
-            if current_location.Y < 767 then
-               current_location.Y <= current_location.Y + 1;
-            else 
-               current_location.Y <= 0;
-            end if;
-         end if;
-      end if;
-   end process;
+    end if;
+  end process;
 
-END;
+  process(clk)
+  begin
+    if clk = '1' and clk'event then
+      if current_location.X >= 1023 then
+        if current_location.Y < 767 then
+          current_location.Y <= current_location.Y + 1;
+        else
+          current_location.Y <= 0;
+        end if;
+      end if;
+    end if;
+  end process;
+
+end;
