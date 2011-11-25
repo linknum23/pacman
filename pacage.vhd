@@ -17,7 +17,7 @@ package pacage is
   end record;
 
   type DIRECTION is (L, R, UP, DOWN, NONE); 
-    type GHOST_MODE is (NORMAL, SCATTER);
+  type GHOST_MODE is (NORMAL, SCATTER);
   type GHOST_DISP_MODE is (NORM, SCATTER, EYES);
 
   type GHOST_INFO is

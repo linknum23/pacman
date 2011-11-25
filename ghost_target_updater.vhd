@@ -12,7 +12,7 @@ entity ghost_target_updater is
     rom_data      : in  std_logic;
     done          : out std_logic;
     pman_loc      : in  POINT;
-    ghost_mode    : in  GHOST_MODE;
+    ghostmode    : in  GHOST_MODE;
     blinky_target : out POINT;
     pinky_target  : out POINT;
     inky_target   : out POINT;

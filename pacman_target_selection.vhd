@@ -6,15 +6,15 @@ use work.pacage.all;
 
 entity pacman_target_selection is
   port(
-    clk                  : in  std_logic;
-    current_direction    : in  DIRECTION;
-    current_location     : in  POINT;
-    current_tile_point   : in  POINT;
-    rom_data_type        : in  std_logic_vector(4 downto 0);
-    rom_request_response : in  std_logic;
-    rom_location         : out POINT;
-    rom_request          : out std_logic;
-    speed                : out std_logic_vector(0 downto 0)
+    clk                : in  std_logic;
+    current_direction  : in  DIRECTION;
+    current_location   : in  POINT;
+    current_tile_point : in  POINT;
+    rom_data_type      : in  std_logic_vector(4 downto 0);
+    rom_enable         : in  std_logic;
+    rom_location       : out POINT;
+    rom_use_done       : out std_logic;
+    speed              : out std_logic_vector(0 downto 0)
     );
 end pacman_target_selection;
 
@@ -33,39 +33,34 @@ begin
   process(clk)
   begin
     if clk = '1' and clk'event then
-      rom_request <= '0';
+      rom_use_done <= '0';
       case state is
         when NONE =>
-          rom_request <= '0';
-          state       <= NONE;
+          state <= NONE;
           if current_location /= last_current_location or current_direction /= last_current_direction then
             --direction change
             state <= REQUEST_MOVE;
           end if;
         when REQUEST_MOVE =>
-          if current_direction /= NONE then
-            ---request rom access
-            rom_request  <= '1';
+          if current_direction /= NONE and rom_enable = '1' then
+            ---utilize rom access
             rom_location <= next_location;
             state        <= CHECK_MOVE;
           else
             state <= REQUEST_MOVE;
           end if;
         when CHECK_MOVE =>
-          if rom_request_response = '1' then
-            --response from rom
-            if rom_data_type >= 16 then
-              --we have a blank or dot
-              enable_move <= '1';
-            else
-              enable_move <= '0';
-            end if;
-            state <= NONE;
+          --response from rom
+          if rom_data_type >= 16 then
+            --we have a blank or dot
+            enable_move <= '1';
           else
-            state <= CHECK_MOVE;
+            enable_move <= '0';
           end if;
-        when others => null;
-      end case;
+          rom_use_done <= '1';
+          state        <= NONE;
+      when others => null;
+    end case;
     end if;
   end process;
 

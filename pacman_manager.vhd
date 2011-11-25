@@ -9,21 +9,22 @@ entity pacman_manager is
     GAME_OFFSET : POINT
     );
   port(
-    clk                      : in  std_logic;
-    rst                      : in  std_logic;
-    collision                : in  std_logic;
-    direction_select         : in  DIRECTION; 
-    current_draw_location    : in  POINT;
-    mode                     : in  std_logic_vector(2 downto 0);
-    data_type                : in  std_logic_vector(4 downto 0);
-    pacman_pixel_location    : out POINT;
-    pacman_tile_location     : out POINT;
-    pacman_rom_tile_location : out POINT;
-    pacman_direction         : out DIRECTION;
-    data                     : out COLOR;
-    valid_location           : out std_logic;
-    rom_request_response     : in  std_logic;
-    rom_request              : out std_logic
+    clk                         : in  std_logic;
+    rst                         : in  std_logic;
+    collision                   : in  std_logic;
+    direction_select            : in  DIRECTION;
+    current_draw_location       : in  POINT;
+    mode                        : in  std_logic_vector(2 downto 0);
+    rom_data_in                 : in  std_logic_vector(4 downto 0);
+    pacman_pixel_location       : out POINT;
+    pacman_tile_location        : out POINT;
+    pacman_rom_tile_location    : out POINT;
+    pacman_tile_location_offset : out POINT;
+    pacman_direction            : out DIRECTION;
+    data                        : out COLOR;
+    valid_location              : out std_logic;
+    rom_enable                  : in  std_logic;
+    rom_use_done                : out std_logic
     );
 end pacman_manager;
 
@@ -39,15 +40,15 @@ architecture Behavioral of pacman_manager is
 
   component pacman_target_selection is
     port(
-      clk                  : in  std_logic;
-      current_direction    : in  DIRECTION;
-      current_location     : in  POINT;
-      current_tile_point   : in  POINT;
-      rom_data_type        : in  std_logic_vector(4 downto 0);
-      rom_request_response : in  std_logic;
-      rom_location         : out POINT;
-      rom_request          : out std_logic;
-      speed                : out std_logic_vector(0 downto 0)
+      clk                : in  std_logic;
+      current_direction  : in  DIRECTION;
+      current_location   : in  POINT;
+      current_tile_point : in  POINT;
+      rom_data_type      : in  std_logic_vector(4 downto 0);
+      rom_enable         : in  std_logic;
+      rom_location       : out POINT;
+      rom_use_done       : out std_logic;
+      speed              : out std_logic_vector(0 downto 0)
       );
   end component;
 
@@ -91,17 +92,18 @@ begin
   --handle the movements
   movement_engine : pacman_target_selection
     port map (
-      clk                  => clk,
-      current_direction    => current_direction,
-      current_location     => current_tile_position,
-      current_tile_point   => current_tile_position_offset,
-      rom_data_type        => data_type,
-      rom_request_response => rom_request_response,
-      rom_location         => next_location,
-      rom_request          => rom_request,
-      speed                => speed
+      clk                => clk,
+      current_direction  => current_direction,
+      current_location   => current_tile_position,
+      current_tile_point => current_tile_position_offset,
+      rom_data_type      => rom_data_in,
+      rom_enable         => rom_enable,
+      rom_location       => next_location,
+      rom_use_done       => rom_use_done,
+      speed              => speed
       );
-  pacman_rom_tile_location <= next_location;
+  pacman_rom_tile_location    <= next_location;
+  pacman_tile_location_offset <= current_tile_position_offset;
 
   --calculate the current position
   process(move_clk)
@@ -210,7 +212,7 @@ begin
   move_clk  <= clocks(14);
 
 
---based on the wacka speed, 
+--based on the wacka speed,
 --toggle back an forth for mouth movement
   process(wacka_clk, speed, current_direction)
   begin
@@ -221,7 +223,7 @@ begin
     end if;
   end process;
 
---output mux for the colors of pacman, 
+--output mux for the colors of pacman,
 --only if we are valid
   process(valid)
   begin

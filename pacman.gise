@@ -204,8 +204,9 @@
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
     </transform>
-    <transform xil_pn:end_ts="1322199876" xil_pn:in_ck="-5604783167017140829" xil_pn:name="TRANEXT_xstsynthesize_spartan3e" xil_pn:prop_ck="-8858626213584220729" xil_pn:start_ts="1322199869">
-      <status xil_pn:value="FailedRun"/>
+    <transform xil_pn:end_ts="1322204898" xil_pn:in_ck="-5604783167017140829" xil_pn:name="TRANEXT_xstsynthesize_spartan3e" xil_pn:prop_ck="-8858626213584220729" xil_pn:start_ts="1322204871">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
       <outfile xil_pn:name=".lso"/>
       <outfile xil_pn:name="_xmsgs/xst.xmsgs"/>
@@ -213,11 +214,11 @@
       <outfile xil_pn:name="top_level.ngc"/>
       <outfile xil_pn:name="top_level.ngr"/>
       <outfile xil_pn:name="top_level.prj"/>
+      <outfile xil_pn:name="top_level.stx"/>
       <outfile xil_pn:name="top_level.syr"/>
       <outfile xil_pn:name="top_level.xst"/>
       <outfile xil_pn:name="top_level_tb_beh.prj"/>
       <outfile xil_pn:name="top_level_tb_stx_beh.prj"/>
-      <outfile xil_pn:name="top_level_vhdl.prj"/>
       <outfile xil_pn:name="top_level_xst.xrpt"/>
       <outfile xil_pn:name="webtalk_pn.xml"/>
       <outfile xil_pn:name="xst"/>

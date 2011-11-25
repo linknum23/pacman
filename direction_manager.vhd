@@ -11,7 +11,7 @@ entity direction_manager is
     direction_selection          : in  DIRECTION;
     pacman_current_tile_location : in  POINT;
     pacman_current_tile_offset   : in  POINT;
-    rom_data_in                  : in  std_logic_vector(3 downto 0);
+    rom_data_in                  : in  std_logic_vector(4 downto 0);
     rom_enable                   : in  std_logic;
     current_direction            : out DIRECTION;
     rom_address                  : out POINT;

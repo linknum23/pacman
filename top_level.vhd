@@ -53,7 +53,7 @@ architecture Behavioral of top_level is
       clk                        : in  std_logic;
       rst                        : in  std_logic; 
       current_draw_location      : in  POINT;
-      pacman_direction_selection : in  DIRECTION; 
+      user_direction_selection : in  DIRECTION; 
       data                       : out COLOR
       );
   end component;
@@ -109,7 +109,7 @@ begin
       clk                        => clk_25mhz,
       rst                        => rst,
       current_draw_location      => current_draw_location,
-      pacman_direction_selection => direction,
+      user_direction_selection => direction,
       data                       => color_data
       ); 
 

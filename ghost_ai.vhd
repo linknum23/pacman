@@ -12,7 +12,7 @@ entity ghost_ai is
         rom_data        : in  std_logic;
         dots_eaten      : in  std_logic_vector (7 downto 0);
         level           : in  std_logic_vector (8 downto 0);
-        ghost_mode      : in  std_logic;
+        ghostmode      : in  std_logic;
         pman_loc        : in  POINT;
         done            : out std_logic;
         blinky_info     : out GHOST_INFO;
@@ -99,27 +99,27 @@ architecture Behavioral of ghost_ai is
 
 begin
 
-  blinky_tile_loc.X <= to_integer(to_unsigned(blinky_info.PT.X, 9) srl 4);
-  blinky_tile_loc.Y <= to_integer(to_unsigned(blinky_info.PT.Y, 9) srl 4);
-  pinky_tile_loc.X  <= to_integer(to_unsigned(pinky_info.PT.X, 9) srl 4);
-  pinky_tile_loc.Y  <= to_integer(to_unsigned(pinky_info.PT.Y, 9) srl 4);
-  inky_tile_loc.X   <= to_integer(to_unsigned(inky_info.PT.X, 9) srl 4);
-  inky_tile_loc.Y   <= to_integer(to_unsigned(inky_info.PT.Y, 9) srl 4);
-  clyde_tile_loc.X  <= to_integer(to_unsigned(clyde_info.PT.X, 9) srl 4);
-  clyde_tile_loc.Y  <= to_integer(to_unsigned(CLYDE_info.PT.Y, 9) srl 4);
+--  blinky_tile_loc.X <= to_integer(to_unsigned(blinky_info.PT.X, 9) srl 4);
+--  blinky_tile_loc.Y <= to_integer(to_unsigned(blinky_info.PT.Y, 9) srl 4);
+--  pinky_tile_loc.X  <= to_integer(to_unsigned(pinky_info.PT.X, 9) srl 4);
+--  pinky_tile_loc.Y  <= to_integer(to_unsigned(pinky_info.PT.Y, 9) srl 4);
+--  inky_tile_loc.X   <= to_integer(to_unsigned(inky_info.PT.X, 9) srl 4);
+--  inky_tile_loc.Y   <= to_integer(to_unsigned(inky_info.PT.Y, 9) srl 4);
+--  clyde_tile_loc.X  <= to_integer(to_unsigned(clyde_info.PT.X, 9) srl 4);
+--  clyde_tile_loc.Y  <= to_integer(to_unsigned(CLYDE_info.PT.Y, 9) srl 4);
 
-  collision_check : collision_machine
-    port map(
-      clk                  => clk,
-      rst                  => rst,
-      pacman_tile_location => pman_loc,
-      blinky_tile_location => blinky_tile_loc,
-      pinky_tile_location  => pinky_tile_loc,
-      inky_tile_location   => inky_tile_loc,
-      clyde_tile_location  => clyde_tile_loc,
-      collision_index      => collision_index,
-      collision            => collision
-      );
+--  collision_check : collision_machine
+--    port map(
+--      clk                  => clk,
+--      rst                  => rst,
+--      pacman_tile_location => pman_loc,
+--      blinky_tile_location => blinky_tile_loc,
+--      pinky_tile_location  => pinky_tile_loc,
+--      inky_tile_location   => inky_tile_loc,
+--      clyde_tile_location  => clyde_tile_loc,
+--      collision_index      => collision_index,
+--      collision            => collision
+--      );
 
   ai_routine_next : process(clk, rst)
   begin
