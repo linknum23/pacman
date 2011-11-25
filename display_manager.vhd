@@ -57,22 +57,22 @@ architecture Behavioral of display_manager is
   end component;
   
   component ghost_ai is
-    Port ( clk : in  STD_LOGIC;
-           en : in  STD_LOGIC;
-           rst : in  STD_LOGIC;
-           rom_addr : out POINT;
-           rom_data : in  STD_LOGIC;
-           dots_eaten : in  STD_LOGIC_VECTOR (7 downto 0);
-           level : in  STD_LOGIC_VECTOR (8 downto 0);
-			  ghost_mode : in  STD_LOGIC;
-			  pman_loc : POINT;
-           done : out  STD_LOGIC;
-			  blinky_info : out GHOST_INFO;
-			  pinky_info : out GHOST_INFO;
-			  inky_info : out GHOST_INFO;
-			  clyde_info : out GHOST_INFO;
-			  collision : out std_logic
-			  );
+    Port (  clk : in  STD_LOGIC;
+			en : in  STD_LOGIC;
+			rst : in  STD_LOGIC;
+			rom_addr : out POINT;
+			rom_data : in  STD_LOGIC;
+			dots_eaten : in  STD_LOGIC_VECTOR (7 downto 0);
+			level : in  STD_LOGIC_VECTOR (8 downto 0);
+			ghost_mode : in  STD_LOGIC;
+			pman_loc : POINT;
+			done : out  STD_LOGIC;
+			blinky_info : out GHOST_INFO;
+			pinky_info : out GHOST_INFO;
+			inky_info : out GHOST_INFO;
+			clyde_info : out GHOST_INFO;
+			collision : out std_logic
+	);
 	end component;
 
   component game_grid is
@@ -114,6 +114,12 @@ architecture Behavioral of display_manager is
   signal grid_rom_request : std_logic := '0';
   signal grid_rom_request_response : std_logic := '0';
   signal grid_data : std_logic_vector(4 downto 0);
+
+  --state controller
+  type game_state is (VGA_READ,PAUSE,GHOST_UPDATE,PACMAN_UPDATE,DIRECTION_UPDATE);
+  signal gstate : game_state := VGA_READ;
+  
+  signal vga_en, ghost_en, pacman_en, direction_en : std_logic;
   
 begin
   board : grid_display
@@ -158,15 +164,15 @@ begin
 	ai : ghost_ai
 	port map (
 		clk => slow_clk,
-		en  => ai_calc_en,
+		en  => ghost_en,
 		rst => rst,
-		rom_addr => ghost_rom_request,
-		rom_data => space_valid,
+		rom_addr => ghost_tile_location,
+		rom_data => grid_data(4),
 		dots_eaten => dots_eaten,
 		level => level,
 		ghost_mode => ghost_mode,
 		pman_loc => pacman_tile_location,
-		done => ai_calc_done,
+		done => ghost_done,
 		blinky_info => blinky,
 		pinky_info => pinky,
 		inky_info => inky,
@@ -184,26 +190,76 @@ begin
       data   => grid_data
       );
 
-  --mux the output color for the display
-  process(pacman_rom_request,pacman_rom_tile_location, grid_tile_location)
+  process(vga_en, ghost_en, pacman_en, direction_en)
   begin
-     pacman_rom_request_response <= '0';
-     grid_rom_request_response <= '0';
-    if pacman_rom_request = '1' then
-      rom_tile_location <= pacman_rom_tile_location;
-      pacman_rom_request_response <= '1';
-    else
-      --give it to the grid
-      rom_tile_location <= grid_tile_location;
-      grid_rom_request_response <= '1';
-    end if;
+case gstate is 
+	if vga_en = '1' then
+		rom_tile_location<= grid_tile_location;
+	elsif ghost_en = '1' then
+		rom_tile_location<= ghost_tile_location;
+	elsif pacman_en = '1' then 
+		rom_tile_location <= pacman_tile_location;
+	elsif direction_en = '1' then
+		rom_tile_location <= (X=> 0, Y=> 0);
+	else 
+		rom_tile_location <= (X=> 0, Y=> 0);
+	end if;
   end process;
 
 ------------------------------------------------
 -- basic state controller for pacman
 --  this should be put in a seperate file when it gets bigger
 -------------------------------------------------------
-	
+process(clk,clr) 
+begin
+	if clk'event and clk = '1' then 
+		if invbp == '0' then 
+			vga_en <= '1';
+			gstate <= VGA_READ;
+		else
+			case gstate is 
+				vga_en <= '0';
+				ghost_en <= '0';
+				pacman_en <= '0';
+				direction_en <= '0';
+				when VGA_READ =>
+					vga_en <= '1';
+					if invbp == '1' then 
+						gstate <= GHOST_UPDATE;
+						ghost_en <= '1';
+					else
+						gstate <= VGA_READ;
+					end if;
+				when GHOST_UPDATE =>
+					ghost_en <= '1';
+					if ghost_done = '1' then 
+						pacman_en <= '1';
+						gstate <= PACMAN_UPDATE;
+					else 
+						gstate <= GHOST_UPDATE;
+					end if;
+				when PACMAN_UPDATE =>
+					pacman_en <= '1';
+					if pacman_done = '1' then 
+						direction_en <= '1';
+						gstate <= DIRECTION_UPDATE;
+					else 
+						gstate <= PACMAN_UPDATE;
+					end if;
+				when DIRECTION_UPDATE =>
+					direction_en <= '1';
+					if direction_done = '1' then 
+						gstate <= PAUSE;
+					else 
+						gstate <= DIRECTION_UPDATE;
+					end if;
+				when PAUSE =>
+					--wait until we get out of the backporch
+					gstate <= PAUSE;
+			end case;
+		end if;
+	end if;
+end if;
 
 
 -------------------------------------------------
