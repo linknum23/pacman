@@ -5,12 +5,12 @@ use work.pacage.all;
 
 entity display_manager is
   port (
-    clk                        : in  std_logic;
-    rst                        : in  std_logic; 
-	 in_vbp							 : in std_logic;
-    current_draw_location      : in  POINT;
-    pacman_direction_selection : in  DIRECTION; 
-    data                       : out COLOR
+	clk                        : in  std_logic;
+	rst                        : in  std_logic; 
+	in_vbp							 : in std_logic;
+	current_draw_location      : in  POINT;
+	pacman_direction_selection : in  DIRECTION; 
+	data                       : out COLOR
     );
 end display_manager;
 
@@ -88,15 +88,29 @@ architecture Behavioral of display_manager is
   signal grid_valid   : std_logic := '0';
   signal space_valid   : std_logic := '0';
   signal pacman_valid : std_logic := '0';
+  signal blinky_valid : std_logic := '0';
+  signal pinky_valid : std_logic := '0';
+  signal inky_valid : std_logic := '0';
+  signal clyde_valid : std_logic := '0';
 
   --color signals
   signal grid_color_data   : COLOR;
   signal pacman_color_data : COLOR;
+  signal clyde_color_data  : COLOR;
+  signal blinky_color_data : COLOR;
+  signal pinky_color_data 	: COLOR;
+  signal inky_color_data 	: COLOR;
+  
+  --state enable and done signals 
+  -- these are used to notify a subcomponent when they can read from the rom
+   signal vga_en, ghost_en, pacman_en, direction_en : std_logic;
+	 signal ghost_done, pacman_done, direction_done : std_logic;
 
   --location signals
   signal pacman_pixel_location    : POINT;
   signal pacman_tile_location     : POINT;
   signal pacman_rom_tile_location : POINT;
+  signal ghost_tile_location 	    : POINT;
   signal blinky_tile_location     : POINT;
   signal pinky_tile_location      : POINT;
   signal inky_tile_location       : POINT;
@@ -118,8 +132,6 @@ architecture Behavioral of display_manager is
   --state controller
   type game_state is (VGA_READ,PAUSE,GHOST_UPDATE,PACMAN_UPDATE,DIRECTION_UPDATE);
   signal gstate : game_state := VGA_READ;
-  
-  signal vga_en, ghost_en, pacman_en, direction_en : std_logic;
   
 begin
   board : grid_display
@@ -161,24 +173,24 @@ begin
       rom_request              => pacman_rom_request
       );
 
-	ai : ghost_ai
-	port map (
-		clk => slow_clk,
-		en  => ghost_en,
-		rst => rst,
-		rom_addr => ghost_tile_location,
-		rom_data => grid_data(4),
-		dots_eaten => dots_eaten,
-		level => level,
-		ghost_mode => ghost_mode,
-		pman_loc => pacman_tile_location,
-		done => ghost_done,
-		blinky_info => blinky,
-		pinky_info => pinky,
-		inky_info => inky,
-		clyde_info => clyde,
-		collision => collision
-	);
+--	ai : ghost_ai
+--	port map (
+--		clk => slow_clk,
+--		en  => ghost_en,
+--		rst => rst,
+--		rom_addr => ghost_tile_location,
+--		rom_data => grid_data(4),
+--		dots_eaten => dots_eaten,
+--		level => level,
+--		ghost_mode => ghost_mode,
+--		pman_loc => pacman_tile_location,
+--		done => ghost_done,
+--		blinky_info => blinky,
+--		pinky_info => pinky,
+--		inky_info => inky,
+--		clyde_info => clyde,
+--		collision => collision
+--	);
 
   -------------------------------------------------
   --grid and its mux
@@ -197,7 +209,7 @@ begin
 	elsif ghost_en = '1' then
 		rom_tile_location<= ghost_tile_location;
 	elsif pacman_en = '1' then 
-		rom_tile_location <= pacman_tile_location;
+		rom_tile_location <= pacman_rom_tile_location;
 	elsif direction_en = '1' then
 		rom_tile_location <= (X=> 0, Y=> 0);
 	else 
@@ -209,21 +221,21 @@ begin
 -- basic state controller for pacman
 --  this should be put in a seperate file when it gets bigger
 -------------------------------------------------------
-process(clk,clr) 
+process(clk,rst) 
 begin
 	if clk'event and clk = '1' then 
-		if invbp = '0' then 
+		if in_vbp = '0' or rst = '1' then 
 			vga_en <= '1';
 			gstate <= VGA_READ;
 		else
-				vga_en <= '0';
-				ghost_en <= '0';
-				pacman_en <= '0';
-				direction_en <= '0';
+			vga_en <= '0';
+			ghost_en <= '0';
+			pacman_en <= '0';
+			direction_en <= '0';
 			case gstate is 
 				when VGA_READ =>
 					vga_en <= '1';
-					if invbp = '1' then 
+					if in_vbp = '1' then 
 						gstate <= GHOST_UPDATE;
 						ghost_en <= '1';
 					else
