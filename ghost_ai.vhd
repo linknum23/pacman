@@ -23,6 +23,7 @@ entity ghost_ai is
         pinky_tile_loc  : out POINT;
         inky_tile_loc   : out POINT;
         clyde_tile_loc  : out POINT;
+		  squiggle : out std_logic;
         collision       : out std_logic
         );
 end ghost_ai;
@@ -99,7 +100,8 @@ architecture Behavioral of ghost_ai is
       blinky_info   : out GHOST_INFO;
       pinky_info    : out GHOST_INFO;
       inky_info     : out GHOST_INFO;
-      clyde_info    : out GHOST_INFO
+      clyde_info    : out GHOST_INFO;
+		squiggle : out std_logic
       );
   end component;
 
@@ -188,7 +190,8 @@ begin
       blinky_info   => blinky_info_int,
       pinky_info    => pinky_info_int,
       inky_info     => inky_info_int,
-      clyde_info    => clyde_info_int
+      clyde_info    => clyde_info_int,
+		squiggle => squiggle
       );
 
   ai_routine_next : process(clk, rst)
@@ -202,7 +205,7 @@ begin
     end if;
   end process;
 
-  rom_mux : process(state)
+  rom_mux : process(state,move_rom_addr,target_rom_addr)
   begin
     case state is
       when CALC_MOVE =>
@@ -214,7 +217,7 @@ begin
     end case;
   end process;
 
-  ai_routine : process(state, calc_move_done, calc_targets_done)
+  ai_routine : process(state, en, calc_move_done, calc_targets_done)
   begin
     do_calc_move    <= '0';
     do_calc_targets <= '0';

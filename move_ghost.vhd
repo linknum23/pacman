@@ -1,5 +1,6 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
+use IEEE.STD_LOGIC_UNSIGNED.all;
 use work.PACAGE.all;
 use IEEE.NUMERIC_STD.all;
 
@@ -19,7 +20,8 @@ entity move_ghost is
     blinky_info   : out GHOST_INFO;
     pinky_info    : out GHOST_INFO;
     inky_info     : out GHOST_INFO;
-    clyde_info    : out GHOST_INFO
+    clyde_info    : out GHOST_INFO;
+	 squiggle      : out std_logic
     );
 end move_ghost;
 
@@ -44,26 +46,29 @@ architecture Behavioral of move_ghost is
   constant INKY_INIT   : GHOST_INFO := (DIR => UP, PT => INKY_START_POINT, MODE => NORM, CAGED => true);
   constant CLYDE_INIT  : GHOST_INFO := (DIR => UP, PT => CLYDE_START_POINT, MODE => NORM, CAGED => true);
 
-  signal blinky : GHOST_INFO := BLINKY_INIT;
-  signal pinky  : GHOST_INFO := PINKY_INIT;
-  signal inky   : GHOST_INFO := INKY_INIT;
-  signal clyde  : GHOST_INFO := CLYDE_INIT;
+  signal blinky2 : GHOST_INFO := BLINKY_INIT;
+  signal pinky2  : GHOST_INFO := PINKY_INIT;
+  signal inky2   : GHOST_INFO := INKY_INIT;
+  signal clyde2  : GHOST_INFO := CLYDE_INIT;
+  --signal cur_ghost : GHOST_INFO:= BLINKY_INIT;
 
   type ghostarr is array (natural range <>) of GHOST_INFO;
-  signal ghosts : ghostarr(3 downto 0) := (
-    blinky,
-    pinky,
-    inky,
-    clyde
+  signal ghosts : ghostarr(0 to 3) := (
+    blinky2,
+    pinky2,
+    inky2,
+    clyde2
     );
+	 
   --checks to see if both directions are a power of two
   function can_change_dir(pt : POINT) return boolean is
-    variable xconv : unsigned(8 downto 0);
-    variable yconv : unsigned(8 downto 0);
+    --variable xconv : unsigned(3 downto 0);
+    --variable yconv : unsigned(3 downto 0);
   begin
-    xconv := to_unsigned(pt.X, 9);
-    yconv := to_unsigned(pt.Y, 9);
-    if xconv(3 downto 0) = "0000" and yconv(3 downto 0) = "0000" then
+    --xconv := to_unsigned(pt.X, 4);
+    --yconv := to_unsigned(pt.Y, 4);
+    --if xconv = "0000" and yconv = "0000" then
+	 if pt.X = 16 then
       return true;
     else
       return false;
@@ -167,43 +172,70 @@ architecture Behavioral of move_ghost is
 
   signal ghost_rc                                      : POINT;
   type   state is (START, SDONE, DO_NEXT, GET_RC, CALC_TARGET_DISTS_1, CALC_TARGET_DISTS_2, CALC_TARGET_DISTS_3, CALC_TARGET_DISTS_4, CALC_TARGET_DISTS_5, UPDATE_DIR, UPDATE_LOC);
-  signal move_state                                    : state;
-  signal tdist_right, tdist_left, tdist_up, tdist_down : natural;
+  signal move_state                                    : state := SDONE;
+  signal tdist_right, tdist_left, tdist_up, tdist_down : natural := 0;
   signal index                                         : natural;
   signal target                                        : POINT;
   signal x_sqdiff, y_sqdiff                            : natural;
+  signal clocks                                        : std_logic_vector(22 downto 0);
+  signal move,last_move,do_move	: std_logic;
 begin
 
 
-  blinky_info <= blinky;
-  pinky_info  <= pinky;
-  inky_info   <= inky;
-  clyde_info  <= clyde;
+  blinky_info <= ghosts(I_BLINKY);
+  pinky_info  <= ghosts(I_PINKY);
+  inky_info   <= ghosts(I_INKY);
+  clyde_info  <= ghosts(I_CLYDE);
+  
+  --clock divider
+  process(clk)
+  begin
+    if clk = '1' and clk'event then
+      clocks <= clocks + 1;
+    end if;
+  end process;
+  squiggle <= clocks(18);
+  move  <= clocks(14);
 
   --iterate through each ghost making simple movements
   simple_move : process(clk, rst)
+  variable index : INTEGER range 0 to 3;
+  variable xconv : unsigned(3 downto 0);
+  variable yconv : unsigned(3 downto 0);
   begin
     if rising_edge(clk) then
+		last_move <= move;
       if rst = '1' then
-        blinky <= BLINKY_INIT;
-        pinky  <= PINKY_INIT;
-        inky   <= INKY_INIT;
-        clyde  <= CLYDE_INIT;
+        ghosts(I_BLINKY) <= BLINKY_INIT;
+        ghosts(I_PINKY)  <= PINKY_INIT;
+        ghosts(I_INKY)   <= INKY_INIT;
+        ghosts(I_CLYDE)  <= CLYDE_INIT;
+		move_state <= SDONE;
       else
+		   if last_move = '0' and move = '1' then
+				do_move <= '1';
+			end if;
         case move_state is
           when START =>
-            index      <= 0;
-            move_state <= GET_RC;
+            index      := 0;
+				--if do_move = '1' then
+					move_state <= UPDATE_LOC;
+				--else
+				--	move_state <= SDONE;
+				--end if;
           when DO_NEXT =>
             if index < 3 then
-              index <= index + 1;
-              if ghosts(index+1).CAGED = false then
-                move_state <= GET_RC;
+              index := index + 1;
+              if ghosts(index).CAGED = false then
+                --move_state <= GET_RC;
+					 move_state <= UPDATE_LOC;
               else
-                move_state <= UPDATE_DIR;
+                --move_state <= UPDATE_DIR;
+					 move_state <= UPDATE_LOC;
               end if;
             else
               move_state <= SDONE;
+				  do_move <= '0';
             end if;
           when GET_RC =>
             ghost_rc   <= get_ghost_rc(ghosts(index));
@@ -266,7 +298,11 @@ begin
             end if;
             move_state <= UPDATE_DIR;
           when UPDATE_DIR =>
-            if can_change_dir(ghosts(index).PT) then
+				xconv := to_unsigned(ghosts(index).PT.X, 4);
+				yconv := to_unsigned(ghosts(index).PT.Y, 4);
+				--check to see if it is a multiple of 16
+				-- this is the logic for whether a not a ghost can change direction
+				if xconv = "0000" and yconv = "0000" then
               if ghosts(index).CAGED = true then
                 if ghosts(index).DIR = UP then
                   ghosts(index).DIR <= DOWN;
@@ -279,7 +315,9 @@ begin
             end if;
             move_state <= UPDATE_LOC;
           when UPDATE_LOC =>
-            ghosts(index).PT <= update_ghost_location(ghosts(index));
+            --ghosts(index).PT <= update_ghost_location(ghosts(index));
+				--test
+				ghosts(index).PT.X <= ghosts(index).PT.X+1;
             move_state       <= DO_NEXT;
           when SDONE =>
             if en = '1' then
@@ -295,6 +333,8 @@ begin
       end if;
     end if;
   end process;
+  
+  
 
 end Behavioral;
 

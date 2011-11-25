@@ -31,6 +31,23 @@ architecture Behavioral of display_manager is
       valid_location        : out std_logic
       );
   end component;
+  
+	component ghost_display is
+	    generic (
+      GAME_OFFSET : POINT
+      );
+	port(
+			  blinky_info     : in GHOST_INFO;
+			  pinky_info      : in GHOST_INFO;
+			  inky_info       : in GHOST_INFO;
+			  clyde_info      : in GHOST_INFO;
+			  ghostmode       : in GHOST_MODE;
+			  current_draw_location       : in  POINT;
+			  ghost_valid     : out std_logic;
+			  squiggle     : in std_logic;
+			  ghost_color 		: out COLOR
+			  );
+	end component;
 
   component pacman_manager is
     generic (
@@ -71,7 +88,8 @@ architecture Behavioral of display_manager is
           pinky_info  : out GHOST_INFO;
           inky_info   : out GHOST_INFO;
           clyde_info  : out GHOST_INFO;
-          collision   : out std_logic
+          collision   : out std_logic;
+			 squiggle : out std_logic
           );
   end component;
 
@@ -104,18 +122,12 @@ architecture Behavioral of display_manager is
   signal grid_valid   : std_logic := '0';
   signal space_valid  : std_logic := '0';
   signal pacman_valid : std_logic := '0';
-  signal blinky_valid : std_logic := '0';
-  signal pinky_valid  : std_logic := '0';
-  signal inky_valid   : std_logic := '0';
-  signal clyde_valid  : std_logic := '0';
+  signal ghost_valid : std_logic := '0';
 
   --color signals
   signal grid_color_data   : COLOR;
   signal pacman_color_data : COLOR;
-  signal clyde_color_data  : COLOR;
-  signal blinky_color_data : COLOR;
-  signal pinky_color_data  : COLOR;
-  signal inky_color_data   : COLOR;
+  signal ghost_color_data  : COLOR;
 
   --state enable and done signals
   -- these are used to notify a subcomponent when they can read from the rom
@@ -135,7 +147,7 @@ architecture Behavioral of display_manager is
   signal grid_tile_location          : POINT;
   signal rom_tile_location           : POINT;
 
-  --ghost info -- used for disple
+  --ghost info -- used for display
 
   signal blinky, pinky, inky, clyde : GHOST_INFO;
 
@@ -157,6 +169,7 @@ architecture Behavioral of display_manager is
   signal level      : std_logic_vector(8 downto 0) := "000000001";
   signal dots_eaten : std_logic_vector(7 downto 0) := X"00";  -- num dots in a level is 240
   signal ghostmode  : GHOST_MODE                   := NORMAL;
+  signal squiggle : std_logic;
 
   --state controller
   type   game_state is (VGA_READ, PAUSE, GHOST_UPDATE, PACMAN_UPDATE, DIRECTION_UPDATE);
@@ -209,26 +222,42 @@ begin
       rom_enable                  => pacman_en,
       rom_use_done                => pacman_done
       );
+		
+	gd: ghost_display
+		generic map(
+			GAME_OFFSET => GAME_OFFSET
+      )
+		port map(
+			blinky_info => blinky,
+			pinky_info => pinky,
+			inky_info => inky,
+			clyde_info => clyde,
+			ghostmode => ghostmode,
+			current_draw_location => current_draw_location,
+			ghost_valid => ghost_valid,
+			ghost_color => ghost_color_data,
+			squiggle => squiggle
+		);
 
---
---      ai : ghost_ai
---      port map (
---              clk => clk,
---              en  => ghost_en,
---              rst => rst,
---              rom_addr => ghost_tile_location,
---              rom_data => grid_data(4),
---              dots_eaten => dots_eaten,
---              level => level,
---              ghostmode => ghostmode,
---              pman_loc => pacman_tile_location,
---              done => ghost_done,
---              blinky_info => blinky,
---              pinky_info => pinky,
---              inky_info => inky,
---              clyde_info => clyde,
---              collision => collision
---      );
+  ai : ghost_ai
+    port map (
+		clk => clk,
+		en  => ghost_en,
+		rst => rst,
+		rom_addr => ghost_tile_location,
+		rom_data => grid_data(4),
+		dots_eaten => dots_eaten,
+		level => level,
+		ghostmode => ghostmode,
+		pman_loc => pacman_tile_location,
+		done => ghost_done,
+		blinky_info => blinky,
+		pinky_info => pinky,
+		inky_info => inky,
+		clyde_info => clyde,
+		collision => collision,
+		squiggle => squiggle
+      );
 
   directionz : direction_manager
     port map (
@@ -297,13 +326,13 @@ begin
             end if;
           when GHOST_UPDATE =>
             ghost_en  <= '1';
-            -- if ghost_done = '1' then
-            pacman_en <= '1';
-            ghost_en  <= '0';
-            gstate    <= PACMAN_UPDATE;
-            -- else
-            --   gstate <= GHOST_UPDATE;
-            -- end if;
+            if ghost_done = '1' then
+					pacman_en <= '1';
+					ghost_en  <= '0';
+					gstate    <= PACMAN_UPDATE;
+            else
+              gstate <= GHOST_UPDATE;
+           end if;
           when PACMAN_UPDATE =>
             pacman_en <= '1';
             if pacman_done = '1' then
@@ -333,18 +362,11 @@ begin
   -------------------------------------------------
   --mux the output color for the display
   -------------------------------------------------
-  process(blinky_valid, pinky_valid, blinky_color_data,
-          pinky_color_data, inky_color_data, clyde_color_data, pacman_color_data,
-          pacman_valid, grid_color_data, grid_valid, clyde_valid, inky_valid)
+  process(ghost_valid, ghost_color_data, pacman_color_data,
+          pacman_valid, grid_color_data, grid_valid)
   begin
-    if blinky_valid = '1' then
-      data <= blinky_color_data;
-    elsif pinky_valid = '1' then
-      data <= pinky_color_data;
-    elsif inky_valid = '1' then
-      data <= inky_color_data;
-    elsif clyde_valid = '1' then
-      data <= clyde_color_data;
+    if ghost_valid = '1' then
+      data <= ghost_color_data;
     elsif pacman_valid = '1' then
       data <= pacman_color_data;
     --elsif grid_valid = '1' then
