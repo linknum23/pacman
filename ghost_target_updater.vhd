@@ -5,18 +5,22 @@ use IEEE.NUMERIC_STD.all;
 
 entity ghost_target_updater is
   port (
-    clk           : in  std_logic;
-    en            : in  std_logic;
-    rst           : in  std_logic;
-    rom_addr      : out std_logic_vector (8 downto 0);
-    rom_data      : in  std_logic;
-    done          : out std_logic;
-    pman_loc      : in  POINT;
-    ghostmode    : in  GHOST_MODE;
-    blinky_target : out POINT;
-    pinky_target  : out POINT;
-    inky_target   : out POINT;
-    clyde_target  : out POINT
+    clk             : in  std_logic;
+    en              : in  std_logic;
+    rst             : in  std_logic;
+    rom_addr        : out POINT;
+    rom_data        : in  std_logic;
+    done            : out std_logic;
+    pman_tile_loc   : in  POINT;
+    blinky_tile_loc : in  POINT;
+    pinky_tile_loc  : in  POINT;
+    inky_tile_loc   : in  POINT;
+    clyde_tile_loc  : in  POINT;
+    ghostmode       : in  GHOST_MODE;
+    blinky_target   : out POINT;
+    pinky_target    : out POINT;
+    inky_target     : out POINT;
+    clyde_target    : out POINT
 
     );
 end ghost_target_updater;

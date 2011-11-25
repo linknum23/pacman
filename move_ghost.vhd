@@ -11,7 +11,7 @@ entity move_ghost is
     rom_addr      : out POINT;
     rom_data      : in  std_logic;
     done          : out std_logic;
-    ghost_mode    : in  GHOST_MODE;
+    ghostmode     : in  GHOST_MODE;
     blinky_target : in  POINT;
     pinky_target  : in  POINT;
     inky_target   : in  POINT;

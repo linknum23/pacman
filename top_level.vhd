@@ -45,27 +45,30 @@ architecture Behavioral of top_level is
       rst       : in  std_logic;
       clk_25mhz : out std_logic
       );
-  end component;
+  end component; 
+  
+   component display_manager is
+      Port ( 
+			clk                        : in  std_logic;
+			rst                        : in  std_logic; 
+			in_vbp							 : in std_logic;
+			current_draw_location      : in  POINT;
+			data                       : out COLOR
+         );
+   end component;
 
-
-  component display_manager is
-    port (
-      clk                        : in  std_logic;
-      rst                        : in  std_logic; 
-      current_draw_location      : in  POINT;
-      user_direction_selection : in  DIRECTION; 
-      data                       : out COLOR
-      );
-  end component;
 
   signal clk_65mhz, clk_50mhz, clk_25mhz : std_logic := '0';
   signal vidon                           : std_logic := '0';
+  signal in_vbp                           : std_logic := '0';
   signal hc, vc                          : std_logic_vector(10 downto 0);
   signal color_data                      : COLOR;
   signal current_draw_location           : POINT;
   signal rst                             : std_logic := '0';
   signal direction                       : DIRECTION := NONE;
-begin
+  
+  begin
+  
   rst <= btn(1) and btn(0);
   --red   <= hc(2 downto 0) and vc(2 downto 0);
   --green <= hc(5 downto 3) and vc(5 downto 3);
@@ -99,19 +102,20 @@ begin
       vsync => vsync,
       hc    => hc,
       vc    => vc,
+      in_vbp=> in_vbp,
       vidon => vidon
       );  
   current_draw_location.X <= to_integer(unsigned(hc));
   current_draw_location.Y <= to_integer(unsigned(vc));
 
-  display : display_manager
-    port map (
-      clk                        => clk_25mhz,
-      rst                        => rst,
-      current_draw_location      => current_draw_location,
-      user_direction_selection => direction,
-      data                       => color_data
-      ); 
+   display: display_manager 
+   PORT MAP (
+       clk => clk_25mhz,
+       rst => rst,
+       in_vbp => in_vbp,
+       current_draw_location => current_draw_location,
+       data => color_data
+     ); 
 
 
   process(clk_25mhz)
@@ -120,7 +124,7 @@ begin
       if btn(0) = '1' then
         direction <= R;
       elsif btn(1) = '1' then
-        direction <= DOWN;
+        direction <= DOWN; 
       elsif btn(2) = '1' then
         direction <= UP;
       elsif btn(3) = '1' then

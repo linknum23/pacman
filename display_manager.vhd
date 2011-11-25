@@ -5,12 +5,12 @@ use work.pacage.all;
 
 entity display_manager is
   port (
-    clk                        : in  std_logic;
-    rst                        : in  std_logic;
-    in_vbp                     : in  std_logic;
-    current_draw_location      : in  POINT;
+    clk                      : in  std_logic;
+    rst                      : in  std_logic;
+    in_vbp                   : in  std_logic;
+    current_draw_location    : in  POINT;
     user_direction_selection : in  DIRECTION;
-    data                       : out COLOR
+    data                     : out COLOR
     );
 end display_manager;
 
@@ -64,7 +64,7 @@ architecture Behavioral of display_manager is
           rom_data    : in  std_logic;
           dots_eaten  : in  std_logic_vector (7 downto 0);
           level       : in  std_logic_vector (8 downto 0);
-          ghost_mode  : in  std_logic;
+          ghostmode   : in  GHOST_MODE;
           pman_loc    : in  POINT;
           done        : out std_logic;
           blinky_info : out GHOST_INFO;
@@ -101,24 +101,24 @@ architecture Behavioral of display_manager is
   constant GAME_OFFSET : POINT := ((1024-GAME_SIZE.X)/2, (768-GAME_SIZE.Y)/2);
 
   --valid signals
-  signal grid_valid   : std_logic := '0';
+  signal grid_valid   : std_logic := '0'; 
   signal space_valid  : std_logic := '0';
-  signal pacman_valid : std_logic := '0';
-  signal blinky_valid : std_logic := '0';
-  signal pinky_valid  : std_logic := '0';
-  signal inky_valid   : std_logic := '0';
-  signal clyde_valid  : std_logic := '0';
+  signal pacman_valid : std_logic := '0'; 
+  signal blinky_valid : std_logic := '0'; 
+                                           signal pinky_valid : std_logic := '0';
+  signal inky_valid  : std_logic := '0';
+  signal clyde_valid : std_logic := '0';
 
   --color signals
   signal grid_color_data   : COLOR;
-  signal pacman_color_data : COLOR;
-  signal clyde_color_data  : COLOR;
-  signal blinky_color_data : COLOR;
-  signal pinky_color_data  : COLOR;
-  signal inky_color_data   : COLOR;
+  signal pacman_color_data : COLOR; 
+    signal clyde_color_data : COLOR; 
+                                     signal blinky_color_data : COLOR; 
+                                       signal pinky_color_data : COLOR;
+  signal inky_color_data : COLOR;
 
-                                        --state enable and done signals
-                                        -- these are used to notify a subcomponent when they can read from the rom
+  --state enable and done signals
+  -- these are used to notify a subcomponent when they can read from the rom
   signal vga_en, ghost_en, pacman_en, direction_en : std_logic;
   signal ghost_done, pacman_done, direction_done   : std_logic;
 
@@ -135,6 +135,10 @@ architecture Behavioral of display_manager is
   signal grid_tile_location          : POINT;
   signal rom_tile_location           : POINT;
 
+  --ghost info -- used for disple
+  
+    signal blinky, pinky, inky, clyde : GHOST_INFO;
+  
   signal pacman_direction : DIRECTION := NONE;
 
   signal collision : std_logic;
@@ -149,6 +153,10 @@ architecture Behavioral of display_manager is
   signal grid_rom_request_response   : std_logic := '0';
   signal grid_data                   : std_logic_vector(4 downto 0);
   signal direction_tile_location     : POINT;
+  
+    signal level      : std_logic_vector(8 downto 0) := "000000001"; 
+    signal dots_eaten : std_logic_vector(7 downto 0) := X"00";  -- num dots in a level is 240
+  signal ghostmode : GHOST_MODE := NORMAL;
 
   --state controller
   type   game_state is (VGA_READ, PAUSE, GHOST_UPDATE, PACMAN_UPDATE, DIRECTION_UPDATE);
@@ -200,11 +208,25 @@ begin
       rom_enable                  => pacman_en,
       rom_use_done                => pacman_done
       );
-
-  -------------------------------------------------
-  -- Here all of the directions are managed from the controller based on the game logic.
-  -- This is then fed to PACMAN on how to move throughout the system.
-  -------------------------------------------------
+--
+--      ai : ghost_ai
+--      port map (
+--              clk => clk,
+--              en  => ghost_en,
+--              rst => rst,
+--              rom_addr => ghost_tile_location,
+--              rom_data => grid_data(4),
+--              dots_eaten => dots_eaten,
+--              level => level,
+--              ghostmode => ghostmode,
+--              pman_loc => pacman_tile_location,
+--              done => ghost_done,
+--              blinky_info => blinky,
+--              pinky_info => pinky,
+--              inky_info => inky,
+--              clyde_info => clyde,
+--              collision => collision
+--      );
 
   directionz : direction_manager
     port map (
@@ -219,25 +241,6 @@ begin
       rom_address                  => direction_tile_location,
       rom_use_done                 => direction_done
       );
-
---      ai : ghost_ai
---      port map (
---              clk => slow_clk,
---              en  => ghost_en,
---              rst => rst,
---              rom_addr => ghost_tile_location,
---              rom_data => grid_data(4),
---              dots_eaten => dots_eaten,
---              level => level,
---              ghost_mode => ghost_mode,
---              pman_loc => pacman_tile_location,
---              done => ghost_done,
---              blinky_info => blinky,
---              pinky_info => pinky,
---              inky_info => inky,
---              clyde_info => clyde,
---              collision => collision
---      );
 
   -------------------------------------------------
   --grid and its mux
