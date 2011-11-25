@@ -198,9 +198,9 @@ begin
   begin
     if clk'event and clk = '1' then
       if rst = '1' then
-        state <= next_state;
-      else
         state <= SDONE;
+      else
+        state <= next_state;
       end if;
     end if;
   end process;
@@ -226,15 +226,15 @@ begin
     case state is
       when START =>
         next_state <= CALC_TARGETS;
-      when CALC_TARGETS =>
-        do_calc_targets <= '1';
+		  do_calc_targets <= '1';
+      when CALC_TARGETS =>        
         if calc_targets_done = '1' then
           next_state <= CALC_MOVE;
+			 do_calc_move <= '1';
         else
           next_state <= CALC_TARGETS;
         end if;
       when CALC_MOVE =>
-        do_calc_move <= '1';
         if calc_move_done = '1' then
           next_state <= SDONE;
         else

@@ -324,10 +324,8 @@ begin
               gstate <= VGA_READ;
             end if;
           when GHOST_UPDATE =>
-            ghost_en  <= '1';
             if ghost_done = '1' then
 					pacman_en <= '1';
-					ghost_en  <= '0';
 					gstate    <= PACMAN_UPDATE;
             else
               gstate <= GHOST_UPDATE;

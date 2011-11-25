@@ -218,20 +218,20 @@ begin
         case move_state is
           when START =>
             index      := 0;
-				--if do_move = '1' then
+				if do_move = '1' then
 					move_state <= UPDATE_LOC;
-				--else
-				--	move_state <= SDONE;
-				--end if;
+				else
+					move_state <= SDONE;
+				end if;
           when DO_NEXT =>
             if index < 3 then
               index := index + 1;
               if ghosts(index).CAGED = false then
-                --move_state <= GET_RC;
-					 move_state <= UPDATE_LOC;
+                move_state <= GET_RC;
+					 --move_state <= UPDATE_LOC;
               else
-                --move_state <= UPDATE_DIR;
-					 move_state <= UPDATE_LOC;
+                move_state <= UPDATE_DIR;
+					 --move_state <= UPDATE_LOC;
               end if;
             else
               move_state <= SDONE;
@@ -315,9 +315,9 @@ begin
             end if;
             move_state <= UPDATE_LOC;
           when UPDATE_LOC =>
-            --ghosts(index).PT <= update_ghost_location(ghosts(index));
+            ghosts(index).PT <= update_ghost_location(ghosts(index));
 				--test
-				ghosts(index).PT.X <= ghosts(index).PT.X+1;
+				--ghosts(index).PT.X <= ghosts(index).PT.X+1;
             move_state       <= DO_NEXT;
           when SDONE =>
             if en = '1' then

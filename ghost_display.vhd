@@ -40,7 +40,7 @@ architecture Behavioral of ghost_display is
 	constant PINKY_BODY_COLOR : COLOR := (R=>"111", G=>"101",B=>"10");--pink
 	constant INKY_BODY_COLOR : COLOR := (R=>"000", G=>"111",B=>"11");--teal
 	constant CLYDE_BODY_COLOR : COLOR := (R=>"111", G=>"100",B=>"00");--orange
-	
+	constant GHOST_DRAW_OFFSET : integer := 8;
 	signal board_draw_location : POINT;
 	signal ghost_location : POINT;
 	signal dir : DIRECTION;
@@ -76,35 +76,35 @@ process (blinky_info.PT.X,blinky_info.PT.Y,pinky_info.PT.X,pinky_info.PT.Y,inky_
 begin
 	no_ghost_here <= '0';
 	gbody_color <= BLINKY_BODY_COLOR;
-	if blinky_info.PT.X <= board_draw_location.X and blinky_info.PT.X + GHOST_WIDTH > board_draw_location.X and 
-		blinky_info.PT.Y <= board_draw_location.Y and blinky_info.PT.Y + GHOST_HEIGHT > board_draw_location.Y then
+	if blinky_info.PT.X <= board_draw_location.X - GHOST_DRAW_OFFSET and blinky_info.PT.X + GHOST_WIDTH > board_draw_location.X - GHOST_DRAW_OFFSET and 
+		blinky_info.PT.Y <= board_draw_location.Y - GHOST_DRAW_OFFSET and blinky_info.PT.Y + GHOST_HEIGHT > board_draw_location.Y - GHOST_DRAW_OFFSET then
 		
-			ghost_location.X <= board_draw_location.X-blinky_info.PT.X;
-			ghost_location.Y <= board_draw_location.Y-blinky_info.PT.Y;
+			ghost_location.X <= board_draw_location.X-GHOST_DRAW_OFFSET-blinky_info.PT.X;
+			ghost_location.Y <= board_draw_location.Y-GHOST_DRAW_OFFSET-blinky_info.PT.Y;
 			dir <= blinky_info.DIR;
 			gbody_color <= BLINKY_BODY_COLOR;
 			
-	elsif pinky_info.PT.X <= board_draw_location.X and pinky_info.PT.X + GHOST_WIDTH > board_draw_location.X and 
-		pinky_info.PT.Y <= board_draw_location.Y and pinky_info.PT.Y + GHOST_HEIGHT > board_draw_location.Y then
+	elsif pinky_info.PT.X <= board_draw_location.X - GHOST_DRAW_OFFSET and pinky_info.PT.X + GHOST_WIDTH > board_draw_location.X - GHOST_DRAW_OFFSET and 
+		pinky_info.PT.Y <= board_draw_location.Y - GHOST_DRAW_OFFSET and pinky_info.PT.Y + GHOST_HEIGHT > board_draw_location.Y - GHOST_DRAW_OFFSET then
 		
-			ghost_location.X <= board_draw_location.X-pinky_info.PT.X;
-			ghost_location.Y <= board_draw_location.Y-pinky_info.PT.Y;
+			ghost_location.X <= board_draw_location.X- GHOST_DRAW_OFFSET-pinky_info.PT.X;
+			ghost_location.Y <= board_draw_location.Y- GHOST_DRAW_OFFSET-pinky_info.PT.Y;
 			dir <= pinky_info.DIR;
 			gbody_color <= PINKY_BODY_COLOR;
 			
-	elsif inky_info.PT.X <= board_draw_location.X and inky_info.PT.X + GHOST_WIDTH > board_draw_location.X and 
-		inky_info.PT.Y <= board_draw_location.Y and inky_info.PT.Y + GHOST_HEIGHT > board_draw_location.Y then
+	elsif inky_info.PT.X <= board_draw_location.X + GHOST_DRAW_OFFSET and inky_info.PT.X + GHOST_WIDTH > board_draw_location.X + GHOST_DRAW_OFFSET and 
+		inky_info.PT.Y <= board_draw_location.Y + GHOST_DRAW_OFFSET and inky_info.PT.Y + GHOST_HEIGHT > board_draw_location.Y + GHOST_DRAW_OFFSET then
 		
-			ghost_location.X <= board_draw_location.X-inky_info.PT.X;
-			ghost_location.Y <= board_draw_location.Y-inky_info.PT.Y;
+			ghost_location.X <= board_draw_location.X+ GHOST_DRAW_OFFSET-inky_info.PT.X;
+			ghost_location.Y <= board_draw_location.Y+ GHOST_DRAW_OFFSET -inky_info.PT.Y;
 			dir <= inky_info.DIR;
 			gbody_color <= INKY_BODY_COLOR;
 			
-	elsif clyde_info.PT.X <= board_draw_location.X and clyde_info.PT.X + GHOST_WIDTH > board_draw_location.X and 
-		clyde_info.PT.Y <= board_draw_location.Y and clyde_info.PT.Y + GHOST_HEIGHT > board_draw_location.Y then
+	elsif clyde_info.PT.X <= board_draw_location.X + GHOST_DRAW_OFFSET and clyde_info.PT.X + GHOST_WIDTH > board_draw_location.X + GHOST_DRAW_OFFSET and 
+		clyde_info.PT.Y <= board_draw_location.Y + GHOST_DRAW_OFFSET and clyde_info.PT.Y + GHOST_HEIGHT > board_draw_location.Y + GHOST_DRAW_OFFSET then
 		
-			ghost_location.X <= board_draw_location.X-clyde_info.PT.X;
-			ghost_location.Y <= board_draw_location.Y-clyde_info.PT.Y;
+			ghost_location.X <= board_draw_location.X+ GHOST_DRAW_OFFSET-clyde_info.PT.X;
+			ghost_location.Y <= board_draw_location.Y+GHOST_DRAW_OFFSET-clyde_info.PT.Y;
 			dir <= clyde_info.DIR;
 			gbody_color <= CLYDE_BODY_COLOR;
 	else 
