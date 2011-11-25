@@ -7,7 +7,7 @@ end top_level_tb;
 architecture behavior of top_level_tb is
 
   -- Component Declaration for the Unit Under Test (UUT)
-  
+
   component top_level
     port(
       mclk  : in  std_logic;
@@ -35,7 +35,7 @@ architecture behavior of top_level_tb is
 
   -- Clock period definitions
   constant mclk_period : time := 10 ns;
-  
+
 begin
 
   -- Instantiate the Unit Under Test (UUT)
@@ -63,12 +63,12 @@ begin
   stim_proc : process
   begin
     dir <= "0001";
-    --wait for 3ms;     
-    --dir <= "0010";
-    --wait for 3ms;
-    --dir <= "0100";
-    --wait for 3ms;
-    --dir <= "1000";
+    wait for 300us;
+    dir <= "0010";
+    wait for 300us;
+    dir <= "0100";
+    wait for 300us;
+    dir <= "1000";
     wait;
   end process;
 

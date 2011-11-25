@@ -13,7 +13,7 @@ entity direction_manager is
     pacman_current_tile_offset   : in  POINT;
     rom_data_in                  : in  std_logic_vector(4 downto 0);
     rom_enable                   : in  std_logic;
-    current_direction            : out DIRECTION;
+    current_direction            : out DIRECTION := NONE;
     rom_address                  : out POINT;
     rom_use_done                 : out std_logic
     );
@@ -73,6 +73,7 @@ begin
             current_direction <= direction_reg;
           end if;
           last_direction_selection <= direction_reg;
+          state <= WAIT_FOR_DIRECTION;
         when others => null;
       end case;
     end if;

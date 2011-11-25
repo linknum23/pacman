@@ -101,21 +101,21 @@ architecture Behavioral of display_manager is
   constant GAME_OFFSET : POINT := ((1024-GAME_SIZE.X)/2, (768-GAME_SIZE.Y)/2);
 
   --valid signals
-  signal grid_valid   : std_logic := '0'; 
+  signal grid_valid   : std_logic := '0';
   signal space_valid  : std_logic := '0';
-  signal pacman_valid : std_logic := '0'; 
-  signal blinky_valid : std_logic := '0'; 
-                                           signal pinky_valid : std_logic := '0';
-  signal inky_valid  : std_logic := '0';
-  signal clyde_valid : std_logic := '0';
+  signal pacman_valid : std_logic := '0';
+  signal blinky_valid : std_logic := '0';
+  signal pinky_valid  : std_logic := '0';
+  signal inky_valid   : std_logic := '0';
+  signal clyde_valid  : std_logic := '0';
 
   --color signals
   signal grid_color_data   : COLOR;
-  signal pacman_color_data : COLOR; 
-    signal clyde_color_data : COLOR; 
-                                     signal blinky_color_data : COLOR; 
-                                       signal pinky_color_data : COLOR;
-  signal inky_color_data : COLOR;
+  signal pacman_color_data : COLOR;
+  signal clyde_color_data  : COLOR;
+  signal blinky_color_data : COLOR;
+  signal pinky_color_data  : COLOR;
+  signal inky_color_data   : COLOR;
 
   --state enable and done signals
   -- these are used to notify a subcomponent when they can read from the rom
@@ -136,9 +136,9 @@ architecture Behavioral of display_manager is
   signal rom_tile_location           : POINT;
 
   --ghost info -- used for disple
-  
-    signal blinky, pinky, inky, clyde : GHOST_INFO;
-  
+
+  signal blinky, pinky, inky, clyde : GHOST_INFO;
+
   signal pacman_direction : DIRECTION := NONE;
 
   signal collision : std_logic;
@@ -153,10 +153,10 @@ architecture Behavioral of display_manager is
   signal grid_rom_request_response   : std_logic := '0';
   signal grid_data                   : std_logic_vector(4 downto 0);
   signal direction_tile_location     : POINT;
-  
-    signal level      : std_logic_vector(8 downto 0) := "000000001"; 
-    signal dots_eaten : std_logic_vector(7 downto 0) := X"00";  -- num dots in a level is 240
-  signal ghostmode : GHOST_MODE := NORMAL;
+
+  signal level      : std_logic_vector(8 downto 0) := "000000001";
+  signal dots_eaten : std_logic_vector(7 downto 0) := X"00";  -- num dots in a level is 240
+  signal ghostmode  : GHOST_MODE                   := NORMAL;
 
   --state controller
   type   game_state is (VGA_READ, PAUSE, GHOST_UPDATE, PACMAN_UPDATE, DIRECTION_UPDATE);
@@ -204,7 +204,7 @@ begin
       pacman_rom_tile_location    => pacman_rom_tile_location,
       pacman_direction            => pacman_direction,
       data                        => pacman_color_data,
-      valid_location              => space_valid,
+      valid_location              => pacman_valid,
       rom_enable                  => pacman_en,
       rom_use_done                => pacman_done
       );
@@ -271,7 +271,7 @@ begin
 -- basic state controller for pacman
 --  this should be put in a seperate file when it gets bigger
 -------------------------------------------------------
-  process(clk, rst)
+  process(clk)
   begin
     if clk'event and clk = '1' then
       if in_vbp = '0' or rst = '1' then
@@ -287,22 +287,25 @@ begin
             vga_en <= '1';
             if in_vbp = '1' then
               gstate   <= GHOST_UPDATE;
+              vga_en   <= '0';
               ghost_en <= '1';
             else
               gstate <= VGA_READ;
             end if;
           when GHOST_UPDATE =>
-            ghost_en <= '1';
-            if ghost_done = '1' then
-              pacman_en <= '1';
-              gstate    <= PACMAN_UPDATE;
-            else
-              gstate <= GHOST_UPDATE;
-            end if;
+            ghost_en  <= '1';
+            -- if ghost_done = '1' then
+            pacman_en <= '1';
+            ghost_en  <= '0';
+            gstate    <= PACMAN_UPDATE;
+            -- else
+            --   gstate <= GHOST_UPDATE;
+            -- end if;
           when PACMAN_UPDATE =>
             pacman_en <= '1';
             if pacman_done = '1' then
               direction_en <= '1';
+              pacman_en    <= '0';
               gstate       <= DIRECTION_UPDATE;
             else
               gstate <= PACMAN_UPDATE;
@@ -310,7 +313,8 @@ begin
           when DIRECTION_UPDATE =>
             direction_en <= '1';
             if direction_done = '1' then
-              gstate <= PAUSE;
+              direction_en <= '0';
+              gstate       <= PAUSE;
             else
               gstate <= DIRECTION_UPDATE;
             end if;

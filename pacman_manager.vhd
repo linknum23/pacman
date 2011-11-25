@@ -59,7 +59,7 @@ architecture Behavioral of pacman_manager is
   constant PAC_SIZE                     : POINT   := (32, 32);
   constant TILE_SIZE                    : POINT   := (4, 4);  --in bits
 --locations
-  signal   current_position             : POINT   := (GAME_OFFSET.X-1 + (14*16)-8, GAME_OFFSET.Y-1 + (23*16));
+  signal   current_position             : POINT   := (GAME_OFFSET.X + (14*16)-8, GAME_OFFSET.Y + (23*16));
   signal   board_pixel_location         : POINT;
   signal   current_tile_position        : POINT;
   signal   current_tile_position_offset : POINT;
