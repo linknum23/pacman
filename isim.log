@@ -73,3 +73,4 @@ at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD.T
 at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
 at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
 Stopped at time : 1860295 ns : File "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/ipcore_dir/dcm.vhd" Line 47
+# exit 0
