@@ -33,7 +33,7 @@ architecture Behavioral of top_level is
       hsync  : out std_logic;
       vsync  : out std_logic;
       hc     : out std_logic_vector(10 downto 0);
-      vc     : out std_logic_vector(10 downto 0); 
+      vc     : out std_logic_vector(10 downto 0);
       in_vbp : out std_logic;
       vidon  : out std_logic
       );
@@ -45,38 +45,37 @@ architecture Behavioral of top_level is
       rst       : in  std_logic;
       clk_25mhz : out std_logic
       );
-  end component; 
-  
-   component display_manager is
-      Port ( 
-			clk                        : in  std_logic;
-			rst                        : in  std_logic; 
-			in_vbp							 : in std_logic;
-			current_draw_location      : in  POINT;
-			data                       : out COLOR
-         );
-   end component;
+  end component;
+
+  component display_manager is
+    port (
+      clk                      : in  std_logic;
+      rst                      : in  std_logic;
+      in_vbp                   : in  std_logic;
+      current_draw_location    : in  POINT;
+      user_direction_selection : in  DIRECTION;
+      data                     : out COLOR
+      );
+  end component;
 
 
   signal clk_65mhz, clk_50mhz, clk_25mhz : std_logic := '0';
   signal vidon                           : std_logic := '0';
-  signal in_vbp                           : std_logic := '0';
+  signal in_vbp                          : std_logic := '0';
   signal hc, vc                          : std_logic_vector(10 downto 0);
   signal color_data                      : COLOR;
   signal current_draw_location           : POINT;
   signal rst                             : std_logic := '0';
   signal direction                       : DIRECTION := NONE;
-  
-  begin
-  
-  rst <= btn(1) and btn(0);
-  --red   <= hc(2 downto 0) and vc(2 downto 0);
-  --green <= hc(5 downto 3) and vc(5 downto 3);
-  --blue  <= hc(7 downto 6) and vc(7 downto 6);
 
-  red   <= color_data.R when vidon = '1' else "000";
-  green <= color_data.G when vidon = '1' else "000";
-  blue  <= color_data.B when vidon = '1' else "00";
+begin
+
+  rst <= btn(1) and btn(0);
+
+  red   <= color_data.R; --when vidon = '1' else "000";
+  green <= color_data.G; --when vidon = '1' else "000";
+  blue  <= color_data.B; --when vidon = '1' else "00";
+
 
   clks : clock_divider
     port map (
@@ -97,25 +96,27 @@ architecture Behavioral of top_level is
 
   vga_driver : vga_1024x768
     port map (
-      clk   => clk_65mhz,
-      hsync => hsync,
-      vsync => vsync,
-      hc    => hc,
-      vc    => vc,
-      in_vbp=> in_vbp,
-      vidon => vidon
-      );  
+      clk    => clk_65mhz,
+      hsync  => hsync,
+      vsync  => vsync,
+      hc     => hc,
+      vc     => vc,
+      in_vbp => open,
+      vidon  => vidon
+      );
   current_draw_location.X <= to_integer(unsigned(hc));
   current_draw_location.Y <= to_integer(unsigned(vc));
+  in_vbp                  <= not(vidon);
 
-   display: display_manager 
-   PORT MAP (
-       clk => clk_25mhz,
-       rst => rst,
-       in_vbp => in_vbp,
-       current_draw_location => current_draw_location,
-       data => color_data
-     ); 
+  display : display_manager
+    port map (
+      clk                      => clk_25mhz,
+      rst                      => rst,
+      in_vbp                   => in_vbp,
+      current_draw_location    => current_draw_location,
+      user_direction_selection => direction,
+      data                     => color_data
+      );
 
 
   process(clk_25mhz)
@@ -124,14 +125,16 @@ architecture Behavioral of top_level is
       if btn(0) = '1' then
         direction <= R;
       elsif btn(1) = '1' then
-        direction <= DOWN; 
+        direction <= DOWN;
       elsif btn(2) = '1' then
         direction <= UP;
       elsif btn(3) = '1' then
         direction <= L;
+        else
+        direction <= NONE;
       end if;
     end if;
   end process;
-  
+
 end Behavioral;
 
