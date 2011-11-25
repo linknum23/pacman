@@ -37,12 +37,16 @@ begin
       case state is
         when NONE =>
           state <= NONE;
-          if current_location /= last_current_location or current_direction /= last_current_direction then
+          if (current_location /= last_current_location and current_direction /= NONE) or current_direction /= last_current_direction then
             --direction change
             state <= REQUEST_MOVE;
+          else
+            if rom_enable = '1' then
+              rom_use_done <= '1';
+            end if;
           end if;
         when REQUEST_MOVE =>
-          if current_direction /= NONE and rom_enable = '1' then
+          if rom_enable = '1' then
             ---utilize rom access
             rom_location <= next_location;
             state        <= CHECK_MOVE;
@@ -59,8 +63,8 @@ begin
           end if;
           rom_use_done <= '1';
           state        <= NONE;
-      when others => null;
-    end case;
+        when others => null;
+      end case;
     end if;
   end process;
 
@@ -76,9 +80,11 @@ begin
     end if;
   end process;
 
-  process(current_tile_point)
+  process(current_tile_point, current_direction)
   begin
-    if current_tile_point.X = 0 then
+    if (current_direction = R or current_direction = L) and (current_tile_point.X = 0 or current_tile_point.X = 15) then
+      edge <= '1';
+    elsif (current_direction = UP or current_direction = DOWN) and (current_tile_point.Y = 0 or current_tile_point.Y = 15)then
       edge <= '1';
     else
       edge <= '0';

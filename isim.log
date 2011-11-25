@@ -12,7 +12,7 @@ Time resolution is 1 ps
 Simulator is doing circuit initialization process.
 at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
 at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
 at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
 at 0 ps, Instance /top_level_tb/uut/display/the_pacman/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
 at 0 ps, Instance /top_level_tb/uut/display/the_pacman/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
@@ -50,38 +50,61 @@ at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_UNS
 at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
 at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
 at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-# run all
-at 5496161152 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5506499612 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5516838076 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5527176536 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5537515 ns(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5547853460 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5558191920 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5568530384 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5578868844 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5589207304 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5599545768 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5609884228 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5620222692 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5630561152 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5640899612 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5651238076 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5661576536 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5671915 ns(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5682253460 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5692591920 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5702930384 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5713268844 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5723607304 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5733945768 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5744284228 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5754622692 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5764961152 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5775299612 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5785638076 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5795976536 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5806315 ns(9), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-at 5816653460 ps(8), Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-Stopped at time : 12519884228 ps : File "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/vga1024x768.vhd" Line 46
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
+# run 1.00us
 # exit 0

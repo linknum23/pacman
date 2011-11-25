@@ -185,6 +185,7 @@ begin
   --Right here is all the juicy goodness that this sweet man is dishing out.
   --You will find all the control logic and display logic embedded inside this sexy component.
   -------------------------------------------------
+
   the_pacman : pacman_manager
     generic map(
       GAME_OFFSET => GAME_OFFSET
@@ -208,6 +209,7 @@ begin
       rom_enable                  => pacman_en,
       rom_use_done                => pacman_done
       );
+
 --
 --      ai : ghost_ai
 --      port map (
@@ -254,16 +256,17 @@ begin
 
   process(vga_en, grid_tile_location, ghost_tile_location, pacman_rom_tile_location, ghost_en, pacman_en, direction_en, direction_tile_location)
   begin
-    if vga_en = '1' then
+    --if vga_en = '1' then
       rom_tile_location <= grid_tile_location;
-    elsif ghost_en = '1' then
+    --els
+    if ghost_en = '1' then
       rom_tile_location <= ghost_tile_location;
     elsif pacman_en = '1' then
       rom_tile_location <= pacman_rom_tile_location;
     elsif direction_en = '1' then
       rom_tile_location <= direction_tile_location;
-    else
-      rom_tile_location <= (X => 0, Y => 0);
+    --else
+    --  rom_tile_location <= (X => 0, Y => 0);
     end if;
   end process;
 
@@ -344,12 +347,13 @@ begin
       data <= clyde_color_data;
     elsif pacman_valid = '1' then
       data <= pacman_color_data;
-    elsif grid_valid = '1' then
-      data <= grid_color_data;
+    --elsif grid_valid = '1' then
     else
-      data.R <= "000";
-      data.G <= "000";
-      data.B <= "00";
+       data <= grid_color_data;
+    --else
+    --  data.R <= "000";
+    --  data.G <= "000";
+    --  data.B <= "00";
     end if;
   end process;
 

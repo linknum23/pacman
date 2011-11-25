@@ -227,13 +227,13 @@ begin
 --only if we are valid
   process(valid)
   begin
-    data.R <= "000";
-    data.G <= "000";
-    data.B <= "00";
-    if valid = '1' then
+    --data.R <= "000";
+    --data.G <= "000";
+    --data.B <= "00";
+    --if valid = '1' then
       data.R <= "111";
       data.G <= "111";
-    end if;
+    --end if;
   end process;
 
 

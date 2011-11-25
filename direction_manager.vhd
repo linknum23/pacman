@@ -59,21 +59,25 @@ begin
             state         <= WAIT_FOR_ROM;
           else
             state <= WAIT_FOR_DIRECTION;
+            if rom_enable = '1' then
+              rom_use_done <= '1';
+            end if;
           end if;
         when WAIT_FOR_ROM =>
           if rom_enable = '1' then
             rom_address <= address_to_check;
             state       <= CHECK_ROM;
           else
-            state <= WAIT_FOR_DIRECTION;
+            state <= WAIT_FOR_ROM;
           end if;
         when CHECK_ROM =>
           rom_use_done <= '1';
           if rom_data_in >= 16 then
             current_direction <= direction_reg;
+            last_direction_selection <= direction_reg;
           end if;
-          last_direction_selection <= direction_reg;
-          state <= WAIT_FOR_DIRECTION;
+
+          state                    <= WAIT_FOR_DIRECTION;
         when others => null;
       end case;
     end if;

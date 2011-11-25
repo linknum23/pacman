@@ -71,7 +71,7 @@ begin
   current_tile_location <= tile_location;
 
                                         --calculate the address into the grid rom
-  process(game_location)
+  process(game_location.Y,game_location.X)
     variable y, x : std_logic_vector(11 downto 0) := (others => '0');
   begin
     y        := std_logic_vector(to_unsigned(game_location.Y, 12));
@@ -82,9 +82,9 @@ begin
 
 
                                         --check the type of data returned from the rom and color accordingly
-  process(valid, data_type, rom_addr)
+  process(valid, data_type)
   begin
-    if valid = '1' then
+    --if valid = '1' then
       if data_type < 16 then            --and clocks(22) = '1'then
         data.R <= "000";
         data.G <= "000";
@@ -94,15 +94,15 @@ begin
         data.G <= "101";
         data.B <= "10";
       end if;
-    elsif rom_addr(7 downto 4) = 0 or rom_addr(3 downto 0) = 0 then
-      data.R <= "000";
-      data.G <= "101";
-      data.B <= "01";
-    else
-      data.R <= "000";
-      data.G <= "000";
-      data.B <= "00";
-    end if;
+    --elsif rom_addr(7 downto 4) = 0 or rom_addr(3 downto 0) = 0 then
+    --  data.R <= "000";
+    --  data.G <= "101";
+    --  data.B <= "01";
+    --else
+    --  data.R <= "000";
+    --  data.G <= "000";
+    --  data.B <= "00";
+    --end if;
   end process;
 
 

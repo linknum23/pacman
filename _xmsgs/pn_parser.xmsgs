@@ -8,7 +8,13 @@
 <!-- Copyright (c) 1995-2011 Xilinx, Inc.  All rights reserved.    -->
 
 <messages>
+<msg type="info" file="ProjectMgmt" num="1061" ><arg fmt="%s" index="1">Parsing VHDL file &quot;/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/grid_display.vhd&quot; into library work</arg>
+</msg>
+
 <msg type="info" file="ProjectMgmt" num="1061" ><arg fmt="%s" index="1">Parsing VHDL file &quot;/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/pacman_manager.vhd&quot; into library work</arg>
+</msg>
+
+<msg type="info" file="ProjectMgmt" num="1061" ><arg fmt="%s" index="1">Parsing VHDL file &quot;/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/pacman_target_selection.vhd&quot; into library work</arg>
 </msg>
 
 </messages>
