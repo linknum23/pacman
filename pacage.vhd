@@ -16,7 +16,7 @@ package pacage is
     B : std_logic_vector(1 downto 0);
   end record;
 
-  type DIRECTION is (L, R, UP, DOWN, NONE); 
+  type DIRECTION is (L, R, UP, DOWN, NONE, STILL);
   type GHOST_MODE is (NORMAL, SCATTER);
   type GHOST_DISP_MODE is (NORM, SCATTER, EYES);
 
@@ -24,7 +24,7 @@ package pacage is
   record
     PT   : POINT;
     DIR  : DIRECTION;
-    MODE : GHOST_DISP_MODE; 
+    MODE : GHOST_DISP_MODE;
       CAGED : boolean;
   end record;
 

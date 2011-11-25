@@ -20,28 +20,16 @@ entity direction_manager is
 end direction_manager;
 
 architecture Behavioral of direction_manager is
-  signal last_direction_selection : DIRECTION  := NONE;
+  signal last_used_selection : DIRECTION  := NONE;
   type   state_type is (WAIT_FOR_DIRECTION, WAIT_FOR_ROM, CHECK_ROM);
-  signal state                    : state_type := WAIT_FOR_DIRECTION;
-  signal direction_reg            : DIRECTION  := NONE;
-  signal address_to_check         : POINT;
-  signal tile_lined_up            : std_logic  := '0';
+  signal state               : state_type := WAIT_FOR_DIRECTION;
+  signal direction_reg       : DIRECTION  := NONE;
+  signal address_to_check    : POINT;
+  signal tile_lined_up       : std_logic  := '0';
+  signal attempted_selection : DIRECTION  := NONE;
+  signal counter             : std_logic_vector(23 downto 0);
+  signal direction_time_zone : std_logic  := '0';
 begin
-
-  process(direction_reg, pacman_current_tile_location)
-  begin
-    address_to_check <= pacman_current_tile_location;
-    if direction_reg = L then
-      address_to_check.X <= pacman_current_tile_location.X - 1;
-    elsif direction_reg = R then
-      address_to_check.X <= pacman_current_tile_location.X + 1;
-    elsif direction_reg = UP then
-      address_to_check.Y <= pacman_current_tile_location.Y - 1;
-    elsif direction_reg = DOWN then
-      address_to_check.Y <= pacman_current_tile_location.Y + 1;
-    else
-    end if;
-  end process;
 
   --check to see if we are at a tile border
   tile_lined_up <= '1' when ((direction_selection = L or direction_selection = R) and pacman_current_tile_offset.Y = 0)
@@ -49,14 +37,44 @@ begin
 
   process(clk)
   begin
+    if clk = '1' and clk'event then
+      attempted_selection <= direction_selection;
+      --shift register for the last direction press
+      if counter(23) = '0' then
+        counter             <= counter + 1;
+        direction_time_zone <= '1';
+      else
+        direction_time_zone <= '0';
+      end if;
+      if attempted_selection /= direction_selection then
+        counter <= (others => '0');
+      end if;
+    end if;
+  end process;
+
+  process(clk)
+  begin
     if clk'event and clk = '1' then
       rom_use_done <= '0';
       case state is
         when WAIT_FOR_DIRECTION =>
-          if direction_selection /= last_direction_selection and tile_lined_up = '1' then
+          if direction_selection /= last_used_selection and tile_lined_up = '1' and direction_time_zone = '1' then
             --if we have a changed direction and our direction change will line up properly then wait for rom access
             direction_reg <= direction_selection;
-            state         <= WAIT_FOR_ROM;
+
+            address_to_check <= pacman_current_tile_location;
+            --grab the address too
+            if direction_selection = L then
+              address_to_check.X <= pacman_current_tile_location.X - 1;
+            elsif direction_selection = R then
+              address_to_check.X <= pacman_current_tile_location.X + 1;
+            elsif direction_selection = UP then
+              address_to_check.Y <= pacman_current_tile_location.Y - 1;
+            elsif direction_selection = DOWN then
+              address_to_check.Y <= pacman_current_tile_location.Y + 1;
+            end if;
+
+            state <= WAIT_FOR_ROM;
           else
             state <= WAIT_FOR_DIRECTION;
             if rom_enable = '1' then
@@ -73,11 +91,10 @@ begin
         when CHECK_ROM =>
           rom_use_done <= '1';
           if rom_data_in >= 16 then
-            current_direction <= direction_reg;
-            last_direction_selection <= direction_reg;
+            current_direction   <= direction_reg;
+            last_used_selection <= direction_reg;
           end if;
-
-          state                    <= WAIT_FOR_DIRECTION;
+          state <= WAIT_FOR_DIRECTION;
         when others => null;
       end case;
     end if;

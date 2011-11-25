@@ -63,10 +63,10 @@ begin
   stim_proc : process
   begin
     dir <= "1000";
-    wait for 10us;
+    wait for 40us;
     dir <= "0100";
-    wait for 50ns;
-    dir <= "0000";
+    wait for 100ns;
+    --dir <= "0000";
     --wait for 300us;
     --dir <= "0100";
    -- wait for 300us;

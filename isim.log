@@ -30,7 +30,7 @@ at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD.T
 at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
 at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
 # restart
-# run 1.00us
+# run all
 Simulator is doing circuit initialization process.
 at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
 at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
@@ -50,61 +50,26 @@ at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_UNS
 at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
 at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
 at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# run 1.00us
-# exit 0
+Stopped at time : 1142675 ns : File "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/ipcore_dir/dcm.vhd" Line 48
+# restart
+# run all
+Simulator is doing circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/the_pacman/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 0 ps, Instance /top_level_tb/uut/display/the_pacman/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 0 ps, Instance /top_level_tb/uut/display/the_pacman/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 0 ps, Instance /top_level_tb/uut/display/the_pacman/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+Finished circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+Stopped at time : 1860295 ns : File "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/ipcore_dir/dcm.vhd" Line 47

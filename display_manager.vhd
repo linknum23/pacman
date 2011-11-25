@@ -285,17 +285,16 @@ begin
 
   process(vga_en, grid_tile_location, ghost_tile_location, pacman_rom_tile_location, ghost_en, pacman_en, direction_en, direction_tile_location)
   begin
-    --if vga_en = '1' then
+    if vga_en = '1' then
       rom_tile_location <= grid_tile_location;
-    --els
-    if ghost_en = '1' then
+    elsif ghost_en = '1' then
       rom_tile_location <= ghost_tile_location;
     elsif pacman_en = '1' then
       rom_tile_location <= pacman_rom_tile_location;
     elsif direction_en = '1' then
       rom_tile_location <= direction_tile_location;
-    --else
-    --  rom_tile_location <= (X => 0, Y => 0);
+    else
+      rom_tile_location <= (X => 0, Y => 0);
     end if;
   end process;
 
@@ -369,13 +368,13 @@ begin
       data <= ghost_color_data;
     elsif pacman_valid = '1' then
       data <= pacman_color_data;
-    --elsif grid_valid = '1' then
     else
-       data <= grid_color_data;
-    --else
-    --  data.R <= "000";
-    --  data.G <= "000";
-    --  data.B <= "00";
+      --elsif grid_valid = '1' then
+      data <= grid_color_data;
+      --else
+      --  data.R <= "000";
+      --  data.G <= "000";
+      --  data.B <= "00";
     end if;
   end process;
 

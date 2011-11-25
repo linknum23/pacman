@@ -46,6 +46,7 @@ begin
             end if;
           end if;
         when REQUEST_MOVE =>
+          enable_move <= '0';
           if rom_enable = '1' then
             ---utilize rom access
             rom_location <= next_location;
@@ -82,9 +83,9 @@ begin
 
   process(current_tile_point, current_direction)
   begin
-    if (current_direction = R or current_direction = L) and (current_tile_point.X = 0 or current_tile_point.X = 15) then
+    if (current_direction = R or current_direction = L) and current_tile_point.X = 0  then
       edge <= '1';
-    elsif (current_direction = UP or current_direction = DOWN) and (current_tile_point.Y = 0 or current_tile_point.Y = 15)then
+    elsif (current_direction = UP or current_direction = DOWN) and current_tile_point.Y = 0 then
       edge <= '1';
     else
       edge <= '0';

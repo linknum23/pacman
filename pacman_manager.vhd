@@ -72,7 +72,7 @@ architecture Behavioral of pacman_manager is
 
   signal valid             : std_logic := '0';
   signal offset            : POINT     := (0, 0);
-  signal current_direction : DIRECTION := NONE;
+  signal current_direction : DIRECTION := STILL;
 
   signal clocks              : std_logic_vector(22 downto 0) := (others => '0');
   signal wacka_clk, move_clk : std_logic                     := '0';
@@ -84,7 +84,9 @@ begin
   process(clk)
   begin
     if clk = '1' and clk'event then
-      current_direction <= direction_select;
+      if direction_select /= NONE then
+        current_direction <= direction_select;
+      end if;
     end if;
   end process;
 
@@ -216,7 +218,7 @@ begin
 --toggle back an forth for mouth movement
   process(wacka_clk, speed, current_direction)
   begin
-    if wacka_clk = '1' and current_direction /= NONE then
+    if wacka_clk = '1' and current_direction /= STILL then
       offset.Y <= PAC_OPEN_OFFSET;
     elsif speed > 0 then
       offset.Y <= PAC_CLOSED_OFFSET;
@@ -227,13 +229,13 @@ begin
 --only if we are valid
   process(valid)
   begin
-    --data.R <= "000";
-    --data.G <= "000";
-    --data.B <= "00";
-    --if valid = '1' then
+    data.R <= "000";
+    data.G <= "000";
+    data.B <= "00";
+    if valid = '1' then
       data.R <= "111";
       data.G <= "111";
-    --end if;
+    end if;
   end process;
 
 
