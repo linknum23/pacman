@@ -59,7 +59,7 @@ begin
   begin
     if clk = '1' and clk 'event then
       --offset by 1 for the register delay
-      if current_draw_location.X >= GAME_OFFSET.X-2 and current_draw_location.X < GAME_OFFSET.X + GAME_SIZE.X - 1
+      if current_draw_location.X >= GAME_OFFSET.X-2 and current_draw_location.X < GAME_OFFSET.X + GAME_SIZE.X - 2
         and current_draw_location.Y >= GAME_OFFSET.Y and current_draw_location.Y < GAME_OFFSET.Y + GAME_SIZE.Y then
         --valid here
         valid <= '1';

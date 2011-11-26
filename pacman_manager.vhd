@@ -137,8 +137,8 @@ begin
   process(clk)
   begin
     if clk = '1' and clk'event then
-      --10 = 8 + 2, 9 = 8 + 1
-      if current_draw_location.X >= (current_position.X - 10) and current_draw_location.X < (current_position.X + PAC_SIZE.X - 9) then
+      --10 = 8 + 2
+      if current_draw_location.X >= (current_position.X - 10) and current_draw_location.X < (current_position.X + PAC_SIZE.X - 10) then
         validh <= '1';
       else
         validh <= '0';
@@ -228,7 +228,7 @@ begin
   begin
     if wacka_clk = '1' and current_direction /= STILL then
       offset.Y <= PAC_OPEN_OFFSET;
-    elsif speed > 0 then
+    elsif speed = '1' then
       offset.Y <= PAC_CLOSED_OFFSET;
     end if;
   end process;

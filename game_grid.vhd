@@ -64,18 +64,19 @@ architecture Behavioral of game_grid is
     row30
     );
 
-  type   dot_grid is array (integer range 0 to 27) of std_logic_vector(0 to 30);
-  signal used_dot_grid : dot_grid := (others => (others => '0'));
+  type   dot_grid is array (integer range 0 to 30) of std_logic_vector(0 to 27);
+  signal used_dot_grid : dot_grid  := (others => (others => '0'));
+  signal out_of_range  : std_logic := '0';
 
 begin
 
+  out_of_range <= '1' when addr.X < -1 or addr.Y < -1 or addr.X > 27 or addr.Y > 30 else '0';
   process(addr,used_dot_grid)
   begin
     data_out <= "10000";
-    if addr.Y < 31 and addr.X < 28 and addr.Y >= 0 and addr.X >= 0 then
-      if used_dot_grid (addr.Y)(addr.X) = '1' then
-        data_out <= "10000";
-      else
+	--valid locations must be given except for -1,-1
+    if addr.Y >= 0 and addr.X >= 0 then
+      if used_dot_grid (addr.Y)(addr.X) = '0' then
         data_out <= grid(addr.Y)(addr.X);
       end if;
     end if;
@@ -89,9 +90,9 @@ begin
       elsif we = '1' then
         --writing into rom
         --make sure we have a dot
-        if grid(addr.Y)(addr.X)(4) = '1' and addr.Y < 31 and addr.X < 28 and addr.Y >= 0 and addr.X >= 0 then
+        --if grid(addr.Y)(addr.X)(4) = '1' and addr.Y < 31 and addr.X < 28 and addr.Y >= 0 and addr.X >= 0 then
           used_dot_grid(addr.Y)(addr.X) <= '1';
-        end if;
+        --end if;
       end if;
     end if;
   end process;
