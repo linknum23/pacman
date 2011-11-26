@@ -111,7 +111,7 @@ begin
 
   display : display_manager
     port map (
-      clk                      => clk_25mhz,
+      clk                      => clk_65mhz,
       rst                      => rst,
       in_vbp                   => in_vbp,
       current_draw_location    => current_draw_location,

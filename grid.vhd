@@ -2,10 +2,11 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use IEEE.STD_LOGIC_UNSIGNED.all;
 use IEEE.NUMERIC_STD.all;
+use work.pacage.all;
 
 entity grid_roms is
   port(
-    addr      : in  std_logic_vector(7 downto 0);
+    addr      : in  POINT;
     data_type : in  std_logic_vector(4 downto 0);
     data      : out std_logic
     );
@@ -14,7 +15,7 @@ end grid_roms;
 architecture Behavioral of grid_roms is
 
   type rom_array is array (integer range <>) of std_logic_vector (0 to 15);
-  constant rom : rom_array (0 to 303) := (
+  signal rom : rom_array (0 to 303) := (
     --topleft 0
     "0000000000000000",
     "0000000000000000",
@@ -340,20 +341,15 @@ architecture Behavioral of grid_roms is
     "0000000000000000"
     );
 
-  signal offset : std_logic_vector(8 downto 0) := (others => '0');
-  signal x, y   : integer                      := 0;
+  signal why : unsigned(8 downto 0);
 begin
 
-  --mult by 16 by shift 4
-  offset <= (data_type & "0000") + addr(7 downto 4);
-  y      <= to_integer(unsigned(offset));
-  x      <= to_integer(unsigned(addr(3 downto 0)));
-
-  process(y, x)
+  why <= (unsigned(data_type) & "0000") + to_unsigned(addr.Y, why'length);
+  process(why, addr)
   begin
     data <= '0';
-    if y < 304 and y >= 0 and x >= 0 and x < 16 then
-      data <= rom(y)(x);
+    if why < 304 and why >= 0 and addr.X < 16 and addr.X >= 0 then
+      data <= rom(to_integer(why))(addr.X);
     end if;
   end process;
 

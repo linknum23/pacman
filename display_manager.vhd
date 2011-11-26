@@ -297,7 +297,7 @@ begin
     elsif direction_en = '1' then
       rom_tile_location <= direction_tile_location;
     else
-      rom_tile_location <= (X => 0, Y => 0);
+      rom_tile_location <= (X => -1, Y => -1);
     end if;
   end process;
 
@@ -365,9 +365,9 @@ begin
   process(ghost_valid, ghost_color_data, pacman_color_data,
           pacman_valid, grid_color_data, grid_valid)
   begin
-      data.R <= "000";
-      data.G <= "000";
-      data.B <= "00";
+    data.R <= "000";
+    data.G <= "000";
+    data.B <= "00";
     if ghost_valid = '1' then
       data <= ghost_color_data;
     elsif pacman_valid = '1' then

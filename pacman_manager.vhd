@@ -65,13 +65,12 @@ architecture Behavioral of pacman_manager is
   signal   current_tile_position        : POINT;
   signal   current_tile_position_offset : POINT;
   signal   pacman_draw_location         : POINT;
-  signal   board_draw_location          : POINT;
   signal   tile_location                : POINT;
 
 
   signal next_location : POINT := (0, 0);
 
-  signal valid             : std_logic := '0';
+  signal validh,validv             : std_logic := '0';
   signal offset            : POINT     := (0, 0);
   signal current_direction : DIRECTION := STILL;
 
@@ -113,7 +112,6 @@ begin
   process(move_clk)
   begin
     if move_clk = '1' and move_clk'event then
-      --if current_position.X > -32 and current_position.X < 1055 and current_position.Y > -32 and current_position.Y < 799 then
       if current_direction = L then
         current_position.X <= current_position.X - to_integer(unsigned(speed));
       elsif current_direction = R then
@@ -125,8 +123,8 @@ begin
       end if;
 
       --toggle x for the wrap around
-      if current_position.X < GAME_OFFSET.X +8 then
-        current_position.X <= GAME_OFFSET.X + GAME_SIZE.X -24 ;
+      if current_position.X < GAME_OFFSET.X + 8 then
+        current_position.X <= GAME_OFFSET.X + GAME_SIZE.X - 24;
       elsif current_position.X > GAME_OFFSET.X + GAME_SIZE.X - 24 then
         current_position.X <= GAME_OFFSET.X + 8;
       end if;
@@ -134,12 +132,51 @@ begin
     end if;
   end process;
 
+  process(clk)
+  begin
+    if clk = '1' and clk'event then
+	--10 = 8 + 2, 9 = 8 + 1
+      if current_draw_location.X >= (current_position.X - 10) and current_draw_location.X < (current_position.X + PAC_SIZE.X - 9) then
+        validh <= '1';
+      else
+        validh <= '0';
+      end if;
+	  if current_draw_location.Y >= (current_position.Y - 8) and current_draw_location.Y < (current_position.Y + PAC_SIZE.Y - 8) then
+	    validv <= '1';
+      else
+        validv <= '0';
+      end if;
+	  
+	  
+	  --double register for timing delay
+      if validh = '1' and validv = '1' then
+        pacman_draw_location.X <= current_draw_location.X - current_position.X + 8 + 1;
+        pacman_draw_location.Y <= current_draw_location.Y - current_position.Y + 8;
+
+      else
+        pacman_draw_location.X <= -1;
+        pacman_draw_location.Y <= -1;
+      end if;
+    end if;
+
+  end process;
+  -- valid <= '1' when current_draw_location.X >= (current_position.X - 8)
+  -- and current_draw_location.X < (current_position.X + PAC_SIZE.X - 8)
+  -- and current_draw_location.Y >= (current_position.Y - 8)
+  -- and current_draw_location.Y < (current_position.Y + PAC_SIZE.Y - 8)
+  -- else '0';
+
+  board_pixel_location.X <= current_position.X - GAME_OFFSET.X;
+  board_pixel_location.Y <= current_position.Y - GAME_OFFSET.Y;
+
+--output the valid flag
+  valid_location <= pac_rom_bit;
+
 --output pacman's current direction register to be used by others
   pacman_direction <= current_direction;
 
 --output pacman's current location in pixels within the board range
-  board_pixel_location.X  <= current_position.X - GAME_OFFSET.X;
-  board_pixel_location.Y  <= current_position.Y - GAME_OFFSET.Y;
+
   pacman_pixel_location.X <= board_pixel_location.X;
   pacman_pixel_location.Y <= board_pixel_location.Y;
 
@@ -149,18 +186,18 @@ begin
   pacman_tile_location    <= current_tile_position;
 
 --get offsets into that tile
-  current_tile_position_offset.X <= board_pixel_location.X - to_integer(to_unsigned(current_tile_position.X, 11) sll TILE_SIZE.X);
-  current_tile_position_offset.Y <= board_pixel_location.Y - to_integer(to_unsigned(current_tile_position.Y, 11) sll TILE_SIZE.Y);
+  current_tile_position_offset.X <= board_pixel_location.X - to_integer(to_unsigned(board_pixel_location.X, 9) and "111110000");
+  current_tile_position_offset.Y <= board_pixel_location.Y - to_integer(to_unsigned(board_pixel_location.Y, 9) and "111110000");
 
 --location minus the offsets
 --area to start drawing
-  pacman_draw_location.X <= current_draw_location.X - current_position.X + 8 when valid = '1' else 0;
-  pacman_draw_location.Y <= current_draw_location.Y - current_position.Y + 8 when valid = '1' else 0;
+  --pacman_draw_location.X <= current_draw_location.X - current_position.X + 8 when valid = '1' else -1;
+  --pacman_draw_location.Y <= current_draw_location.Y - current_position.Y + 8 when valid = '1' else -1;
 
---location minus the offsets
---location of the drawing pixel within board coords
-  board_draw_location.X <= current_draw_location.X - GAME_OFFSET.X when valid = '1' else 0;
-  board_draw_location.Y <= current_draw_location.Y - GAME_OFFSET.Y when valid = '1' else 0;
+----location minus the offsets
+----location of the drawing pixel within board coords
+  -- board_draw_location.X <= current_draw_location.X - GAME_OFFSET.X when valid = '1' else -1;
+  -- board_draw_location.Y <= current_draw_location.Y - GAME_OFFSET.Y when valid = '1' else -1;
 
   rom : pacman_rom
     port map (
@@ -171,7 +208,6 @@ begin
 
 --calculate the addresses for the rom using a 32x32 PROM. The prom will be scaled up from a 16x16 PROM.
   process(pacman_draw_location, current_direction)
-    variable y, x : std_logic_vector(11 downto 0) := (others => '0');
   begin
     if current_direction = R then
       addr.Y <= pacman_draw_location.Y;
@@ -188,16 +224,6 @@ begin
     end if;
   end process;
 
---valid flag to tell whether we are in range of the image and if we are drawing a color for it.
---shift valid by 8 bits down
-  valid <= '1' when current_draw_location.X >= (current_position.X - 8)
-           and current_draw_location.X < (current_position.X + PAC_SIZE.X - 8)
-           and current_draw_location.Y >= (current_position.Y - 8)
-           and current_draw_location.Y < (current_position.Y + PAC_SIZE.Y - 8)
-           else '0';
---output the valid flag
-  valid_location <= valid and pac_rom_bit;
-
 --clock divider
   process(clk)
   begin
@@ -205,33 +231,25 @@ begin
       clocks <= clocks + 1;
     end if;
   end process;
-  wacka_clk <= clocks(18);
-  move_clk  <= clocks(14);
+  wacka_clk <= clocks(22);
+  move_clk  <= clocks(18);
 
 
 --based on the wacka speed,
 --toggle back an forth for mouth movement
-  process(wacka_clk,current_direction,speed)
+  process(wacka_clk, current_direction, speed)
   begin
     if wacka_clk = '1' and current_direction /= STILL then
-        offset.Y <= PAC_OPEN_OFFSET;
-      elsif speed > 0 then
-        offset.Y <= PAC_CLOSED_OFFSET;
-      end if;
-  end process;
-
---output mux for the colors of pacman,
---only if we are valid
-  process(valid)
-  begin
-    data.R <= "000";
-    data.G <= "000";
-    data.B <= "00";
-    if valid = '1' then
-      data.R <= "111";
-      data.G <= "111";
+      offset.Y <= PAC_OPEN_OFFSET;
+    elsif speed > 0 then
+      offset.Y <= PAC_CLOSED_OFFSET;
     end if;
   end process;
+
+
+  data.B <= "00";
+  data.R <= "111";
+  data.G <= "111";
 
 
 end Behavioral;

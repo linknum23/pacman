@@ -60,7 +60,7 @@ begin
   why <= to_unsigned(offset.Y + addr.Y, why'length);
   ex  <= to_unsigned(addr.X, ex'length);
 
-  process(why, ex, offset)
+  process(why, ex)
     variable newy : unsigned(why'high downto 0);
     variable newx : unsigned(ex'high downto 0);
   begin

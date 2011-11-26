@@ -5,8 +5,8 @@ package pacage is
 
   type POINT is
   record
-    X : integer;
-    Y : integer;
+    X : integer range -1 to 2000;
+    Y : integer range -1 to 2000;
   end record;
 
   type COLOR is
