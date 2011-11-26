@@ -97,8 +97,12 @@ architecture Behavioral of display_manager is
 
   component game_grid is
     port(
-      addr : in  POINT;
-      data : out std_logic_vector(4 downto 0)
+      clk      : in  std_logic;
+      rst      : in  std_logic;
+      addr     : in  POINT;
+      we       : in  std_logic;
+      data_in  : in  std_logic_vector(4 downto 0);
+      data_out : out std_logic_vector(4 downto 0)
       );
   end component;
 
@@ -114,6 +118,24 @@ architecture Behavioral of display_manager is
       current_direction            : out DIRECTION;
       rom_address                  : out POINT;
       rom_use_done                 : out std_logic
+      );
+  end component;
+
+  component game_machine is
+    port (
+      clk                   : in  std_logic;
+      rst                   : in  std_logic;
+      current_draw_location : in  POINT;
+      pacman_tile_location  : in  POINT;
+      rom_data_in           : in  std_logic_vector(4 downto 0);
+      rom_enable            : in  std_logic;
+      rom_address           : out POINT;
+      rom_data_out          : out std_logic_vector(4 downto 0);
+      rom_use_done          : out std_logic;
+      rom_we                : out std_logic;
+      number_eaten_dots     : out integer;
+      score                 : out integer;
+      reset_level           : out std_logic
       );
   end component;
 
@@ -133,8 +155,8 @@ architecture Behavioral of display_manager is
 
   --state enable and done signals
   -- these are used to notify a subcomponent when they can read from the rom
-  signal vga_en, ghost_en, pacman_en, direction_en : std_logic;
-  signal ghost_done, pacman_done, direction_done   : std_logic;
+  signal vga_en, ghost_en, pacman_en, direction_en, game_machine_en, game_machine_we : std_logic;
+  signal ghost_done, pacman_done, direction_done, game_machine_done                  : std_logic;
 
   --location signals
   signal pacman_pixel_location       : POINT;
@@ -148,6 +170,8 @@ architecture Behavioral of display_manager is
   signal clyde_tile_location         : POINT;
   signal grid_tile_location          : POINT;
   signal rom_tile_location           : POINT;
+  signal game_machine_tile_location  : POINT;
+  signal game_machine_data_out       : std_logic_vector(4 downto 0);
 
   --ghost info -- used for display
 
@@ -165,7 +189,8 @@ architecture Behavioral of display_manager is
   signal pacman_rom_request_response : std_logic := '0';
   signal grid_rom_request            : std_logic := '0';
   signal grid_rom_request_response   : std_logic := '0';
-  signal grid_data                   : std_logic_vector(4 downto 0);
+  signal grid_data, grid_rom_data_in : std_logic_vector(4 downto 0);
+  signal grid_rom_we                 : std_logic := '0';
   signal direction_tile_location     : POINT;
 
   signal level      : std_logic_vector(8 downto 0) := "000000001";
@@ -173,8 +198,14 @@ architecture Behavioral of display_manager is
   signal ghostmode  : GHOST_MODE                   := NORMAL;
   signal squiggle   : std_logic;
 
+  --game control signals
+  signal score             : integer range 0 to 999999 := 0;
+  signal number_eaten_dots : integer range 0 to 255    := 0;
+  signal reset_level       : std_logic                 := '0';
+
+
   --state controller
-  type   game_state is (VGA_READ, PAUSE, GHOST_UPDATE, PACMAN_UPDATE, DIRECTION_UPDATE);
+  type   game_state is (VGA_READ, PAUSE, GHOST_UPDATE, PACMAN_UPDATE, DIRECTION_UPDATE, GAME_UPDATE);
   signal gstate : game_state := VGA_READ;
 
 begin
@@ -276,18 +307,42 @@ begin
       rom_use_done                 => direction_done
       );
 
+  machine : game_machine
+    port map(
+      clk                   => clk,
+      rst                   => rst,
+      current_draw_location => current_draw_location,
+      pacman_tile_location  => pacman_tile_location,
+      rom_data_in           => grid_data,
+      rom_enable            => game_machine_en,
+      rom_address           => game_machine_tile_location,
+      rom_data_out          => game_machine_data_out,
+      rom_use_done          => game_machine_done,
+      rom_we                => game_machine_we,
+      number_eaten_dots     => number_eaten_dots,
+      score                 => score,
+      reset_level           => reset_level
+      );  
+
+
   -------------------------------------------------
   --grid and its mux
   -------------------------------------------------
   the_grid : game_grid
     port map(
-      addr.X => rom_tile_location.X,
-      addr.Y => rom_tile_location.Y,
-      data   => grid_data
+      clk      => clk,
+      rst      => rst,
+      data_in  => grid_rom_data_in,
+      we       => grid_rom_we,
+      addr.X   => rom_tile_location.X,
+      addr.Y   => rom_tile_location.Y,
+      data_out => grid_data
       );
 
-  process(vga_en, grid_tile_location, ghost_tile_location, pacman_rom_tile_location, ghost_en, pacman_en, direction_en, direction_tile_location)
+  process(vga_en, grid_tile_location, ghost_tile_location, pacman_rom_tile_location, ghost_en, pacman_en, direction_en, direction_tile_location, game_machine_en, game_machine_tile_location, game_machine_we, game_machine_data_out)
   begin
+    grid_rom_data_in <= (others => '0');
+    grid_rom_we      <= '0';
     if vga_en = '1' then
       rom_tile_location <= grid_tile_location;
     elsif ghost_en = '1' then
@@ -296,6 +351,10 @@ begin
       rom_tile_location <= pacman_rom_tile_location;
     elsif direction_en = '1' then
       rom_tile_location <= direction_tile_location;
+    elsif game_machine_en = '1' then
+      rom_tile_location <= game_machine_tile_location;
+      grid_rom_we       <= game_machine_we;
+      grid_rom_data_in  <= game_machine_data_out;
     else
       rom_tile_location <= (X => -1, Y => -1);
     end if;
@@ -346,12 +405,21 @@ begin
             direction_en <= '1';
             if direction_done = '1' then
               direction_en <= '0';
-              gstate       <= PAUSE;
+              gstate       <= GAME_UPDATE;
             else
               gstate <= DIRECTION_UPDATE;
             end if;
+            
+          when GAME_UPDATE =>
+            game_machine_en <= '1';
+            if game_machine_done = '1' then
+              game_machine_en <= '0';
+              gstate          <= PAUSE;
+            else
+              gstate <= GAME_UPDATE;
+            end if;
           when PAUSE =>
-            --wait until we get out of the backporch
+                                        --wait until we get out of the backporch
             gstate <= PAUSE;
         end case;
       end if;
@@ -359,9 +427,9 @@ begin
   end process;
 
 
-  -------------------------------------------------
-  --mux the output color for the display
-  -------------------------------------------------
+                                        -------------------------------------------------
+                                        --mux the output color for the display
+                                        -------------------------------------------------
   process(ghost_valid, ghost_color_data, pacman_color_data,
           pacman_valid, grid_color_data, grid_valid)
   begin

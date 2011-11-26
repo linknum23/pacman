@@ -14,7 +14,7 @@ entity pacman_target_selection is
     rom_enable         : in  std_logic;
     rom_location       : out POINT;
     rom_use_done       : out std_logic;
-    speed              : out std_logic_vector(0 downto 0)
+    speed              : out std_logic
     );
 end pacman_target_selection;
 
@@ -72,12 +72,12 @@ begin
   process(enable_move, edge)
   begin
     if enable_move = '1' then
-      speed <= "1";
+      speed <= '1';
     elsif enable_move = '0' and edge = '0' then
       --diabled but havent hit the edge yet
-      speed <= "1";
+      speed <= '1';
     else
-      speed <= "0";
+      speed <= '0';
     end if;
   end process;
 

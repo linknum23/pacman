@@ -1,4 +1,4 @@
-Running: C:\Xilinx\13.3\ISE_DS\ISE\bin\nt\unwrapped\fuse.exe -intstyle ise -incremental -o C:/projects/Pacman/pacman/top_level_tb_isim_beh.exe -prj C:/projects/Pacman/pacman/top_level_tb_beh.prj top_level_tb 
+Running: fuse.exe -relaunch -intstyle "ise" -incremental -o "C:/projects/Pacman/pacman/top_level_tb_isim_beh.exe" -prj "C:/projects/Pacman/pacman/top_level_tb_beh.prj" "top_level_tb" 
 ISim O.76xd (signature 0x2f00eba5)
 Number of CPUs detected in this system: 4
 Turning on mult-threading, number of parallel sub-compilation jobs: 8 
@@ -15,6 +15,7 @@ Parsing VHDL file "C:/projects/Pacman/pacman/pacman_manager.vhd" into library wo
 Parsing VHDL file "C:/projects/Pacman/pacman/grid_display.vhd" into library work
 Parsing VHDL file "C:/projects/Pacman/pacman/ghost_display.vhd" into library work
 Parsing VHDL file "C:/projects/Pacman/pacman/ghost_ai.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/game_machine.vhd" into library work
 Parsing VHDL file "C:/projects/Pacman/pacman/game_grid.vhd" into library work
 Parsing VHDL file "C:/projects/Pacman/pacman/direction_manager.vhd" into library work
 Parsing VHDL file "C:/projects/Pacman/pacman/vga1024x768.vhd" into library work
@@ -26,7 +27,7 @@ Parsing VHDL file "C:/projects/Pacman/pacman/top_level_tb.vhd" into library work
 Starting static elaboration
 Completed static elaboration
 Fuse Memory Usage: 75592 KB
-Fuse CPU Usage: 406 ms
+Fuse CPU Usage: 374 ms
 Compiling package standard
 Compiling package std_logic_1164
 Compiling package numeric_std
@@ -60,13 +61,14 @@ Compiling architecture behavioral of entity ghost_target_updater [ghost_target_u
 Compiling architecture behavioral of entity move_ghost [move_ghost_default]
 Compiling architecture behavioral of entity ghost_ai [ghost_ai_default]
 Compiling architecture behavioral of entity direction_manager [direction_manager_default]
+Compiling architecture behavioral of entity game_machine [game_machine_default]
 Compiling architecture behavioral of entity game_grid [game_grid_default]
 Compiling architecture behavioral of entity display_manager [display_manager_default]
 Compiling architecture behavioral of entity top_level [top_level_default]
 Compiling architecture behavior of entity top_level_tb
 Time Resolution for simulation is 1ps.
-Waiting for 1 sub-compilation(s) to finish...
-Compiled 62 VHDL Units
+Waiting for 13 sub-compilation(s) to finish...
+Compiled 64 VHDL Units
 Built simulation executable C:/projects/Pacman/pacman/top_level_tb_isim_beh.exe
 Fuse Memory Usage: 111692 KB
-Fuse CPU Usage: 1062 ms
+Fuse CPU Usage: 1030 ms

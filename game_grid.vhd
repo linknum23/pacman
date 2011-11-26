@@ -6,8 +6,12 @@ use work.pacage.all;
 
 entity game_grid is
   port(
-    addr : in  POINT;
-    data : out std_logic_vector(4 downto 0)
+    clk      : in  std_logic;
+    rst      : in  std_logic;
+    addr     : in  POINT;
+    we       : in  std_logic;
+    data_in  : in  std_logic_vector(4 downto 0);
+    data_out : out std_logic_vector(4 downto 0)
     );
 end game_grid;
 
@@ -17,8 +21,8 @@ architecture Behavioral of game_grid is
 -- 0-15 are of type wall
 -- 16 is blank
 -- 17,18 are dots
-  type game_row is array (integer range <>) of std_logic_vector(4 downto 0);
-  type game_col is array (integer range <>) of game_row(0 to 27);
+  type game_row is array (integer range 0 to 27) of std_logic_vector(4 downto 0);
+  type game_col is array (integer range <>) of game_row;
 
   constant row00 : game_row := ("01000", "01001", "01001", "01001", "01001", "01001", "01001", "01001", "01001", "01001", "01001", "01001", "01001", "01010", "01000", "01001", "01001", "01001", "01001", "01001", "01001", "01001", "01001", "01001", "01001", "01001", "01001", "01010");
   constant row01 : game_row := ("01111", "10001", "10001", "10001", "10001", "10001", "10001", "10001", "10001", "10001", "10001", "10001", "10001", "00111", "00011", "10001", "10001", "10001", "10001", "10001", "10001", "10001", "10001", "10001", "10001", "10001", "10001", "01011");
@@ -60,13 +64,35 @@ architecture Behavioral of game_grid is
     row30
     );
 
+  type   dot_grid is array (integer range 0 to 27) of std_logic_vector(0 to 30);
+  signal used_dot_grid : dot_grid := (others => (others => '0'));
+
 begin
 
-  process(addr)
+  process(addr,used_dot_grid)
   begin
-    data <= "10000";
+    data_out <= "10000";
     if addr.Y < 31 and addr.X < 28 and addr.Y >= 0 and addr.X >= 0 then
-      data <= grid(addr.Y)(addr.X);
+      if used_dot_grid (addr.Y)(addr.X) = '1' then
+        data_out <= "10000";
+      else
+        data_out <= grid(addr.Y)(addr.X);
+      end if;
+    end if;
+  end process;
+
+  process(clk)
+  begin
+    if clk = '1' and clk'event then
+      if rst = '1' then
+        used_dot_grid <= (others => (others => '0'));
+      elsif we = '1' then
+        --writing into rom
+        --make sure we have a dot
+        if grid(addr.Y)(addr.X)(4) = '1' and addr.Y < 31 and addr.X < 28 and addr.Y >= 0 and addr.X >= 0 then
+          used_dot_grid(addr.Y)(addr.X) <= '1';
+        end if;
+      end if;
     end if;
   end process;
 

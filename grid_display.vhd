@@ -44,7 +44,7 @@ architecture Behavioral of grid_display is
                                         --bit back from the tile roms
   signal grid_rom_bit             : std_logic;
                                         --clock counter
-  signal clocks                   : std_logic_vector(22 downto 0) := (others => '0');
+  signal clocks                   : std_logic_vector(24 downto 0) := (others => '0');
   signal game_location_unsigned_X : unsigned(11 downto 0);
   signal game_location_unsigned_Y : unsigned(11 downto 0);
 begin
@@ -66,7 +66,7 @@ begin
       else
         valid <= '0';
       end if;
-	  --here we double register due to delay
+      --here we double register due to delay
       if valid = '1' then
         --location minus the offsets
         game_location.X <= current_draw_location.X - GAME_OFFSET.X + 1;
@@ -94,16 +94,20 @@ begin
   rom_addr.X <= to_integer(game_location_unsigned_X(TILE_SIZE.X-1 downto 0));
   rom_addr.Y <= to_integer(game_location_unsigned_Y(TILE_SIZE.X-1 downto 0));
 
-  process(data_type)
+  process(data_type,clocks(23))
   begin
     if data_type <= 16 then
       data.R <= "000";
       data.G <= "000";
       data.B <= "11";
-    else
+    elsif (data_type = 18 and clocks(23) = '1') or data_type = 17 then
       data.R <= "111";
       data.G <= "101";
       data.B <= "10";
+    else
+      data.R <= "000";
+      data.G <= "000";
+      data.B <= "00";
     end if;
   end process;
 

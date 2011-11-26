@@ -49,7 +49,7 @@ architecture Behavioral of pacman_manager is
       rom_enable         : in  std_logic;
       rom_location       : out POINT;
       rom_use_done       : out std_logic;
-      speed              : out std_logic_vector(0 downto 0)
+      speed              : out std_logic
       );
   end component;
 
@@ -60,7 +60,7 @@ architecture Behavioral of pacman_manager is
   constant PAC_SIZE                     : POINT   := (32, 32);
   constant TILE_SIZE                    : POINT   := (4, 4);  --in bits
 --locations
-  signal   current_position             : POINT   := (GAME_OFFSET.X + (14*16)-8, GAME_OFFSET.Y + (23*16));
+  signal   current_position             : POINT   := (GAME_OFFSET.X + (14*16)-8, GAME_OFFSET.Y + (23*16));  --14, 24
   signal   board_pixel_location         : POINT;
   signal   current_tile_position        : POINT;
   signal   current_tile_position_offset : POINT;
@@ -70,7 +70,7 @@ architecture Behavioral of pacman_manager is
 
   signal next_location : POINT := (0, 0);
 
-  signal validh,validv             : std_logic := '0';
+  signal validh, validv    : std_logic := '0';
   signal offset            : POINT     := (0, 0);
   signal current_direction : DIRECTION := STILL;
 
@@ -78,7 +78,7 @@ architecture Behavioral of pacman_manager is
   signal wacka_clk, move_clk : std_logic                     := '0';
   signal pac_rom_bit         : std_logic                     := '0';
   signal addr                : POINT;
-  signal speed               : std_logic_vector(0 downto 0)  := "0";
+  signal speed               : std_logic := '0';
 begin
   --register the requested direction
   process(clk)
@@ -112,14 +112,16 @@ begin
   process(move_clk)
   begin
     if move_clk = '1' and move_clk'event then
-      if current_direction = L then
-        current_position.X <= current_position.X - to_integer(unsigned(speed));
-      elsif current_direction = R then
-        current_position.X <= current_position.X + to_integer(unsigned(speed));
-      elsif current_direction = UP then
-        current_position.Y <= current_position.Y - to_integer(unsigned(speed));
-      elsif current_direction = DOWN then
-        current_position.Y <= current_position.Y + to_integer(unsigned(speed));
+      if speed = '1' then
+        if current_direction = L then
+          current_position.X <= current_position.X - 1;
+        elsif current_direction = R then
+          current_position.X <= current_position.X + 1;
+        elsif current_direction = UP then
+          current_position.Y <= current_position.Y - 1;
+        elsif current_direction = DOWN then
+          current_position.Y <= current_position.Y + 1;
+        end if;
       end if;
 
       --toggle x for the wrap around
@@ -135,20 +137,20 @@ begin
   process(clk)
   begin
     if clk = '1' and clk'event then
-	--10 = 8 + 2, 9 = 8 + 1
+      --10 = 8 + 2, 9 = 8 + 1
       if current_draw_location.X >= (current_position.X - 10) and current_draw_location.X < (current_position.X + PAC_SIZE.X - 9) then
         validh <= '1';
       else
         validh <= '0';
       end if;
-	  if current_draw_location.Y >= (current_position.Y - 8) and current_draw_location.Y < (current_position.Y + PAC_SIZE.Y - 8) then
-	    validv <= '1';
+      if current_draw_location.Y >= (current_position.Y - 8) and current_draw_location.Y < (current_position.Y + PAC_SIZE.Y - 8) then
+        validv <= '1';
       else
         validv <= '0';
       end if;
-	  
-	  
-	  --double register for timing delay
+
+
+      --double register for timing delay
       if validh = '1' and validv = '1' then
         pacman_draw_location.X <= current_draw_location.X - current_position.X + 8 + 1;
         pacman_draw_location.Y <= current_draw_location.Y - current_position.Y + 8;
@@ -160,11 +162,6 @@ begin
     end if;
 
   end process;
-  -- valid <= '1' when current_draw_location.X >= (current_position.X - 8)
-  -- and current_draw_location.X < (current_position.X + PAC_SIZE.X - 8)
-  -- and current_draw_location.Y >= (current_position.Y - 8)
-  -- and current_draw_location.Y < (current_position.Y + PAC_SIZE.Y - 8)
-  -- else '0';
 
   board_pixel_location.X <= current_position.X - GAME_OFFSET.X;
   board_pixel_location.Y <= current_position.Y - GAME_OFFSET.Y;
@@ -188,16 +185,6 @@ begin
 --get offsets into that tile
   current_tile_position_offset.X <= board_pixel_location.X - to_integer(to_unsigned(board_pixel_location.X, 9) and "111110000");
   current_tile_position_offset.Y <= board_pixel_location.Y - to_integer(to_unsigned(board_pixel_location.Y, 9) and "111110000");
-
---location minus the offsets
---area to start drawing
-  --pacman_draw_location.X <= current_draw_location.X - current_position.X + 8 when valid = '1' else -1;
-  --pacman_draw_location.Y <= current_draw_location.Y - current_position.Y + 8 when valid = '1' else -1;
-
-----location minus the offsets
-----location of the drawing pixel within board coords
-  -- board_draw_location.X <= current_draw_location.X - GAME_OFFSET.X when valid = '1' else -1;
-  -- board_draw_location.Y <= current_draw_location.Y - GAME_OFFSET.Y when valid = '1' else -1;
 
   rom : pacman_rom
     port map (
