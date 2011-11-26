@@ -37,11 +37,13 @@ architecture Behavioral of display_manager is
       GAME_OFFSET : POINT
       );
     port(
+      clk                   : in std_logic;
       blinky_info           : in  GHOST_INFO;
       pinky_info            : in  GHOST_INFO;
       inky_info             : in  GHOST_INFO;
       clyde_info            : in  GHOST_INFO;
       ghostmode             : in  GHOST_MODE;
+		fright_blink		: in std_logic;
       current_draw_location : in  POINT;
       ghost_valid           : out std_logic;
       squiggle              : in  std_logic;
@@ -75,6 +77,10 @@ architecture Behavioral of display_manager is
   end component;
 
   component ghost_ai is
+      generic (
+      GAME_OFFSET : POINT;
+      GAME_SIZE   : POINT
+      );
     port (
       clk         : in  std_logic;
       en          : in  std_logic;
@@ -85,6 +91,7 @@ architecture Behavioral of display_manager is
       level       : in  std_logic_vector (8 downto 0);
       ghostmode   : in  GHOST_MODE;
       pman_loc    : in  POINT;
+      pman_dir    : in  DIRECTION;
       done        : out std_logic;
       blinky_info : out GHOST_INFO;
       pinky_info  : out GHOST_INFO;
@@ -158,7 +165,7 @@ architecture Behavioral of display_manager is
 
   --state enable and done signals
   -- these are used to notify a subcomponent when they can read from the rom
-  signal vga_en, ghost_en, pacman_en, direction_en, game_machine_en, game_machine_we : std_logic;
+  signal vga_en, ghost_en, pacman_en, direction_en, game_machine_en, game_machine_we, ghost_read : std_logic;
   signal ghost_done, pacman_done, direction_done, game_machine_done                  : std_logic;
 
   --location signals
@@ -266,11 +273,13 @@ begin
       GAME_OFFSET => GAME_OFFSET
       )
     port map(
+      clk                   => clk,
       blinky_info           => blinky,
       pinky_info            => pinky,
       inky_info             => inky,
       clyde_info            => clyde,
       ghostmode             => ghostmode,
+		fright_blink		    => '0',--need to connect this later
       current_draw_location => current_draw_location,
       ghost_valid           => ghost_valid,
       ghost_color           => ghost_color_data,
@@ -278,6 +287,10 @@ begin
       );
 
   ai : ghost_ai
+      generic map (
+      GAME_SIZE   => GAME_SIZE,
+      GAME_OFFSET => GAME_OFFSET
+      )
     port map (
       clk         => clk,
       en          => ghost_en,
@@ -288,6 +301,7 @@ begin
       level       => level,
       ghostmode   => ghostmode,
       pman_loc    => pacman_tile_location,
+      pman_dir    => pacman_direction,
       done        => ghost_done,
       blinky_info => blinky,
       pinky_info  => pinky,
@@ -351,7 +365,7 @@ begin
     grid_rom_we      <= '0';
     if vga_en = '1' then
       rom_tile_location <= grid_tile_location;
-    elsif ghost_en = '1' then
+    elsif ghost_read = '1' then
       rom_tile_location <= ghost_tile_location;
     elsif pacman_en = '1' then
       rom_tile_location <= pacman_rom_tile_location;
@@ -381,6 +395,7 @@ begin
         ghost_en     <= '0';
         pacman_en    <= '0';
         direction_en <= '0';
+		  ghost_read <= '0';
         case gstate is
           when VGA_READ =>
             vga_en <= '1';
@@ -392,6 +407,7 @@ begin
               gstate <= VGA_READ;
             end if;
           when GHOST_UPDATE =>
+				ghost_read <= '1';
             if ghost_done = '1' then
               pacman_en <= '1';
               gstate    <= PACMAN_UPDATE;

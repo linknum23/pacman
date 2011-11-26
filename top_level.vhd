@@ -101,7 +101,7 @@ begin
       vsync  => vsync,
       hc     => hc,
       vc     => vc,
-      in_vbp => open,
+      in_vbp => open,--in_vbp,
       vidon  => vidon
       );
 

@@ -5,6 +5,10 @@ use work.pacage.all;
 use IEEE.NUMERIC_STD.all;
 
 entity ghost_ai is
+    generic (
+      GAME_OFFSET : POINT;
+      GAME_SIZE   : POINT
+      );
   port (clk             : in  std_logic;
         en              : in  std_logic;
         rst             : in  std_logic;
@@ -14,6 +18,7 @@ entity ghost_ai is
         level           : in  std_logic_vector (8 downto 0);
         ghostmode       : in  GHOST_MODE;
         pman_loc        : in  POINT;
+		  pman_dir        : in  DIRECTION;
         done            : out std_logic;
         blinky_info     : out GHOST_INFO;
         pinky_info      : out GHOST_INFO;
@@ -72,6 +77,7 @@ architecture Behavioral of ghost_ai is
       rom_data        : in  std_logic;
       done            : out std_logic;
       pman_tile_loc   : in  POINT;
+	   pman_dir        : in  DIRECTION;
       blinky_tile_loc : in  POINT;
       pinky_tile_loc  : in  POINT;
       inky_tile_loc   : in  POINT;
@@ -85,6 +91,10 @@ architecture Behavioral of ghost_ai is
   end component;
 
   component move_ghost is
+      generic (
+      GAME_OFFSET : POINT;
+      GAME_SIZE   : POINT
+      );
     port (
       clk           : in  std_logic;
       en            : in  std_logic;
@@ -164,6 +174,7 @@ begin
       done            => calc_targets_done,
       ghostmode       => ghostmode,
       pman_tile_loc   => pman_loc,
+		pman_dir        => pman_dir,
       blinky_target   => blinky_target,
       pinky_target    => pinky_target,
       inky_target     => inky_target,
@@ -175,6 +186,10 @@ begin
       );
 
   move : move_ghost
+      generic map (
+      GAME_OFFSET => GAME_OFFSET,
+      GAME_SIZE   => GAME_SIZE
+      )
     port map(
       clk           => clk,
       en            => do_calc_move,

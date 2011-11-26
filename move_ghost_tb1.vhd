@@ -17,7 +17,7 @@ architecture behavior of move_ghost_tb1 is
       rom_addr      : out POINT;
       rom_data      : in  std_logic;
       done          : out std_logic;
-      ghost_mode    :     GHOST_MODE;
+      ghostmode    :     GHOST_MODE;
       blinky_target : in  POINT;
       pinky_target  : in  POINT;
       inky_target   : in  POINT;
@@ -25,17 +25,17 @@ architecture behavior of move_ghost_tb1 is
       blinky_info   : out GHOST_INFO;
       pinky_info    : out GHOST_INFO;
       inky_info     : out GHOST_INFO;
-      clyde_info    : out GHOST_INFO
+      clyde_info    : out GHOST_INFO;
+	 squiggle      : out std_logic
       );
   end component;
-
 
   --Inputs
   signal clk        : std_logic  := '0';
   signal en         : std_logic  := '0';
   signal rst        : std_logic  := '0';
   signal rom_data   : std_logic  := '0';
-  signal ghost_mode : GHOST_MODE := NORMAL;
+  signal ghostmode : GHOST_MODE := NORMAL;
 
   --Outputs
   signal rom_addr    : POINT;
@@ -58,7 +58,7 @@ begin
     rom_addr   => rom_addr,
     rom_data   => rom_data,
     done       => done,
-    ghost_mode => ghost_mode,
+    ghostmode => ghostmode,
 
     blinky_target => (X => 0, Y => 11),
     pinky_target  => (X => 0, Y => 11),
