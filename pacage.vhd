@@ -17,15 +17,15 @@ package pacage is
   end record;
 
   type DIRECTION is (L, R, UP, DOWN, NONE, STILL);
-  type GHOST_MODE is (NORMAL, SCATTER);
-  type GHOST_DISP_MODE is (NORM, SCATTER, EYES);
+  type GHOST_MODE is (NORMAL, SCATTER, FRIGHTENED);
+  type GHOST_DISP_MODE is (NORM, SCATTER, FRIGHTENED, EYES);
 
   type GHOST_INFO is
   record
-    PT   : POINT;
-    DIR  : DIRECTION;
-    MODE : GHOST_DISP_MODE;
-      CAGED : boolean;
+    PT    : POINT;
+    DIR   : DIRECTION;
+    MODE  : GHOST_DISP_MODE;
+    CAGED : boolean;
   end record;
 
 end package;

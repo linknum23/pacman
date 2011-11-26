@@ -123,19 +123,22 @@ architecture Behavioral of display_manager is
 
   component game_machine is
     port (
-      clk                   : in  std_logic;
-      rst                   : in  std_logic;
-      current_draw_location : in  POINT;
-      pacman_tile_location  : in  POINT;
-      rom_data_in           : in  std_logic_vector(4 downto 0);
-      rom_enable            : in  std_logic;
-      rom_address           : out POINT;
-      rom_data_out          : out std_logic_vector(4 downto 0);
-      rom_use_done          : out std_logic;
-      rom_we                : out std_logic;
-      number_eaten_dots     : out integer;
-      score                 : out integer;
-      reset_level           : out std_logic
+      clk                       : in  std_logic;
+      rst                       : in  std_logic;
+      current_draw_location     : in  POINT;
+      pacman_tile_location      : in  POINT;
+      rom_data_in               : in  std_logic_vector(4 downto 0);
+      rom_enable                : in  std_logic;
+      rom_address               : out POINT;
+      rom_data_out              : out std_logic_vector(4 downto 0);
+      rom_use_done              : out std_logic;
+      ghostmode                 : out GHOST_MODE;
+      time_since_last_dot_eaten : out integer;
+      rom_we                    : out std_logic;
+      number_eaten_dots         : out integer;
+      score                     : out integer;
+      level                     : out std_logic_vector(8 downto 0);
+      reset_level               : out std_logic
       );
   end component;
 
@@ -193,16 +196,17 @@ architecture Behavioral of display_manager is
   signal grid_rom_we                 : std_logic := '0';
   signal direction_tile_location     : POINT;
 
-  signal level      : std_logic_vector(8 downto 0) := "000000001";
-  signal dots_eaten : std_logic_vector(7 downto 0) := X"00";  -- num dots in a level is 240
-  signal ghostmode  : GHOST_MODE                   := NORMAL;
-  signal squiggle   : std_logic;
+
+  signal squiggle : std_logic;
 
   --game control signals
-  signal score             : integer range 0 to 999999 := 0;
-  signal number_eaten_dots : integer range 0 to 255    := 0;
-  signal reset_level       : std_logic                 := '0';
-
+  signal score                     : integer range 0 to 999999    := 0;
+  signal number_eaten_dots         : integer range 0 to 255       := 0;
+  signal reset_level               : std_logic                    := '0';
+  signal time_since_last_dot_eaten : integer                      := 0;
+  signal level                     : std_logic_vector(8 downto 0) := "000000000";
+  signal dots_eaten                : std_logic_vector(7 downto 0) := X"00";  -- num dots in a level is 240
+  signal ghostmode                 : GHOST_MODE                   := NORMAL;
 
   --state controller
   type   game_state is (VGA_READ, PAUSE, GHOST_UPDATE, PACMAN_UPDATE, DIRECTION_UPDATE, GAME_UPDATE);
@@ -319,8 +323,10 @@ begin
       rom_data_out          => game_machine_data_out,
       rom_use_done          => game_machine_done,
       rom_we                => game_machine_we,
+      ghostmode             => ghostmode,
       number_eaten_dots     => number_eaten_dots,
       score                 => score,
+      level                 => level,
       reset_level           => reset_level
       );  
 
