@@ -78,7 +78,7 @@ architecture Behavioral of pacman_manager is
   signal wacka_clk, move_clk : std_logic                     := '0';
   signal pac_rom_bit         : std_logic                     := '0';
   signal addr                : POINT;
-  signal speed               : std_logic := '0';
+  signal speed               : std_logic                     := '0';
 begin
   --register the requested direction
   process(clk)

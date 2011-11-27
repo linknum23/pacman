@@ -52,6 +52,7 @@ architecture Behavioral of top_level is
     port (
       clk                      : in  std_logic;
       rst                      : in  std_logic;
+      game_en                  : in  std_logic;
       in_vbp                   : in  std_logic;
       user_direction_selection : in  DIRECTION;
       current_draw_location    : in  POINT;
@@ -101,7 +102,7 @@ begin
       vsync  => vsync,
       hc     => hc,
       vc     => vc,
-      in_vbp => open,--in_vbp,
+      in_vbp => open,                   --in_vbp,
       vidon  => vidon
       );
 
@@ -113,6 +114,7 @@ begin
     port map (
       clk                      => clk_65mhz,
       rst                      => rst,
+      game_en                  => '1',
       in_vbp                   => in_vbp,
       current_draw_location    => current_draw_location,
       user_direction_selection => direction,

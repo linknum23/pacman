@@ -7,6 +7,7 @@ entity display_manager is
   port (
     clk                      : in  std_logic;
     rst                      : in  std_logic;
+    game_en                  : in  std_logic;
     in_vbp                   : in  std_logic;
     current_draw_location    : in  POINT;
     user_direction_selection : in  DIRECTION;
@@ -15,139 +16,6 @@ entity display_manager is
 end display_manager;
 
 architecture Behavioral of display_manager is
-  component grid_display is
-    generic (
-      GAME_OFFSET : POINT;
-      GAME_SIZE   : POINT
-      );
-    port(
-      clk                   : in  std_logic;
-      rst                   : in  std_logic;
-      current_draw_location : in  POINT;
-      data_type             : in  std_logic_vector(4 downto 0);
-      current_tile_location : out POINT;
-      mode                  : in  std_logic_vector(2 downto 0);
-      data                  : out COLOR;
-      valid_location        : out std_logic
-      );
-  end component;
-
-  component ghost_display is
-    generic (
-      GAME_OFFSET : POINT
-      );
-    port(
-      clk                   : in std_logic;
-      blinky_info           : in  GHOST_INFO;
-      pinky_info            : in  GHOST_INFO;
-      inky_info             : in  GHOST_INFO;
-      clyde_info            : in  GHOST_INFO;
-      ghostmode             : in  GHOST_MODE;
-		fright_blink		: in std_logic;
-      current_draw_location : in  POINT;
-      ghost_valid           : out std_logic;
-      squiggle              : in  std_logic;
-      ghost_color           : out COLOR
-      );
-  end component;
-
-  component pacman_manager is
-    generic (
-      GAME_OFFSET : POINT;
-      GAME_SIZE   : POINT
-      );
-    port(
-      clk                         : in  std_logic;
-      rst                         : in  std_logic;
-      collision                   : in  std_logic;
-      direction_select            : in  DIRECTION;
-      current_draw_location       : in  POINT;
-      mode                        : in  std_logic_vector(2 downto 0);
-      rom_data_in                 : in  std_logic_vector(4 downto 0);
-      pacman_pixel_location       : out POINT;
-      pacman_tile_location        : out POINT;
-      pacman_rom_tile_location    : out POINT;
-      pacman_tile_location_offset : out POINT;
-      pacman_direction            : out DIRECTION;
-      data                        : out COLOR;
-      valid_location              : out std_logic;
-      rom_enable                  : in  std_logic;
-      rom_use_done                : out std_logic
-      );
-  end component;
-
-  component ghost_ai is
-      generic (
-      GAME_OFFSET : POINT;
-      GAME_SIZE   : POINT
-      );
-    port (
-      clk         : in  std_logic;
-      en          : in  std_logic;
-      rst         : in  std_logic;
-      rom_addr    : out POINT;
-      rom_data    : in  std_logic;
-      dots_eaten  : in  std_logic_vector (7 downto 0);
-      level       : in  std_logic_vector (8 downto 0);
-      ghostmode   : in  GHOST_MODE;
-      pman_loc    : in  POINT;
-      pman_dir    : in  DIRECTION;
-      done        : out std_logic;
-      blinky_info : out GHOST_INFO;
-      pinky_info  : out GHOST_INFO;
-      inky_info   : out GHOST_INFO;
-      clyde_info  : out GHOST_INFO;
-      collision   : out std_logic;
-      squiggle    : out std_logic
-      );
-  end component;
-
-  component game_grid is
-    port(
-      clk      : in  std_logic;
-      rst      : in  std_logic;
-      addr     : in  POINT;
-      we       : in  std_logic;
-      data_in  : in  std_logic_vector(4 downto 0);
-      data_out : out std_logic_vector(4 downto 0)
-      );
-  end component;
-
-  component direction_manager
-    port(
-      clk                          : in  std_logic;
-      rst                          : in  std_logic;
-      direction_selection          : in  DIRECTION;
-      pacman_current_tile_location : in  POINT;
-      pacman_current_tile_offset   : in  POINT;
-      rom_data_in                  : in  std_logic_vector(4 downto 0);
-      rom_enable                   : in  std_logic;
-      current_direction            : out DIRECTION;
-      rom_address                  : out POINT;
-      rom_use_done                 : out std_logic
-      );
-  end component;
-
-  component game_machine is
-    port (
-      clk                       : in  std_logic;
-      rst                       : in  std_logic;
-      current_draw_location     : in  POINT;
-      pacman_tile_location      : in  POINT;
-      rom_data_in               : in  std_logic_vector(4 downto 0);
-      rom_enable                : in  std_logic;
-      rom_address               : out POINT;
-      rom_data_out              : out std_logic_vector(4 downto 0);
-      rom_use_done              : out std_logic;
-      ghostmode                 : out GHOST_MODE;
-      time_since_last_dot_eaten : out integer;
-      rom_we                    : out std_logic;
-      number_eaten_dots         : out integer;
-      score                     : out integer;
-      level                     : out std_logic_vector(8 downto 0);
-      reset_level               : out std_logic
-      );
-  end component;
 
   constant GAME_SIZE   : POINT := (448, 496);
   constant GAME_OFFSET : POINT := ((1024-GAME_SIZE.X)/2, (768-GAME_SIZE.Y)/2);
@@ -166,7 +34,7 @@ architecture Behavioral of display_manager is
   --state enable and done signals
   -- these are used to notify a subcomponent when they can read from the rom
   signal vga_en, ghost_en, pacman_en, direction_en, game_machine_en, game_machine_we, ghost_read : std_logic;
-  signal ghost_done, pacman_done, direction_done, game_machine_done                  : std_logic;
+  signal ghost_done, pacman_done, direction_done, game_machine_done                              : std_logic;
 
   --location signals
   signal pacman_pixel_location       : POINT;
@@ -207,13 +75,7 @@ architecture Behavioral of display_manager is
   signal squiggle : std_logic;
 
   --game control signals
-  signal score                     : integer range 0 to 999999    := 0;
-  signal number_eaten_dots         : integer range 0 to 255       := 0;
-  signal reset_level               : std_logic                    := '0';
-  signal time_since_last_dot_eaten : integer                      := 0;
-  signal level                     : std_logic_vector(8 downto 0) := "000000000";
-  signal dots_eaten                : std_logic_vector(7 downto 0) := X"00";  -- num dots in a level is 240
-  signal ghostmode                 : GHOST_MODE                   := NORMAL;
+  signal gameinfo : GAME_INFO;
 
   --state controller
   type   game_state is (VGA_READ, PAUSE, GHOST_UPDATE, PACMAN_UPDATE, DIRECTION_UPDATE, GAME_UPDATE);
@@ -278,8 +140,8 @@ begin
       pinky_info            => pinky,
       inky_info             => inky,
       clyde_info            => clyde,
-      ghostmode             => ghostmode,
-		fright_blink		    => '0',--need to connect this later
+      ghostmode             => gameinfo.ghostmode,
+      fright_blink          => '0',     --need to connect this later
       current_draw_location => current_draw_location,
       ghost_valid           => ghost_valid,
       ghost_color           => ghost_color_data,
@@ -287,7 +149,7 @@ begin
       );
 
   ai : ghost_ai
-      generic map (
+    generic map (
       GAME_SIZE   => GAME_SIZE,
       GAME_OFFSET => GAME_OFFSET
       )
@@ -297,9 +159,7 @@ begin
       rst         => rst,
       rom_addr    => ghost_tile_location,
       rom_data    => grid_data(4),
-      dots_eaten  => dots_eaten,
-      level       => level,
-      ghostmode   => ghostmode,
+      gameinfo    => gameinfo,
       pman_loc    => pacman_tile_location,
       pman_dir    => pacman_direction,
       done        => ghost_done,
@@ -329,6 +189,8 @@ begin
     port map(
       clk                   => clk,
       rst                   => rst,
+      game_en               => game_en,
+      collision             => collision,
       current_draw_location => current_draw_location,
       pacman_tile_location  => pacman_tile_location,
       rom_data_in           => grid_data,
@@ -337,11 +199,7 @@ begin
       rom_data_out          => game_machine_data_out,
       rom_use_done          => game_machine_done,
       rom_we                => game_machine_we,
-      ghostmode             => ghostmode,
-      number_eaten_dots     => number_eaten_dots,
-      score                 => score,
-      level                 => level,
-      reset_level           => reset_level
+      gameinfo              => gameinfo
       );  
 
 
@@ -395,7 +253,7 @@ begin
         ghost_en     <= '0';
         pacman_en    <= '0';
         direction_en <= '0';
-		  ghost_read <= '0';
+        ghost_read   <= '0';
         case gstate is
           when VGA_READ =>
             vga_en <= '1';
@@ -407,7 +265,7 @@ begin
               gstate <= VGA_READ;
             end if;
           when GHOST_UPDATE =>
-				ghost_read <= '1';
+            ghost_read <= '1';
             if ghost_done = '1' then
               pacman_en <= '1';
               gstate    <= PACMAN_UPDATE;
