@@ -28,4 +28,145 @@ package pacage is
     CAGED : boolean;
   end record;
 
+  type GAME_INFO is
+  record
+    ghostmode                 : GHOST_MODE;
+    number_eaten_dots         : integer;
+    time_since_last_dot_eaten : integer;
+    score                     : integer;
+    level                     : std_logic_vector(8 downto 0);
+    reset_level               : std_logic;
+    level_complete            : std_logic;
+  end record;
+
+  
+  --components
+  component grid_display is
+    generic (
+      GAME_OFFSET : POINT;
+      GAME_SIZE   : POINT
+      );
+    port(
+      clk                   : in  std_logic;
+      rst                   : in  std_logic;
+      current_draw_location : in  POINT;
+      data_type             : in  std_logic_vector(4 downto 0);
+      current_tile_location : out POINT;
+      mode                  : in  std_logic_vector(2 downto 0);
+      data                  : out COLOR;
+      valid_location        : out std_logic
+      );
+  end component;
+
+  component ghost_display is
+    generic (
+      GAME_OFFSET : POINT
+      );
+    port(
+      clk                   : in  std_logic;
+      blinky_info           : in  GHOST_INFO;
+      pinky_info            : in  GHOST_INFO;
+      inky_info             : in  GHOST_INFO;
+      clyde_info            : in  GHOST_INFO;
+      ghostmode             : in  GHOST_MODE;
+      fright_blink          : in  std_logic;
+      current_draw_location : in  POINT;
+      ghost_valid           : out std_logic;
+      squiggle              : in  std_logic;
+      ghost_color           : out COLOR
+      );
+  end component;
+
+  component pacman_manager is
+    generic (
+      GAME_OFFSET : POINT;
+      GAME_SIZE   : POINT
+      );
+    port(
+      clk                         : in  std_logic;
+      rst                         : in  std_logic;
+      collision                   : in  std_logic;
+      direction_select            : in  DIRECTION;
+      current_draw_location       : in  POINT;
+      mode                        : in  std_logic_vector(2 downto 0);
+      rom_data_in                 : in  std_logic_vector(4 downto 0);
+      pacman_pixel_location       : out POINT;
+      pacman_tile_location        : out POINT;
+      pacman_rom_tile_location    : out POINT;
+      pacman_tile_location_offset : out POINT;
+      pacman_direction            : out DIRECTION;
+      data                        : out COLOR;
+      valid_location              : out std_logic;
+      rom_enable                  : in  std_logic;
+      rom_use_done                : out std_logic
+      );
+  end component;
+
+  component ghost_ai is
+    generic (
+      GAME_OFFSET : POINT;
+      GAME_SIZE   : POINT
+      );
+    port (
+      clk         : in  std_logic;
+      en          : in  std_logic;
+      rst         : in  std_logic;
+      rom_addr    : out POINT;
+      rom_data    : in  std_logic;
+      dots_eaten  : in  std_logic_vector (7 downto 0);
+      level       : in  std_logic_vector (8 downto 0);
+      ghostmode   : in  GHOST_MODE;
+      pman_loc    : in  POINT;
+      pman_dir    : in  DIRECTION;
+      done        : out std_logic;
+      blinky_info : out GHOST_INFO;
+      pinky_info  : out GHOST_INFO;
+      inky_info   : out GHOST_INFO;
+      clyde_info  : out GHOST_INFO;
+      collision   : out std_logic;
+      squiggle    : out std_logic
+      );
+  end component;
+
+  component game_grid is
+    port(
+      clk      : in  std_logic;
+      rst      : in  std_logic;
+      addr     : in  POINT;
+      we       : in  std_logic;
+      data_in  : in  std_logic_vector(4 downto 0);
+      data_out : out std_logic_vector(4 downto 0)
+      );
+  end component;
+
+  component direction_manager
+    port(
+      clk                          : in  std_logic;
+      rst                          : in  std_logic;
+      direction_selection          : in  DIRECTION;
+      pacman_current_tile_location : in  POINT;
+      pacman_current_tile_offset   : in  POINT;
+      rom_data_in                  : in  std_logic_vector(4 downto 0);
+      rom_enable                   : in  std_logic;
+      current_direction            : out DIRECTION;
+      rom_address                  : out POINT;
+      rom_use_done                 : out std_logic
+      );
+  end component;
+
+  component game_machine is
+    port (
+      clk                   : in  std_logic;
+      rst                   : in  std_logic;
+      current_draw_location : in  POINT;
+      pacman_tile_location  : in  POINT;
+      rom_data_in           : in  std_logic_vector(4 downto 0);
+      rom_enable            : in  std_logic;
+      rom_address           : out POINT;
+      rom_data_out          : out std_logic_vector(4 downto 0);
+      rom_use_done          : out std_logic;
+      gameinfo              : out GAME_INFO
+      );
+  end component;
+
 end package;
