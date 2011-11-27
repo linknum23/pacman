@@ -221,28 +221,28 @@ begin
 				inky_clr_flag <= '0';
 				clyde_clr_flag <= '0';
 				
-				if ghost_rc.Y =  14 and (ghost_rc.X < 6 or ghost_rc.X > 21) then
-					--check tunnel
-					if index = I_PINKY then
-					  pinky_is_in_tunnel <= true;
-					elsif index = I_BLINKY then
-					  blinky_is_in_tunnel <= true;
-					elsif index = I_INKY then
-					  inky_is_in_tunnel <= true;
-					else
-					  clyde_is_in_tunnel <= true;
-					end if;
-				else 
-					if index = I_PINKY then
-					  pinky_is_in_tunnel <= false;
-					elsif index = I_BLINKY then
-					  blinky_is_in_tunnel <= false;
-					elsif index = I_INKY then
-					  inky_is_in_tunnel <= false;
-					else
-					  clyde_is_in_tunnel <= false;
-					end if;
-				end if;
+--				if ghost_rc.Y =  14 and (ghost_rc.X < 6 or ghost_rc.X > 21) then
+--					--check tunnel
+--					if index = I_PINKY then
+--					  pinky_is_in_tunnel <= true;
+--					elsif index = I_BLINKY then
+--					  blinky_is_in_tunnel <= true;
+--					elsif index = I_INKY then
+--					  inky_is_in_tunnel <= true;
+--					else
+--					  clyde_is_in_tunnel <= true;
+--					end if;
+--				else 
+--					if index = I_PINKY then
+--					  pinky_is_in_tunnel <= false;
+--					elsif index = I_BLINKY then
+--					  blinky_is_in_tunnel <= false;
+--					elsif index = I_INKY then
+--					  inky_is_in_tunnel <= false;
+--					else
+--					  clyde_is_in_tunnel <= false;
+--					end if;
+--				end if;
 			 
 				-- using a square pipeline to compute the squares
 				-- after 2 clocks it has a result
