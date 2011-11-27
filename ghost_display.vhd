@@ -62,11 +62,13 @@ architecture Behavioral of ghost_display is
 	signal no_ghost_here : std_logic := '1';
 	
 	signal data : std_logic_vector(1 downto 0);
+	signal gmode : GHOST_DISP_MODE;
 	
 	component ghost_rom is
   port(
     addr   : in  POINT;
     dir : in  DIRECTION;
+	 mode : in GHOST_DISP_MODE;
 	 squiggle : in std_logic;
     data   : out std_logic_vector(1 downto 0)
     );
@@ -150,24 +152,28 @@ begin
 			ghost_location.Y <= blinky_draw_loc_y;
 			dir <= blinky_info.DIR;
 			gbody_color <= BLINKY_BODY_COLOR;
+			gmode <= blinky_info.MODE;
 			no_ghost_here <= '0';
 		elsif pinky_in_range = '1' then
 			ghost_location.X <= pinky_draw_loc_x;
 			ghost_location.Y <= pinky_draw_loc_y;
 			dir <= pinky_info.DIR;
 			gbody_color <= PINKY_BODY_COLOR;
+			gmode <= pinky_info.MODE;
 			no_ghost_here <= '0';
 		elsif inky_in_range = '1' then 
 			ghost_location.X <= inky_draw_loc_x;
 			ghost_location.Y <= inky_draw_loc_y;
 			dir <= inky_info.DIR;
 			gbody_color <= INKY_BODY_COLOR;
+			gmode <= inky_info.MODE;
 			no_ghost_here <= '0';
 		elsif clyde_in_range = '1' then
 			ghost_location.X <= clyde_draw_loc_x;
 			ghost_location.Y <= clyde_draw_loc_y;
 			dir <= clyde_info.DIR;
 			gbody_color <= CLYDE_BODY_COLOR;
+			gmode <= clyde_info.MODE;
 			no_ghost_here <= '0';
 		else 
 			dir <= blinky_info.DIR;
@@ -219,6 +225,7 @@ grom: ghost_rom
   port map(
     addr=> ghost_location,
     dir => dir,
+	 mode => gmode,
 	 squiggle => squiggle,
     data  => data
     );
