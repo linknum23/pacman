@@ -73,4 +73,4 @@ Waiting for 1 sub-compilation(s) to finish...
 Compiled 66 VHDL Units
 Built simulation executable C:/projects/Pacman/pacman/top_level_tb_isim_beh.exe
 Fuse Memory Usage: 111692 KB
-Fuse CPU Usage: 1171 ms
+Fuse CPU Usage: 1250 ms

@@ -70,7 +70,7 @@ architecture Behavioral of pacman_manager is
   constant PAC_SIZE                     : POINT   := (32, 32);
   constant TILE_SIZE                    : POINT   := (4, 4);  --in bits
 --locations
-  signal   current_position             : POINT   := (GAME_OFFSET.X + (2*16)-8, GAME_OFFSET.Y + (23*16));  --14, 23
+  signal   current_position             : POINT   := (GAME_OFFSET.X + (14*16)-8, GAME_OFFSET.Y + (23*16));  --14, 23
   signal   board_pixel_location         : POINT;
   signal   current_tile_position        : POINT;
   signal   current_tile_position_offset : POINT;
@@ -129,6 +129,7 @@ begin
       end if;
     end if;
   end process;
+  speed_clear <= speed_flag;
 
   --calculate the current position
   process(clk)
@@ -150,17 +151,17 @@ begin
         counter_60hz <= (others => '0');
       end if;
 
-      speed_clear <= '0';
-      if speed_flag = '1' and enable_move = '1' and enable_count = '0' then
-        speed_clear <= '1';
-        if current_direction = L then
-          current_position.X <= current_position.X - 1;
-        elsif current_direction = R then
-          current_position.X <= current_position.X + 1;
-        elsif current_direction = UP then
-          current_position.Y <= current_position.Y - 1;
-        elsif current_direction = DOWN then
-          current_position.Y <= current_position.Y + 1;
+      if speed_flag = '1' and enable_move = '1' then
+        if enable_count = '0' then
+          if current_direction = L then
+            current_position.X <= current_position.X - 1;
+          elsif current_direction = R then
+            current_position.X <= current_position.X + 1;
+          elsif current_direction = UP then
+            current_position.Y <= current_position.Y - 1;
+          elsif current_direction = DOWN then
+            current_position.Y <= current_position.Y + 1;
+          end if;
         end if;
       end if;
 

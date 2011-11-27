@@ -240,3 +240,255 @@ at 0 ps, Instance /top_level_tb/uut/display/gd/grom/ : Warning: NUMERIC_STD."<":
 Finished circuit initialization process.
 at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
 at 676152 ps(6), Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+# restart
+# run 1.00us
+Simulator is doing circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/gd/grom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+Finished circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 676152 ps(6), Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+# restart
+# run 1.00us
+Simulator is doing circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/gd/grom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+Finished circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 676152 ps(6), Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+# restart
+# run 1.00us
+Simulator is doing circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/gd/grom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+Finished circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 676152 ps(6), Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+# restart
+# run 1.00us
+Simulator is doing circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/gd/grom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+Finished circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 676152 ps(6), Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+# run all
+Stopped at time : 1043753072 ps : File "C:/projects/Pacman/pacman/vga1024x768.vhd" Line 46
+# restart
+# restart
+# run all
+Simulator is doing circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/gd/grom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+Finished circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 676152 ps(6), Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+Stopped at time : 21990145380 ps : File "C:/projects/Pacman/pacman/speed_clock.vhd" Line 22
+# restart
+# run all
+Simulator is doing circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/gd/grom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+Finished circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 676152 ps(6), Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+Stopped at time : 511300 ns : File "C:/projects/Pacman/pacman/top_level_tb.vhd" Line 55
+ISim O.76xd (signature 0x2f00eba5)
+WARNING: A WEBPACK license was found.
+WARNING: Please use Xilinx License Configuration Manager to check out a full ISim license.
+WARNING: ISim will run in Lite mode. Please refer to the ISim documentation for more information on the differences between the Lite and the Full version.
+This is a Lite version of ISim.
+# run 1000 ns
+Simulator is doing circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/ : Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/gd/grom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+Finished circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 676152 ps(6), Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+# restart
+# run 1.00us
+Simulator is doing circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/gd/grom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+Finished circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 676152 ps(6), Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated
+# run all
+Stopped at time : 17107929996 ps : File "C:/projects/Pacman/pacman/vga1024x768.vhd" Line 46
+ISim O.76xd (signature 0x2f00eba5)
+WARNING: A WEBPACK license was found.
+WARNING: Please use Xilinx License Configuration Manager to check out a full ISim license.
+WARNING: ISim will run in Lite mode. Please refer to the ISim documentation for more information on the differences between the Lite and the Full version.
+This is a Lite version of ISim.
+# run 1000 ns
+Simulator is doing circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/ : Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/gd/grom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+Finished circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+# run all
+Stopped at time : 14263991532 ps : File "C:/projects/Pacman/pacman/pacman_manager.vhd" Line 287
+# run all
+Stopped at time : 26131830 ns : File "C:/projects/Pacman/pacman/ghost_display.vhd" Line 142
+# restart
+ISim O.76xd (signature 0x2f00eba5)
+WARNING: A WEBPACK license was found.
+WARNING: Please use Xilinx License Configuration Manager to check out a full ISim license.
+WARNING: ISim will run in Lite mode. Please refer to the ISim documentation for more information on the differences between the Lite and the Full version.
+This is a Lite version of ISim.
+# run 1000 ns
+Simulator is doing circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/ : Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/gd/grom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+Finished circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+# run all
+Stopped at time : 4384220 ns : File "C:/projects/Pacman/pacman/top_level_tb.vhd" Line 55
+ISim O.76xd (signature 0x2f00eba5)
+WARNING: A WEBPACK license was found.
+WARNING: Please use Xilinx License Configuration Manager to check out a full ISim license.
+WARNING: ISim will run in Lite mode. Please refer to the ISim documentation for more information on the differences between the Lite and the Full version.
+This is a Lite version of ISim.
+# run 1000 ns
+Simulator is doing circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/ : Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/gd/grom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+Finished circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+# run all
+Stopped at time : 39575990 ns : File "C:/projects/Pacman/pacman/top_level_tb.vhd" Line 57
+# restart
+# run all
+Simulator is doing circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/gd/grom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+Finished circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+Stopped at time : 5185950 ns : File "C:/projects/Pacman/pacman/ipcore_dir/dcm.vhd" Line 48
+# run all
+Stopped at time : 41491137688 ps : File "C:/projects/Pacman/pacman/vga1024x768.vhd" Line 75
+# restart
+# run 1.00us
+Simulator is doing circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/gd/grom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+Finished circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+# run all
+Stopped at time : 7834483844 ps : File "C:/projects/Pacman/pacman/vga1024x768.vhd" Line 46
+ISim O.76xd (signature 0x2f00eba5)
+WARNING: A WEBPACK license was found.
+WARNING: Please use Xilinx License Configuration Manager to check out a full ISim license.
+WARNING: ISim will run in Lite mode. Please refer to the ISim documentation for more information on the differences between the Lite and the Full version.
+This is a Lite version of ISim.
+# run 1000 ns
+Simulator is doing circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/ : Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/gd/grom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+Finished circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+# run all
+Stopped at time : 6785076152 ps : File "C:/projects/Pacman/pacman/game_machine.vhd" Line 144

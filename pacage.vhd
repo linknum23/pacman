@@ -47,14 +47,14 @@ package pacage is
 
   type GAME_INFO is
   record
-    ghostmode                 : GHOST_MODE;
-    game_in_progress          : std_logic;
-    number_lives_left         : integer range 0 to 3;
-    number_eaten_dots         : integer range 0 to 244;
-    score                     : integer range 0 to 999999;
-    level                     : std_logic_vector(8 downto 0);
-    reset_level               : std_logic;
-    level_complete            : std_logic;
+    ghostmode         : GHOST_MODE;
+    game_in_progress  : std_logic;
+    number_lives_left : integer range 0 to 3;
+    number_eaten_dots : integer range 0 to 244;
+    score             : integer range 0 to 999999;
+    level             : std_logic_vector(8 downto 0);
+    reset_level       : std_logic;
+    level_complete    : std_logic;
   end record;
 
 
@@ -106,7 +106,7 @@ package pacage is
       collision                   : in  std_logic;
       direction_select            : in  DIRECTION;
       current_draw_location       : in  POINT;
-	  gameinfo                    : in  GAME_INFO;
+      gameinfo                    : in  GAME_INFO;
       mode                        : in  std_logic_vector(2 downto 0);
       rom_data_in                 : in  std_logic_vector(4 downto 0);
       pacman_pixel_location       : out POINT;
