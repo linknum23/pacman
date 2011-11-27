@@ -16,7 +16,7 @@ entity move_ghost is
     rom_addr      : out POINT;
     rom_data      : in  std_logic;
     done          : out std_logic;
-    ghostmode     : in  GHOST_MODE;
+    gameinfo      : in  GAME_INFO;
     blinky_target : in  POINT;
     pinky_target  : in  POINT;
     inky_target   : in  POINT;
@@ -68,7 +68,8 @@ architecture Behavioral of move_ghost is
   type   state is (START, SDONE, DO_NEXT, GET_RC,CALC_TARGET_DISTS,
 						CALC_TARGET_DISTS_0, CALC_TARGET_DISTS_1, CALC_TARGET_DISTS_2, 
 						CALC_TARGET_DISTS_3, CALC_TARGET_DISTS_4, CALC_TARGET_DISTS_5, 
-						CALC_TARGET_DISTS_6,UPDATE_DIR,UPDATE_DIR_1,UPDATE_DIR_2, UPDATE_LOC,UPDATE_LOC_1);
+						CALC_TARGET_DISTS_6,UPDATE_DIR,UPDATE_DIR_1,UPDATE_DIR_2, 
+						UPDATE_LOC,UPDATE_LOC_1);
   signal move_state                                    : state := SDONE;
   signal tdist_right, tdist_left, tdist_up, tdist_down : natural range 0 to 1023 := 0;
   --signal index                                         : integer range -1 to 3;
@@ -267,12 +268,12 @@ begin
 			  if ghosts(index).CAGED = true then
 				--check to see if Y index is a multiple of 16
 				-- this does the cage bounce
-				 if yconv(3 downto 0) = "0000" then
-					 if ghosts(index).DIR = UP then
+				 if yconv(4 downto 0) = "10000" then
+					if ghosts(index).DIR = UP then
 						ghosts(index).DIR <= DOWN;
-					 else
+					else
 						ghosts(index).DIR <= UP;
-					 end if;
+					end if;
 				 end if;
 				 move_state <= UPDATE_LOC;
 			  else

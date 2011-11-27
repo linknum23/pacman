@@ -113,9 +113,7 @@ package pacage is
       rst         : in  std_logic;
       rom_addr    : out POINT;
       rom_data    : in  std_logic;
-      dots_eaten  : in  std_logic_vector (7 downto 0);
-      level       : in  std_logic_vector (8 downto 0);
-      ghostmode   : in  GHOST_MODE;
+      gameinfo    : in  GAME_INFO;
       pman_loc    : in  POINT;
       pman_dir    : in  DIRECTION;
       done        : out std_logic;
@@ -166,6 +164,67 @@ package pacage is
       rom_data_out          : out std_logic_vector(4 downto 0);
       rom_use_done          : out std_logic;
       gameinfo              : out GAME_INFO
+      );
+  end component;
+  
+    component ghost_target_updater is
+    port (
+      clk             : in  std_logic;
+      en              : in  std_logic;
+      rst             : in  std_logic;
+      rom_addr        : out POINT;
+      rom_data        : in  std_logic;
+      done            : out std_logic;
+      pman_tile_loc   : in  POINT;
+	   pman_dir        : in  DIRECTION;
+      blinky_tile_loc : in  POINT;
+      pinky_tile_loc  : in  POINT;
+      inky_tile_loc   : in  POINT;
+      clyde_tile_loc  : in  POINT;
+      ghostmode       : in  GHOST_MODE;
+      blinky_target   : out POINT;
+      pinky_target    : out POINT;
+      inky_target     : out POINT;
+      clyde_target    : out POINT
+      );
+  end component;
+
+  component move_ghost is
+      generic (
+      GAME_OFFSET : POINT;
+      GAME_SIZE   : POINT
+      );
+    port (
+      clk           : in  std_logic;
+      en            : in  std_logic;
+      rst           : in  std_logic;
+      rom_addr      : out POINT;
+      rom_data      : in  std_logic;
+      done          : out std_logic;
+      gameinfo      : GAME_INFO;
+      blinky_target : in  POINT;
+      pinky_target  : in  POINT;
+      inky_target   : in  POINT;
+      clyde_target  : in  POINT;
+      blinky_info   : out GHOST_INFO;
+      pinky_info    : out GHOST_INFO;
+      inky_info     : out GHOST_INFO;
+      clyde_info    : out GHOST_INFO;
+		squiggle : out std_logic
+      );
+  end component;
+
+  component collision_machine is
+    port(
+      clk                  : in  std_logic;
+      rst                  : in  std_logic;
+      pacman_tile_location : in  POINT;
+      blinky_tile_location : in  POINT;
+      pinky_tile_location  : in  POINT;
+      inky_tile_location   : in  POINT;
+      clyde_tile_location  : in  POINT;
+      collision_index      : out natural range 0 to 3;
+      collision            : out std_logic
       );
   end component;
 

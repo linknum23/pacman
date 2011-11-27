@@ -14,11 +14,9 @@ entity ghost_ai is
         rst             : in  std_logic;
         rom_addr        : out POINT;
         rom_data        : in  std_logic;
-        dots_eaten      : in  std_logic_vector (7 downto 0);
-        level           : in  std_logic_vector (8 downto 0);
-        ghostmode       : in  GHOST_MODE;
         pman_loc        : in  POINT;
 		  pman_dir        : in  DIRECTION;
+		  gameinfo 		: in GAME_INFO; 
         done            : out std_logic;
         blinky_info     : out GHOST_INFO;
         pinky_info      : out GHOST_INFO;
@@ -68,66 +66,7 @@ architecture Behavioral of ghost_ai is
     inky_tile_location,
     clyde_tile_location : POINT;
   
-  component ghost_target_updater is
-    port (
-      clk             : in  std_logic;
-      en              : in  std_logic;
-      rst             : in  std_logic;
-      rom_addr        : out POINT;
-      rom_data        : in  std_logic;
-      done            : out std_logic;
-      pman_tile_loc   : in  POINT;
-	   pman_dir        : in  DIRECTION;
-      blinky_tile_loc : in  POINT;
-      pinky_tile_loc  : in  POINT;
-      inky_tile_loc   : in  POINT;
-      clyde_tile_loc  : in  POINT;
-      ghostmode       : in  GHOST_MODE;
-      blinky_target   : out POINT;
-      pinky_target    : out POINT;
-      inky_target     : out POINT;
-      clyde_target    : out POINT
-      );
-  end component;
 
-  component move_ghost is
-      generic (
-      GAME_OFFSET : POINT;
-      GAME_SIZE   : POINT
-      );
-    port (
-      clk           : in  std_logic;
-      en            : in  std_logic;
-      rst           : in  std_logic;
-      rom_addr      : out POINT;
-      rom_data      : in  std_logic;
-      done          : out std_logic;
-      ghostmode     :     GHOST_MODE;
-      blinky_target : in  POINT;
-      pinky_target  : in  POINT;
-      inky_target   : in  POINT;
-      clyde_target  : in  POINT;
-      blinky_info   : out GHOST_INFO;
-      pinky_info    : out GHOST_INFO;
-      inky_info     : out GHOST_INFO;
-      clyde_info    : out GHOST_INFO;
-		squiggle : out std_logic
-      );
-  end component;
-
-  component collision_machine is
-    port(
-      clk                  : in  std_logic;
-      rst                  : in  std_logic;
-      pacman_tile_location : in  POINT;
-      blinky_tile_location : in  POINT;
-      pinky_tile_location  : in  POINT;
-      inky_tile_location   : in  POINT;
-      clyde_tile_location  : in  POINT;
-      collision_index      : out natural range 0 to 3;
-      collision            : out std_logic
-      );
-  end component;
 
 begin
 
@@ -172,9 +111,9 @@ begin
       rom_addr        => target_rom_addr,
       rom_data        => rom_data,
       done            => calc_targets_done,
-      ghostmode       => ghostmode,
+      ghostmode       => gameinfo.GHOSTMODE,
       pman_tile_loc   => pman_loc,
-		pman_dir        => pman_dir,
+	   pman_dir        => pman_dir,
       blinky_target   => blinky_target,
       pinky_target    => pinky_target,
       inky_target     => inky_target,
@@ -197,7 +136,7 @@ begin
       rom_addr      => move_rom_addr,
       rom_data      => rom_data,
       done          => calc_move_done,
-      ghostmode     => ghostmode,
+	   gameinfo      => gameinfo,
       blinky_target => blinky_target,
       pinky_target  => pinky_target,
       inky_target   => inky_target,
@@ -206,7 +145,7 @@ begin
       pinky_info    => pinky_info_int,
       inky_info     => inky_info_int,
       clyde_info    => clyde_info_int,
-		squiggle => squiggle
+	  squiggle => squiggle
       );
 
   ai_routine_next : process(clk, rst)
