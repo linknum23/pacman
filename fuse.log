@@ -28,7 +28,7 @@ Parsing VHDL file "C:/projects/Pacman/pacman/top_level_tb.vhd" into library work
 Starting static elaboration
 Completed static elaboration
 Fuse Memory Usage: 75592 KB
-Fuse CPU Usage: 484 ms
+Fuse CPU Usage: 437 ms
 Compiling package standard
 Compiling package std_logic_1164
 Compiling package std_logic_arith
@@ -73,4 +73,4 @@ Waiting for 1 sub-compilation(s) to finish...
 Compiled 66 VHDL Units
 Built simulation executable C:/projects/Pacman/pacman/top_level_tb_isim_beh.exe
 Fuse Memory Usage: 111692 KB
-Fuse CPU Usage: 1265 ms
+Fuse CPU Usage: 1171 ms

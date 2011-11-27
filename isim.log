@@ -220,3 +220,23 @@ at 345768 ps(6), Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_UNSIGNED:
 Stopped at time : 2701872690 ps : File "C:/projects/Pacman/pacman/vga1024x768.vhd" Line 46
 # run all
 Stopped at time : 22486353460 ps : File "C:/projects/Pacman/pacman/speed_clock.vhd" Line 24
+ISim O.76xd (signature 0x2f00eba5)
+WARNING: A WEBPACK license was found.
+WARNING: Please use Xilinx License Configuration Manager to check out a full ISim license.
+WARNING: ISim will run in Lite mode. Please refer to the ISim documentation for more information on the differences between the Lite and the Full version.
+This is a Lite version of ISim.
+# run 1000 ns
+Simulator is doing circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/ : Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/ : Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/the_pacman/rom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 0 ps, Instance /top_level_tb/uut/display/gd/grom/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+Finished circuit initialization process.
+at 0 ps, Instance /top_level_tb/uut/display/board/roms/ : Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+at 676152 ps(6), Instance /top_level_tb/uut/ : Warning: NUMERIC_STD.TO_UNSIGNED: vector truncated

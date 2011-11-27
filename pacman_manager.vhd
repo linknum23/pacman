@@ -84,18 +84,19 @@ architecture Behavioral of pacman_manager is
   signal offset            : POINT     := (0, 0);
   signal current_direction : DIRECTION := STILL;
 
-  signal clocks              : std_logic_vector(22 downto 0) := (others => '0');
-  signal wacka_clk, move_clk : std_logic                     := '0';
-  signal pac_rom_bit         : std_logic                     := '0';
-  signal addr                : POINT;
-  signal speed               : SPEED                         := SPEED_80;
-  signal enable_move         : std_logic                     := '0';
+  signal clocks      : std_logic_vector(22 downto 0) := (others => '0');
+  signal wacka_clk   : std_logic                     := '0';
+  signal pac_rom_bit : std_logic                     := '0';
+  signal addr        : POINT;
+  signal speed       : SPEED                         := SPEED_80;
+  signal enable_move : std_logic                     := '0';
 
   --speed clock
-  signal speed_clear    : std_logic              := '0';
-  signal speed_flag     : std_logic              := '0';
-  signal dot_count_prev : integer range 0 to 244 := 0;
-  signal no_dots        : std_logic              := '0';
+  signal   speed_clear    : std_logic                     := '0';
+  signal   speed_flag     : std_logic                     := '0';
+  signal   dot_count_prev : integer range 0 to 244        := 0;
+  signal   counter_60hz   : std_logic_vector(20 downto 0) := (others => '0');
+  constant ONE_60_SECOND  : std_logic_vector(20 downto 0) := "100001000011111000101";
 begin
 
   speed_gen : speed_clock
@@ -115,13 +116,13 @@ begin
         else
           speed <= SPEED_80;
         end if;
-      elsif gameinfo.level < 4 then
+      elsif gameinfo.level >= 1 and gameinfo.level < 4 then
         if gameinfo.ghostmode = FRIGHTENED then
           speed <= SPEED_95;
         else
           speed <= SPEED_90;
         end if;
-      elsif gameinfo.level < 20 then
+      elsif gameinfo.level >= 4 and gameinfo.level < 20 then
         speed <= SPEED_100;
       else
         speed <= SPEED_90;
@@ -131,16 +132,26 @@ begin
 
   --calculate the current position
   process(clk)
+    variable enable_count : std_logic := '0';
   begin
     if clk = '1' and clk'event then
       dot_count_prev <= gameinfo.number_eaten_dots;
-      no_dots        <= '1';
       if dot_count_prev /= gameinfo.number_eaten_dots then
-        --no_dots = '0';
+        enable_count := '1';
+      end if;
+
+      if enable_count = '1' then
+        counter_60hz <= counter_60hz + 1;
+        if counter_60hz = ONE_60_SECOND-1 then
+          --reached 1/60 seconds
+          enable_count := '0';
+        end if;
+      else
+        counter_60hz <= (others => '0');
       end if;
 
       speed_clear <= '0';
-      if speed_flag = '1' and enable_move = '1' and no_dots = '1' then
+      if speed_flag = '1' and enable_move = '1' and enable_count = '0' then
         speed_clear <= '1';
         if current_direction = L then
           current_position.X <= current_position.X - 1;
