@@ -99,6 +99,8 @@ architecture Behavioral of move_ghost is
   signal clocks                                        : std_logic_vector(22 downto 0):= (others => '0');
   signal move,last_move,do_move	: std_logic := '0';
   signal in_no_up_turns_zone  								: boolean := false;
+  signal blinky_is_in_tunnel,pinky_is_in_tunnel,inky_is_in_tunnel,clyde_is_in_tunnel : boolean := false; 
+  --constant L1_TUNNEL_SPEED : SPEED := 
 
 begin
 
@@ -121,6 +123,9 @@ begin
   speeds : process(gameinfo.LEVEL, gameinfo.NUMBER_EATEN_DOTS)
   begin
   --speed setting for all of the ghosts
+  if blinky_is_in_tunnel then
+  else 
+  end if;
   blinky_speed <= SPEED_50;
   pinky_speed <= SPEED_50;
   inky_speed <= SPEED_50;
