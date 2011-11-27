@@ -100,7 +100,15 @@ architecture Behavioral of move_ghost is
   signal move,last_move,do_move	: std_logic := '0';
   signal in_no_up_turns_zone  								: boolean := false;
   signal blinky_is_in_tunnel,pinky_is_in_tunnel,inky_is_in_tunnel,clyde_is_in_tunnel : boolean := false; 
-  --constant L1_TUNNEL_SPEED : SPEED := 
+constant L1_TUNNEL_SPEED : SPEED := SPEED_40;
+constant L2_TO_4_TUNNEL_SPEED : SPEED := SPEED_45;
+constant L5_TO_255_TUNNEL_SPEED : SPEED := SPEED_50;
+constant L1_NORM_SPEED : SPEED := SPEED_75;
+constant L2_TO_4_NORM_SPEED : SPEED := SPEED_85;
+constant L5_TO_255_NORM_SPEED : SPEED := SPEED_95;
+constant L1_FRIGHT_SPEED : SPEED := SPEED_50;
+constant L2_TO_4_FRIGHT_SPEED : SPEED := SPEED_55;
+constant L5_TO_255_FRIGHT_SPEED : SPEED := SPEED_60;
 
 begin
 
@@ -123,13 +131,37 @@ begin
   speeds : process(gameinfo.LEVEL, gameinfo.NUMBER_EATEN_DOTS)
   begin
   --speed setting for all of the ghosts
-  if blinky_is_in_tunnel then
+  if ghosts(I_BLINKY).MODE = FRIGHTENED then
+    blinky_speed <= L1_FRIGHT_SPEED;
+  elsif blinky_is_in_tunnel then
+	 blinky_speed <= L1_TUNNEL_SPEED;
   else 
+    blinky_speed <= L1_NORM_SPEED;
   end if;
-  blinky_speed <= SPEED_50;
-  pinky_speed <= SPEED_50;
-  inky_speed <= SPEED_50;
-  clyde_speed <= SPEED_50;
+  
+    if ghosts(I_PINKY).MODE = FRIGHTENED then
+    pinky_speed <= L1_FRIGHT_SPEED;
+  elsif pinky_is_in_tunnel then
+	 pinky_speed <= L1_TUNNEL_SPEED;
+  else 
+    pinky_speed <= L1_NORM_SPEED;
+  end if;
+  
+  if ghosts(I_INKY).MODE = FRIGHTENED then
+    inky_speed <= L1_FRIGHT_SPEED;
+  elsif inky_is_in_tunnel then
+	 inky_speed <= L1_TUNNEL_SPEED;
+  else 
+    inky_speed <= L1_NORM_SPEED;
+  end if;
+  
+  if ghosts(I_CLYDE).MODE = FRIGHTENED then
+    clyde_speed <= L1_FRIGHT_SPEED;
+  elsif blinky_is_in_tunnel then
+	 clyde_speed <= L1_TUNNEL_SPEED;
+  else 
+    clyde_speed <= L1_NORM_SPEED;
+  end if;
   end process;
   
   --iterate through each ghost making simple movements
@@ -147,6 +179,10 @@ begin
         ghosts(I_CLYDE)  <= CLYDE_INIT;
 		move_state <= SDONE;
 			do_move <= '0';
+			blinky_is_in_tunnel <= false;
+			pinky_is_in_tunnel <= false;
+			inky_is_in_tunnel <= false;
+			clyde_is_in_tunnel <= false;
       else
 		   if last_move = '0' and move = '1' then
 				do_move <= '1';
@@ -221,28 +257,28 @@ begin
 				inky_clr_flag <= '0';
 				clyde_clr_flag <= '0';
 				
---				if ghost_rc.Y =  14 and (ghost_rc.X < 6 or ghost_rc.X > 21) then
---					--check tunnel
---					if index = I_PINKY then
---					  pinky_is_in_tunnel <= true;
---					elsif index = I_BLINKY then
---					  blinky_is_in_tunnel <= true;
---					elsif index = I_INKY then
---					  inky_is_in_tunnel <= true;
---					else
---					  clyde_is_in_tunnel <= true;
---					end if;
---				else 
---					if index = I_PINKY then
---					  pinky_is_in_tunnel <= false;
---					elsif index = I_BLINKY then
---					  blinky_is_in_tunnel <= false;
---					elsif index = I_INKY then
---					  inky_is_in_tunnel <= false;
---					else
---					  clyde_is_in_tunnel <= false;
---					end if;
---				end if;
+				if ghost_rc.Y =  14 and (ghost_rc.X < 6 or ghost_rc.X > 21) then
+					--check tunnel
+					if index = I_PINKY then
+					  pinky_is_in_tunnel <= true;
+					elsif index = I_BLINKY then
+					  blinky_is_in_tunnel <= true;
+					elsif index = I_INKY then
+					  inky_is_in_tunnel <= true;
+					else
+					  clyde_is_in_tunnel <= true;
+					end if;
+				else 
+					if index = I_PINKY then
+					  pinky_is_in_tunnel <= false;
+					elsif index = I_BLINKY then
+					  blinky_is_in_tunnel <= false;
+					elsif index = I_INKY then
+					  inky_is_in_tunnel <= false;
+					else
+					  clyde_is_in_tunnel <= false;
+					end if;
+				end if;
 			 
 				-- using a square pipeline to compute the squares
 				-- after 2 clocks it has a result

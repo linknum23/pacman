@@ -21,6 +21,8 @@ package pacage is
   type GHOST_DISP_MODE is (NORM, SCATTER, FRIGHTENED, EYES);
   
   subtype SPEED is natural range 0 to 22;
+  constant SPEED_40 : SPEED := 8;
+  constant SPEED_45 : SPEED := 9;
   constant SPEED_50 : SPEED := 10;
   constant SPEED_55 : SPEED := 11;
   constant SPEED_60 : SPEED := 12;
