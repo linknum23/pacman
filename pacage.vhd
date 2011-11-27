@@ -19,23 +19,23 @@ package pacage is
   type DIRECTION is (L, R, UP, DOWN, NONE, STILL);
   type GHOST_MODE is (NORMAL, SCATTER, FRIGHTENED);
   type GHOST_DISP_MODE is (NORM, SCATTER, FRIGHTENED, EYES);
-  
-  subtype SPEED is natural range 0 to 22;
-  constant SPEED_40 : SPEED := 8;
-  constant SPEED_45 : SPEED := 9;
-  constant SPEED_50 : SPEED := 10;
-  constant SPEED_55 : SPEED := 11;
-  constant SPEED_60 : SPEED := 12;
-  constant SPEED_65 : SPEED := 13;
-  constant SPEED_70 : SPEED := 14;
-  constant SPEED_75 : SPEED := 15;
-  constant SPEED_80 : SPEED := 16;
-  constant SPEED_85 : SPEED := 17;
-  constant SPEED_90 : SPEED := 18;
-  constant SPEED_95 : SPEED := 19;
+
+  subtype SPEED is natural range 0 to 22; 
+    constant SPEED_40 : SPEED := 8; 
+                                            constant SPEED_45 : SPEED := 9;
+  constant SPEED_50  : SPEED := 10;
+  constant SPEED_55  : SPEED := 11;
+  constant SPEED_60  : SPEED := 12;
+  constant SPEED_65  : SPEED := 13;
+  constant SPEED_70  : SPEED := 14;
+  constant SPEED_75  : SPEED := 15;
+  constant SPEED_80  : SPEED := 16;
+  constant SPEED_85  : SPEED := 17;
+  constant SPEED_90  : SPEED := 18;
+  constant SPEED_95  : SPEED := 19;
   constant SPEED_100 : SPEED := 20;
   constant SPEED_105 : SPEED := 21;
-  
+
 
   type GHOST_INFO is
   record
@@ -48,7 +48,7 @@ package pacage is
   type GAME_INFO is
   record
     ghostmode                 : GHOST_MODE;
-    game_in_progess           : std_logic;
+    game_in_progress          : std_logic;
     number_lives_left         : integer range 0 to 3;
     number_eaten_dots         : integer range 0 to 244;
     time_since_last_dot_eaten : integer;
@@ -107,6 +107,7 @@ package pacage is
       collision                   : in  std_logic;
       direction_select            : in  DIRECTION;
       current_draw_location       : in  POINT;
+	  gameinfo                    : in  GAME_INFO;
       mode                        : in  std_logic_vector(2 downto 0);
       rom_data_in                 : in  std_logic_vector(4 downto 0);
       pacman_pixel_location       : out POINT;
@@ -182,7 +183,7 @@ package pacage is
       rom_data_in           : in  std_logic_vector(4 downto 0);
       rom_enable            : in  std_logic;
       rom_address           : out POINT;
-	  rom_we                : out std_logic;
+      rom_we                : out std_logic;
       rom_data_out          : out std_logic_vector(4 downto 0);
       rom_use_done          : out std_logic;
       gameinfo              : out GAME_INFO
@@ -250,11 +251,11 @@ package pacage is
       );
   end component;
   component speed_clock is
-port(
-	uspeed : in SPEED;
-	clk_50mhz : in std_logic;
-	flag :  out std_logic;
-	clr_flag : in std_logic
-	);
-	end component;
+    port(
+      uspeed    : in  SPEED;
+      clk_50mhz : in  std_logic;
+      flag      : out std_logic;
+      clr_flag  : in  std_logic
+      );
+  end component;
 end package;

@@ -62,6 +62,8 @@ begin
   -- Stimulus process
   stim_proc : process
   begin
+    dir <= "0011";                      --reset
+    wait for 120ns;
     dir <= "1000";
     wait for 4000us;
     dir <= "0010";
@@ -69,7 +71,7 @@ begin
     --dir <= "0000";
     --wait for 300us;
     --dir <= "0100";
-   -- wait for 300us;
+    -- wait for 300us;
     --dir <= "1000";
     wait;
   end process;

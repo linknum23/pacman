@@ -18,6 +18,7 @@ entity pacman_manager is
     mode                        : in  std_logic_vector(2 downto 0);
     rom_data_in                 : in  std_logic_vector(4 downto 0);
     pacman_pixel_location       : out POINT;
+    gameinfo                    : in  GAME_INFO;
     pacman_tile_location        : out POINT;
     pacman_rom_tile_location    : out POINT;
     pacman_tile_location_offset : out POINT;
@@ -53,6 +54,15 @@ architecture Behavioral of pacman_manager is
       );
   end component;
 
+  component speed_clock is
+    port(
+      uspeed    : in  SPEED;
+      clk_50mhz : in  std_logic;
+      flag      : out std_logic;
+      clr_flag  : in  std_logic
+      );
+  end component;
+
 --offsets into the pacman rom for the different images
   constant PAC_CLOSED_OFFSET            : integer := 0;
   constant PAC_OPEN_OFFSET              : integer := 32;
@@ -60,7 +70,7 @@ architecture Behavioral of pacman_manager is
   constant PAC_SIZE                     : POINT   := (32, 32);
   constant TILE_SIZE                    : POINT   := (4, 4);  --in bits
 --locations
-  signal   current_position             : POINT   := (GAME_OFFSET.X + (14*16)-8, GAME_OFFSET.Y + (23*16));  --14, 23
+  signal   current_position             : POINT   := (GAME_OFFSET.X + (2*16)-8, GAME_OFFSET.Y + (23*16));  --14, 23
   signal   board_pixel_location         : POINT;
   signal   current_tile_position        : POINT;
   signal   current_tile_position_offset : POINT;
@@ -78,8 +88,23 @@ architecture Behavioral of pacman_manager is
   signal wacka_clk, move_clk : std_logic                     := '0';
   signal pac_rom_bit         : std_logic                     := '0';
   signal addr                : POINT;
-  signal speed               : std_logic                     := '0';
+  signal speed               : SPEED                         := SPEED_80;
+  signal enable_move         : std_logic                     := '0';
+
+  --speed clock
+  signal speed_clear : std_logic := '0';
+  signal speed_flag  : std_logic := '0';
 begin
+
+  speed_gen : speed_clock
+    port map(
+      uspeed    => SPEED_80,
+      clk_50mhz => clk,
+      flag      => speed_flag,
+      clr_flag  => speed_clear
+      );
+
+
   --register the requested direction
   process(clk)
   begin
@@ -103,16 +128,18 @@ begin
       rom_enable         => rom_enable,
       rom_location       => next_location,
       rom_use_done       => rom_use_done,
-      speed              => speed
+      speed              => enable_move
       );
   pacman_rom_tile_location    <= next_location;
   pacman_tile_location_offset <= current_tile_position_offset;
 
   --calculate the current position
-  process(move_clk)
+  process(clk)
   begin
-    if move_clk = '1' and move_clk'event then
-      if speed = '1' then
+    if clk = '1' and clk'event then
+      speed_clear <= '0';
+      if speed_flag = '1' and enable_move = '1' then
+        speed_clear <= '1';
         if current_direction = L then
           current_position.X <= current_position.X - 1;
         elsif current_direction = R then

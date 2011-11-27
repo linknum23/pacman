@@ -1,5 +1,6 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
+use IEEE.STD_LOGIC_unsigned.all;
 use ieee.numeric_std.all;
 use work.pacage.all;
 
@@ -12,19 +13,21 @@ entity top_level is
     red   : out std_logic_vector(2 downto 0);
     green : out std_logic_vector(2 downto 0);
     blue  : out std_logic_vector(1 downto 0);
-    ld    : out std_logic_vector(0 downto 0)
+    ld    : out std_logic_vector(7 downto 0)
     );
 end top_level;
 
 architecture Behavioral of top_level is
 
   component dcm is
-    port (CLKIN_IN        : in  std_logic;
-          RST_IN          : in  std_logic;
-          CLKFX_OUT       : out std_logic;
-          CLKIN_IBUFG_OUT : out std_logic;
-          CLK0_OUT        : out std_logic;
-          LOCKED_OUT      : out std_logic);
+    port (
+      CLKIN_IN        : in  std_logic;
+      RST_IN          : in  std_logic;
+      CLKFX_OUT       : out std_logic;
+      CLKIN_IBUFG_OUT : out std_logic;
+      CLK0_OUT        : out std_logic;
+      LOCKED_OUT      : out std_logic
+      );
   end component;
 
   component vga_1024x768
@@ -56,6 +59,7 @@ architecture Behavioral of top_level is
       in_vbp                   : in  std_logic;
       user_direction_selection : in  DIRECTION;
       current_draw_location    : in  POINT;
+      gameinfo_o               : out GAME_INFO;
       data                     : out COLOR
       );
   end component;
@@ -69,14 +73,18 @@ architecture Behavioral of top_level is
   signal current_draw_location           : POINT;
   signal rst                             : std_logic := '0';
   signal direction                       : DIRECTION := NONE;
+  signal gameinfo                        : GAME_INFO;
   
 begin
   
   rst <= btn(1) and btn(0);
 
-  red   <= color_data.R when vidon = '1' else "000";
-  green <= color_data.G when vidon = '1' else "000";
-  blue  <= color_data.B when vidon = '1' else "00";
+  red            <= color_data.R when vidon = '1'                  else "000";
+  green          <= color_data.G when vidon = '1'                  else "000";
+  blue           <= color_data.B when vidon = '1'                  else "00";
+  ld(0)          <= '1'          when gameinfo.ghostmode = SCATTER else '0';
+  ld(7 downto 6) <= gameinfo.level(1 downto 0) + "01";
+  ld(5 downto 1) <= std_logic_vector(to_unsigned(gameinfo.score, 5));
 
   clks : clock_divider
     port map (
@@ -88,11 +96,11 @@ begin
   clockdcm : dcm
     port map(
       CLKIN_IN        => mclk,
-      RST_IN          => rst,
+      RST_IN          => '0',
       CLKFX_OUT       => clk_65mhz,
       CLKIN_IBUFG_OUT => clk_50mhz,
       CLK0_OUT        => open,
-      LOCKED_OUT      => ld(0)
+      LOCKED_OUT      => open
       );
 
   vga_driver : vga_1024x768
@@ -114,10 +122,11 @@ begin
     port map (
       clk                      => clk_65mhz,
       rst                      => rst,
-      game_en                  => '1',
+      game_en                  => rst,
       in_vbp                   => in_vbp,
       current_draw_location    => current_draw_location,
       user_direction_selection => direction,
+      gameinfo_o               => gameinfo,
       data                     => color_data
       ); 
 

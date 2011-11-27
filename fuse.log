@@ -4,6 +4,7 @@ Number of CPUs detected in this system: 4
 Turning on mult-threading, number of parallel sub-compilation jobs: 8 
 Determining compilation order of HDL files
 Parsing VHDL file "C:/projects/Pacman/pacman/pacage.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/speed_clock.vhd" into library work
 Parsing VHDL file "C:/projects/Pacman/pacman/pacman_target_selection.vhd" into library work
 Parsing VHDL file "C:/projects/Pacman/pacman/pacman_rom.vhd" into library work
 Parsing VHDL file "C:/projects/Pacman/pacman/move_ghost.vhd" into library work
@@ -27,13 +28,13 @@ Parsing VHDL file "C:/projects/Pacman/pacman/top_level_tb.vhd" into library work
 Starting static elaboration
 Completed static elaboration
 Fuse Memory Usage: 75592 KB
-Fuse CPU Usage: 406 ms
+Fuse CPU Usage: 484 ms
 Compiling package standard
 Compiling package std_logic_1164
-Compiling package numeric_std
-Compiling package pacage
 Compiling package std_logic_arith
 Compiling package std_logic_unsigned
+Compiling package numeric_std
+Compiling package pacage
 Compiling package vcomponents
 Compiling architecture behavioral of entity clock_divider [clock_divider_default]
 Compiling package textio
@@ -51,6 +52,7 @@ Compiling architecture behavioral of entity dcm [dcm_default]
 Compiling architecture behavioral of entity vga_1024x768 [vga_1024x768_default]
 Compiling architecture behavioral of entity grid_roms [grid_roms_default]
 Compiling architecture behavioral of entity grid_display [\grid_display((288,136),(448,496...]
+Compiling architecture behavioral of entity speed_clock [speed_clock_default]
 Compiling architecture behavioral of entity pacman_target_selection [pacman_target_selection_default]
 Compiling architecture behavioral of entity pacman_rom [pacman_rom_default]
 Compiling architecture behavioral of entity pacman_manager [\pacman_manager((288,136),(448,4...]
@@ -58,8 +60,8 @@ Compiling architecture behavioral of entity ghost_rom [ghost_rom_default]
 Compiling architecture behavioral of entity ghost_display [\ghost_display((288,136))\]
 Compiling architecture behavioral of entity collision_machine [collision_machine_default]
 Compiling architecture behavioral of entity ghost_target_updater [ghost_target_updater_default]
-Compiling architecture behavioral of entity move_ghost [move_ghost_default]
-Compiling architecture behavioral of entity ghost_ai [ghost_ai_default]
+Compiling architecture behavioral of entity move_ghost [\move_ghost((288,136),(448,496))...]
+Compiling architecture behavioral of entity ghost_ai [\ghost_ai((288,136),(448,496))\]
 Compiling architecture behavioral of entity direction_manager [direction_manager_default]
 Compiling architecture behavioral of entity game_machine [game_machine_default]
 Compiling architecture behavioral of entity game_grid [game_grid_default]
@@ -68,7 +70,7 @@ Compiling architecture behavioral of entity top_level [top_level_default]
 Compiling architecture behavior of entity top_level_tb
 Time Resolution for simulation is 1ps.
 Waiting for 1 sub-compilation(s) to finish...
-Compiled 64 VHDL Units
+Compiled 66 VHDL Units
 Built simulation executable C:/projects/Pacman/pacman/top_level_tb_isim_beh.exe
-Fuse Memory Usage: 112716 KB
-Fuse CPU Usage: 1046 ms
+Fuse Memory Usage: 111692 KB
+Fuse CPU Usage: 1265 ms

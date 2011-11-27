@@ -11,6 +11,7 @@ entity display_manager is
     in_vbp                   : in  std_logic;
     current_draw_location    : in  POINT;
     user_direction_selection : in  DIRECTION;
+    gameinfo_o               : out GAME_INFO;
     data                     : out COLOR
     );
 end display_manager;
@@ -82,6 +83,9 @@ architecture Behavioral of display_manager is
   signal gstate : game_state := VGA_READ;
 
 begin
+
+  gameinfo_o <= gameinfo;
+
   board : grid_display
     generic map (
       GAME_SIZE   => GAME_SIZE,
@@ -119,6 +123,7 @@ begin
       current_draw_location       => current_draw_location,
       mode                        => "000",
       rom_data_in                 => grid_data,
+      gameinfo                    => gameinfo,
       pacman_pixel_location       => pacman_pixel_location,
       pacman_tile_location        => pacman_tile_location,
       pacman_tile_location_offset => pacman_tile_location_offset,

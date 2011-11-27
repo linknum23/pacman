@@ -4,7 +4,7 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity speed_clock is
 	port(
-	speed : in natural ranga 0 to 21;
+	speed : in natural range 0 to 21;
 	clk_50mhz : in std_logic;
 	flag :  out std_logic;
 	clr_flag : in std_logic
