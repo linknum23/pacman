@@ -29,8 +29,8 @@ begin
 
   -- figure out the game screen offset counts
   -- so we can look only at the game screen
-  gshc <= hc - goffsetx;
-  gsvc <= vc - goffsety;
+  gshc <= hc - gsoffsetx;
+  gsvc <= vc - gsoffsety;
 
   --calculate which row and column we are in
   -- by dividing by 16

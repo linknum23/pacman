@@ -19,6 +19,21 @@ package pacage is
   type DIRECTION is (L, R, UP, DOWN, NONE, STILL);
   type GHOST_MODE is (NORMAL, SCATTER, FRIGHTENED);
   type GHOST_DISP_MODE is (NORM, SCATTER, FRIGHTENED, EYES);
+  
+  subtype SPEED is natural range 0 to 22;
+  constant SPEED_50 : SPEED := 10;
+  constant SPEED_55 : SPEED := 11;
+  constant SPEED_60 : SPEED := 12;
+  constant SPEED_65 : SPEED := 13;
+  constant SPEED_70 : SPEED := 14;
+  constant SPEED_75 : SPEED := 15;
+  constant SPEED_80 : SPEED := 16;
+  constant SPEED_85 : SPEED := 17;
+  constant SPEED_90 : SPEED := 18;
+  constant SPEED_95 : SPEED := 19;
+  constant SPEED_100 : SPEED := 20;
+  constant SPEED_105 : SPEED := 21;
+  
 
   type GHOST_INFO is
   record
@@ -232,5 +247,12 @@ package pacage is
       collision            : out std_logic
       );
   end component;
-
+  component speed_clock is
+port(
+	uspeed : in SPEED;
+	clk_50mhz : in std_logic;
+	flag :  out std_logic;
+	clr_flag : in std_logic
+	);
+	end component;
 end package;

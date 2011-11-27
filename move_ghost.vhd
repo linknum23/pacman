@@ -46,14 +46,24 @@ architecture Behavioral of move_ghost is
   constant CLYDE_START_POINT : POINT := (X => 15*COL_SIZE+6, y => 14*ROW_SIZE+7);
 
   constant BLINKY_INIT : GHOST_INFO := (DIR => L, PT => START_POINT, MODE => NORM, CAGED => false);
-  constant PINKY_INIT  : GHOST_INFO := (DIR => UP, PT => PINKY_START_POINT, MODE => NORM, CAGED => true);
-  constant INKY_INIT   : GHOST_INFO := (DIR => UP, PT => INKY_START_POINT, MODE => NORM, CAGED => true);
-  constant CLYDE_INIT  : GHOST_INFO := (DIR => UP, PT => CLYDE_START_POINT, MODE => NORM, CAGED => true);
+  constant PINKY_INIT  : GHOST_INFO := (DIR => UP, PT => START_POINT, MODE => NORM, CAGED => false);
+  constant INKY_INIT   : GHOST_INFO := (DIR => UP, PT => START_POINT, MODE => NORM, CAGED => false);
+  constant CLYDE_INIT  : GHOST_INFO := (DIR => UP, PT => START_POINT, MODE => NORM, CAGED => false);
 
   signal blinky2 : GHOST_INFO := BLINKY_INIT;
   signal pinky2  : GHOST_INFO := PINKY_INIT;
   signal inky2   : GHOST_INFO := INKY_INIT;
   signal clyde2  : GHOST_INFO := CLYDE_INIT;
+  
+  --speed handling
+  	signal blinky_speed : SPEED := SPEED_50;
+	signal pinky_speed : SPEED := SPEED_50;
+	signal inky_speed : SPEED := SPEED_50;
+	signal clyde_speed : SPEED := SPEED_50;
+	signal blinky_move_flag, blinky_clr_flag : std_logic;
+	signal pinky_move_flag, pinky_clr_flag : std_logic;
+	signal inky_move_flag, inky_clr_flag : std_logic;
+	signal clyde_move_flag, clyde_clr_flag : std_logic;
   
   type ghostarr is array (natural range <>) of GHOST_INFO;
   signal ghosts : ghostarr(0 to 3) := (
@@ -62,7 +72,14 @@ architecture Behavioral of move_ghost is
     inky2,
     clyde2
     );
-
+--  component speed_clock is
+--port(
+--	uspeed : in SPEED;
+--	clk_50mhz : in std_logic;
+--	flag :  out std_logic;
+--	clr_flag : in std_logic
+--	);
+--	end component;
 
   signal ghost_rc                                      : POINT;
   type   state is (START, SDONE, DO_NEXT, GET_RC,CALC_TARGET_DISTS,
@@ -100,7 +117,16 @@ begin
   end process;
   squiggle <= clocks(18);
   move  <= clocks(19);
-
+  
+  speeds : process(gameinfo.LEVEL, gameinfo.NUMBER_EATEN_DOTS)
+  begin
+  --speed setting for all of the ghosts
+  blinky_speed <= SPEED_50;
+  pinky_speed <= SPEED_50;
+  inky_speed <= SPEED_50;
+  clyde_speed <= SPEED_50;
+  end process;
+  
   --iterate through each ghost making simple movements
   simple_move : process(clk, rst)
   variable index : INTEGER range -1 to 3;
@@ -123,11 +149,15 @@ begin
         case move_state is
           when START =>
             index      := -1;
-				if do_move = '1' then
+				--if do_move = '1' then
 					move_state <= DO_NEXT;
-				else
-					move_state <= SDONE;
-				end if;
+				--else
+				--	move_state <= SDONE;
+				--end if;
+				blinky_clr_flag <= '0';
+				pinky_clr_flag <= '0';
+				inky_clr_flag <= '0';
+				clyde_clr_flag <= '0';
           when DO_NEXT =>
             if index < 3 then
               index := index + 1;
@@ -145,18 +175,70 @@ begin
 				yconv    := to_unsigned(ghosts(index).PT.Y, 9);
 				ghost_rc.X <= to_integer(xconv(8 downto 4));
 				ghost_rc.Y <= to_integer(yconv(8 downto 4));
-            --ghost_rc   <= get_ghost_rc(ghosts(index));
-            move_state <= CALC_TARGET_DISTS;
+            
             if index = I_PINKY then
-              target <= pinky_target;
+              target <= pinky_target;	  
+				  if blinky_move_flag = '1' then
+					move_state <= CALC_TARGET_DISTS;
+					blinky_clr_flag <= '1';
+				  else
+					move_state <= DO_NEXT;
+				  end if;
             elsif index = I_BLINKY then
               target <= blinky_target;
+				  if pinky_move_flag = '1' then
+					move_state <= CALC_TARGET_DISTS;
+					pinky_clr_flag <= '1';
+				  else
+					move_state <= DO_NEXT;
+				  end if;
             elsif index = I_INKY then
               target <= inky_target;
+				  if inky_move_flag = '1' then
+					move_state <= CALC_TARGET_DISTS;
+					inky_clr_flag <= '1';
+				  else
+					move_state <= DO_NEXT;
+				  end if;
             else
               target <= clyde_target;
+				  if clyde_move_flag = '1' then
+					move_state <= CALC_TARGET_DISTS;
+					clyde_clr_flag <= '1';
+				  else
+					move_state <= DO_NEXT;
+				  end if;
             end if;
 			 when CALC_TARGET_DISTS =>
+				--stop clearing
+				blinky_clr_flag <= '0';
+				pinky_clr_flag <= '0';
+				inky_clr_flag <= '0';
+				clyde_clr_flag <= '0';
+				
+				if ghost_rc.Y =  14 and (ghost_rc.X < 6 or ghost_rc.X > 21) then
+					--check tunnel
+					if index = I_PINKY then
+					  pinky_is_in_tunnel <= true;
+					elsif index = I_BLINKY then
+					  blinky_is_in_tunnel <= true;
+					elsif index = I_INKY then
+					  inky_is_in_tunnel <= true;
+					else
+					  clyde_is_in_tunnel <= true;
+					end if;
+				else 
+					if index = I_PINKY then
+					  pinky_is_in_tunnel <= false;
+					elsif index = I_BLINKY then
+					  blinky_is_in_tunnel <= false;
+					elsif index = I_INKY then
+					  inky_is_in_tunnel <= false;
+					else
+					  clyde_is_in_tunnel <= false;
+					end if;
+				end if;
+			 
 				-- using a square pipeline to compute the squares
 				-- after 2 clocks it has a result
 				-- so the logic in this series of states might look a little convoluted
@@ -268,7 +350,7 @@ begin
 			  if ghosts(index).CAGED = true then
 				--check to see if Y index is a multiple of 16
 				-- this does the cage bounce
-				 if yconv(4 downto 0) = "10000" then
+				 if yconv(4 downto 0) = "00000" then
 					if ghosts(index).DIR = UP then
 						ghosts(index).DIR <= DOWN;
 					else
@@ -405,6 +487,34 @@ begin
 	end if;
   end process;
   
+  bspeeds : speed_clock 
+  port map(
+	clk_50mhz => clk,
+	uspeed => blinky_speed,
+	flag => blinky_move_flag,
+	clr_flag => blinky_clr_flag
+  );
+    pspeeds : speed_clock 
+  port map(
+	clk_50mhz => clk,
+	uspeed => pinky_speed,
+	flag => pinky_move_flag,
+	clr_flag => pinky_clr_flag
+  );
+    ispeeds : speed_clock 
+  port map(
+	clk_50mhz => clk,
+	uspeed => inky_speed,
+	flag => inky_move_flag,
+	clr_flag => inky_clr_flag
+  );
+    cspeeds : speed_clock 
+  port map(
+	clk_50mhz => clk,
+	uspeed => clyde_speed,
+	flag => clyde_move_flag,
+	clr_flag => clyde_clr_flag
+  );
   
 
 end Behavioral;
