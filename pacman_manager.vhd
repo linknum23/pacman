@@ -92,18 +92,76 @@ architecture Behavioral of pacman_manager is
   signal enable_move         : std_logic                     := '0';
 
   --speed clock
-  signal speed_clear : std_logic := '0';
-  signal speed_flag  : std_logic := '0';
+  signal speed_clear    : std_logic              := '0';
+  signal speed_flag     : std_logic              := '0';
+  signal dot_count_prev : integer range 0 to 244 := 0;
+  signal no_dots        : std_logic              := '0';
 begin
 
   speed_gen : speed_clock
     port map(
-      uspeed    => SPEED_80,
+      uspeed    => speed,
       clk_50mhz => clk,
       flag      => speed_flag,
       clr_flag  => speed_clear
       );
 
+  process(clk)
+  begin
+    if clk = '1' and clk'event then
+      if gameinfo.level = 0 then
+        if gameinfo.ghostmode = FRIGHTENED then
+          speed <= SPEED_90;
+        else
+          speed <= SPEED_80;
+        end if;
+      elsif gameinfo.level < 4 then
+        if gameinfo.ghostmode = FRIGHTENED then
+          speed <= SPEED_95;
+        else
+          speed <= SPEED_90;
+        end if;
+      elsif gameinfo.level < 20 then
+        speed <= SPEED_100;
+      else
+        speed <= SPEED_90;
+      end if;
+    end if;
+  end process;
+
+  --calculate the current position
+  process(clk)
+  begin
+    if clk = '1' and clk'event then
+      dot_count_prev <= gameinfo.number_eaten_dots;
+      no_dots        <= '1';
+      if dot_count_prev /= gameinfo.number_eaten_dots then
+        --no_dots = '0';
+      end if;
+
+      speed_clear <= '0';
+      if speed_flag = '1' and enable_move = '1' and no_dots = '1' then
+        speed_clear <= '1';
+        if current_direction = L then
+          current_position.X <= current_position.X - 1;
+        elsif current_direction = R then
+          current_position.X <= current_position.X + 1;
+        elsif current_direction = UP then
+          current_position.Y <= current_position.Y - 1;
+        elsif current_direction = DOWN then
+          current_position.Y <= current_position.Y + 1;
+        end if;
+      end if;
+
+      --toggle x for the wrap around
+      if current_position.X < GAME_OFFSET.X + 8 then
+        current_position.X <= GAME_OFFSET.X + GAME_SIZE.X - 24;
+      elsif current_position.X > GAME_OFFSET.X + GAME_SIZE.X - 24 then
+        current_position.X <= GAME_OFFSET.X + 8;
+      end if;
+
+    end if;
+  end process;
 
   --register the requested direction
   process(clk)
@@ -132,34 +190,6 @@ begin
       );
   pacman_rom_tile_location    <= next_location;
   pacman_tile_location_offset <= current_tile_position_offset;
-
-  --calculate the current position
-  process(clk)
-  begin
-    if clk = '1' and clk'event then
-      speed_clear <= '0';
-      if speed_flag = '1' and enable_move = '1' then
-        speed_clear <= '1';
-        if current_direction = L then
-          current_position.X <= current_position.X - 1;
-        elsif current_direction = R then
-          current_position.X <= current_position.X + 1;
-        elsif current_direction = UP then
-          current_position.Y <= current_position.Y - 1;
-        elsif current_direction = DOWN then
-          current_position.Y <= current_position.Y + 1;
-        end if;
-      end if;
-
-      --toggle x for the wrap around
-      if current_position.X < GAME_OFFSET.X + 8 then
-        current_position.X <= GAME_OFFSET.X + GAME_SIZE.X - 24;
-      elsif current_position.X > GAME_OFFSET.X + GAME_SIZE.X - 24 then
-        current_position.X <= GAME_OFFSET.X + 8;
-      end if;
-
-    end if;
-  end process;
 
   process(clk)
   begin
@@ -246,16 +276,15 @@ begin
     end if;
   end process;
   wacka_clk <= clocks(22);
-  move_clk  <= clocks(18);
 
 
 --based on the wacka speed,
 --toggle back an forth for mouth movement
-  process(wacka_clk, current_direction, speed)
+  process(wacka_clk, current_direction, enable_move)
   begin
     if wacka_clk = '1' and current_direction /= STILL then
       offset.Y <= PAC_OPEN_OFFSET;
-    elsif speed = '1' then
+    elsif enable_move = '1' then
       offset.Y <= PAC_CLOSED_OFFSET;
     end if;
   end process;

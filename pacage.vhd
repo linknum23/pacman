@@ -51,7 +51,6 @@ package pacage is
     game_in_progress          : std_logic;
     number_lives_left         : integer range 0 to 3;
     number_eaten_dots         : integer range 0 to 244;
-    time_since_last_dot_eaten : integer;
     score                     : integer range 0 to 999999;
     level                     : std_logic_vector(8 downto 0);
     reset_level               : std_logic;
