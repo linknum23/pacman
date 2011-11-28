@@ -5,6 +5,7 @@ Turning on mult-threading, number of parallel sub-compilation jobs: 8
 Determining compilation order of HDL files
 Parsing VHDL file "C:/projects/Pacman/pacman/pacage.vhd" into library work
 Parsing VHDL file "C:/projects/Pacman/pacman/speed_clock.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/ghost_speed_selector.vhd" into library work
 Parsing VHDL file "C:/projects/Pacman/pacman/pacman_target_selection.vhd" into library work
 Parsing VHDL file "C:/projects/Pacman/pacman/pacman_rom.vhd" into library work
 Parsing VHDL file "C:/projects/Pacman/pacman/number_rom.vhd" into library work
@@ -31,7 +32,7 @@ Parsing VHDL file "C:/projects/Pacman/pacman/top_level_tb.vhd" into library work
 Starting static elaboration
 Completed static elaboration
 Fuse Memory Usage: 75656 KB
-Fuse CPU Usage: 389 ms
+Fuse CPU Usage: 421 ms
 Compiling package standard
 Compiling package std_logic_1164
 Compiling package std_logic_arith
@@ -63,6 +64,7 @@ Compiling architecture behavioral of entity ghost_rom [ghost_rom_default]
 Compiling architecture behavioral of entity ghost_display [\ghost_display((288,136))\]
 Compiling architecture behavioral of entity collision_machine [collision_machine_default]
 Compiling architecture behavioral of entity ghost_target_updater [ghost_target_updater_default]
+Compiling architecture behavioral of entity ghost_speed_selector [ghost_speed_selector_default]
 Compiling architecture behavioral of entity move_ghost [\move_ghost((288,136),(448,496))...]
 Compiling architecture behavioral of entity ghost_ai [\ghost_ai((288,136),(448,496))\]
 Compiling architecture behavioral of entity direction_manager [direction_manager_default]
@@ -75,8 +77,8 @@ Compiling architecture behavioral of entity nes_controller [nes_controller_defau
 Compiling architecture behavioral of entity top_level [top_level_default]
 Compiling architecture behavior of entity top_level_tb
 Time Resolution for simulation is 1ps.
-Waiting for 21 sub-compilation(s) to finish...
-Compiled 72 VHDL Units
+Waiting for 1 sub-compilation(s) to finish...
+Compiled 74 VHDL Units
 Built simulation executable C:/projects/Pacman/pacman/top_level_tb_isim_beh.exe
 Fuse Memory Usage: 112780 KB
-Fuse CPU Usage: 1046 ms
+Fuse CPU Usage: 1249 ms

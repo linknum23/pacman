@@ -50,7 +50,7 @@ architecture Behavioral of pacman_manager is
       rom_enable         : in  std_logic;
       rom_location       : out POINT;
       rom_use_done       : out std_logic;
-      speed              : out std_logic
+      pspeed              : out std_logic
       );
   end component;
 
@@ -84,7 +84,7 @@ architecture Behavioral of pacman_manager is
   signal offset            : POINT     := (0, 0);
   signal current_direction : DIRECTION := STILL;
 
-  signal clocks      : std_logic_vector(22 downto 0) := (others => '0');
+  signal clocks      : std_logic_vector(23 downto 0) := (others => '0');
   signal wacka_clk   : std_logic                     := '0';
   signal pac_rom_bit : std_logic                     := '0';
   signal addr        : POINT;
@@ -198,7 +198,7 @@ begin
       rom_enable         => rom_enable,
       rom_location       => next_location,
       rom_use_done       => rom_use_done,
-      speed              => enable_move
+      pspeed              => enable_move
       );
   pacman_rom_tile_location    <= next_location;
   pacman_tile_location_offset <= current_tile_position_offset;

@@ -33,26 +33,24 @@ architecture Behavioral of game_machine is
   signal   fright_second_counter : std_logic_vector(26 downto 0) := (others => '0');
 
   --second counter
-  constant ONE_SECOND    : std_logic_vector(25 downto 0) := "11110111111101001001000000";
-  constant ONE_60_SECOND : std_logic_vector(20 downto 0) := "100001000011111000101";
+  --constant ONE_SECOND    : std_logic_vector(25 downto 0) := "11110111111101001001000000";
+  --constant ONE_60_SECOND : std_logic_vector(20 downto 0) := "100001000011111000101";
+  constant ONE_SECOND    : integer := 65000000;
+  constant ONE_60_SECOND : integer := ONE_SECOND/60;
 
+  constant scatter_time_1 : int_array := (7, 7, 5);     --7 7 5
+  constant scatter_time_2 : int_array := (27, 27, 25);  -- 27 27 25
+  constant scatter_time_3 : int_array := (34, 34, 30);  -- 34 34 30
+  constant scatter_time_4 : int_array := (54, 54, 50);  -- 54 54 50
+  constant scatter_time_5 : int_array := (59, 59, 55);  --59 59 55
+  constant scatter_time_6 : int_array := (79, 1092, 1092);  --79 1092 1092
+  constant scatter_time_7 : int_array := (84, -1, -1);  --84 1092+1/60 1092+1/60
 
---scatter
-  constant scatter_time_1     : int_array           := (7, 7, 5);
-  constant scatter_time_2     : int_array           := (7, 7, 5);
-  constant scatter_time_3     : int_array           := (5, 5, 5);
-  constant scatter_time_4     : int_array           := (5, -1, -1);  -- -1 is 1/60 seconds
-  constant chase_time_1       : int_array           := (20, 20, 20);
-  constant chase_time_2       : int_array           := (20, 20, 20);
-  constant chase_time_3       : int_array           := (20, 1033, 1037);
-  constant chase_time_4       : int_array           := (2000, 2000, 2000);  -- 2000 is infinite
-  type     scatter_chase_array is array (integer range 0 to 7) of int_array(0 to 2);
-  constant SCATTER_CHASE_TIME : scatter_chase_array := (scatter_time_1, chase_time_1, scatter_time_2, chase_time_2, scatter_time_3, chase_time_3, scatter_time_4, chase_time_4);
+  type     scatter_chase_array is array (integer range 0 to 6) of int_array(0 to 2);
+  constant SCATTER_CHASE_TIME : scatter_chase_array := (scatter_time_1, scatter_time_2, scatter_time_3, scatter_time_4, scatter_time_5, scatter_time_6, scatter_time_7);
 
-  signal scatter_time           : integer range 0 to 2000       := 2000;
-  signal scatter_time_started   : std_logic_vector(25 downto 0) := (others => '0');
-  signal scatter_chase_level    : integer range 0 to 7          := 0;  --what level were in as far as scatter, normal
-  signal scatter_second_counter : std_logic_vector(25 downto 0) := (others => '0');
+  signal scatter_time    : integer range 0 to 2000       := 0;
+  signal scatter_counter : std_logic_vector(35 downto 0) := (others => '0');
 
 
   type     state_type is (WAIT_FOR_MOVEMENT, WAIT_FOR_ROM, CHECK_ROM, OVERWRITE_ROM);
@@ -63,15 +61,14 @@ architecture Behavioral of game_machine is
   signal   last_pacman_tile_location      : POINT                     := (0, 0);
   signal   address_to_check               : POINT;
   signal   number_lives_left              : integer range 0 to 3      := 3;
-  signal   level_num                      : integer range 0 to 255    := 0;
+  signal   level_num                      : integer range 0 to 254    := 0;
   signal   fright_mode_en, in_fright_mode : std_logic                 := '0';
   signal   in_scatter_mode                : std_logic                 := '0';
   signal   level_reset_en                 : std_logic                 := '0';
   signal   level_complete                 : std_logic                 := '0';
-  signal   game_in_progress               : std_logic                 := '0';
+  signal   game_in_progress               : std_logic                 := '1';
 
-  signal en_1_60, done_1_60 : std_logic                     := '0';
-  signal counter_1_60       : std_logic_vector(25 downto 0) := (others => '0');
+  signal counter_1_60 : std_logic_vector(25 downto 0) := (others => '0');
   
   
 begin
@@ -85,6 +82,9 @@ begin
   gameinfo.level_complete    <= level_complete;
   gameinfo.game_in_progress  <= game_in_progress;
 
+  -----------------------------
+  --Keep track of dot eating
+  -----------------------------
   process(clk)
   begin
     if clk'event and clk = '1' then
@@ -139,6 +139,9 @@ begin
     end if;
   end process;
 
+  -----------------------------
+  --Game in progress
+  -----------------------------
   process(clk)
   begin
     if clk = '1' and clk'event then
@@ -149,9 +152,23 @@ begin
         game_in_progress <= '0';
       end if;
     end if;
-    
   end process;
 
+  -----------------------------
+  --increment level when complete
+  -----------------------------
+  process(clk)
+  begin
+    if clk'event and clk = '1' then
+      if level_complete = '1' then
+        level_num <= level_num + 1;
+      end if;
+    end if;
+  end process;
+
+  -----------------------------
+  --level completion and resetting
+  -----------------------------
   process(clk)
   begin
     if clk = '1' and clk'event then
@@ -159,7 +176,7 @@ begin
         --decrement lives
         number_lives_left <= number_lives_left - 1;
         --reset level
-        level_reset_en    <= '1';
+        -- level_reset_en    <= '1';
       elsif game_en = '1' then
         level_reset_en <= '1';
       else
@@ -167,6 +184,7 @@ begin
       end if;
 
       if dots_eaten = MAX_DOTS then
+        level_reset_en <= '1';
         level_complete <= '1';
       else
         level_complete <= '0';
@@ -174,7 +192,9 @@ begin
     end if;
   end process;
 
+  -----------------------------
   --control when fright mode is enabled based on eating big dots
+  -----------------------------
   process(clk)
     variable fright_time : integer range 1 to 6 := 6;
   begin
@@ -202,7 +222,9 @@ begin
     end if;
   end process;
 
+  -----------------------------
   --control when in scatter modes and normal modes
+  -----------------------------  
   process(clk)
     variable level_index  : integer range 0 to 2 := 0;
     variable time_to_wait : integer              := 0;
@@ -218,43 +240,38 @@ begin
 
       if level_reset_en = '1' then
         --wait for game to start
-        scatter_time        <= 0;
-        scatter_chase_level <= 0;
+        scatter_time    <= 0;
+        scatter_counter <= (others => '0');
       end if;
-
-      time_to_wait := SCATTER_CHASE_TIME(scatter_chase_level)(level_index);
-      if time_to_wait > 0 then
-        --normal time in seconds
-        if scatter_time <= time_to_wait then
-          --we keep track of the time within the second we started and increment on that
-          scatter_second_counter <= scatter_second_counter + 1;
-          if scatter_second_counter = ONE_SECOND-1 and scatter_time < 1038 then
-            scatter_time           <= scatter_time + 1;
-            scatter_second_counter <= (others => '0');
-          end if;
-        else
-          scatter_time        <= 0;
-          scatter_chase_level <= scatter_chase_level + 1;
-        end if;
-      else
-        --1/60 of a second
-        if counter_1_60 <= ONE_60_SECOND - 1 then
-          counter_1_60 <= counter_1_60 + 1;
-        else
-          --we waited 1/60 second
-          counter_1_60        <= (others => '0');
-          scatter_time        <= 0;
-          scatter_chase_level <= scatter_chase_level + 1;
+      if scatter_time < SCATTER_CHASE_TIME(5)(level_index) + 5 then  --add 5 to be out of range for all
+        scatter_counter <= scatter_counter + 1;
+        if scatter_counter = ONE_SECOND - 1 then
+          scatter_time    <= scatter_time + 1;
+          scatter_counter <= (others => '0');
         end if;
       end if;
 
-      if game_in_progress = '1' and (scatter_chase_level = 0 or scatter_chase_level = 2 or scatter_chase_level = 4 or scatter_chase_level = 6)then
+      in_scatter_mode <= '0';
+
+      if scatter_time < SCATTER_CHASE_TIME(0)(level_index) then
+        in_scatter_mode <= '1';
+      elsif scatter_time >= SCATTER_CHASE_TIME(1)(level_index) and scatter_time < SCATTER_CHASE_TIME(2)(level_index) then
+        in_scatter_mode <= '1';
+      elsif scatter_time >= SCATTER_CHASE_TIME(3)(level_index) and scatter_time < SCATTER_CHASE_TIME(4)(level_index) then
         in_scatter_mode <= '1';
       else
-        in_scatter_mode <= '0';
+        if level_index = 0 then
+          if scatter_time >= SCATTER_CHASE_TIME(5)(level_index) and scatter_time < SCATTER_CHASE_TIME(6)(level_index) then
+            in_scatter_mode <= '1';
+          end if;
+        else
+          if scatter_time = SCATTER_CHASE_TIME(5)(level_index) and scatter_counter < ONE_60_SECOND then
+            in_scatter_mode <= '1';
+          end if;
+        end if;
       end if;
     end if;
-  end process;
 
+  end process;
 end Behavioral;
 
