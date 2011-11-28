@@ -6,14 +6,15 @@ use work.pacage.all;
 
 entity top_level is
   port (
-    mclk  : in  std_logic;
-    hsync : out std_logic;
-    vsync : out std_logic;
-    btn   : in  std_logic_vector(3 downto 0);
-    red   : out std_logic_vector(2 downto 0);
-    green : out std_logic_vector(2 downto 0);
-    blue  : out std_logic_vector(1 downto 0);
-    ld    : out std_logic_vector(7 downto 0)
+    mclk  : in    std_logic;
+    hsync : out   std_logic;
+    vsync : out   std_logic;
+    btn   : in    std_logic_vector(3 downto 0);
+    red   : out   std_logic_vector(2 downto 0);
+    green : out   std_logic_vector(2 downto 0);
+    blue  : out   std_logic_vector(1 downto 0);
+    ld    : out   std_logic_vector(7 downto 0);
+    j     : inout std_logic_vector(3 downto 0)  --j4 is already gnd
     );
 end top_level;
 
@@ -53,14 +54,27 @@ architecture Behavioral of top_level is
 
   component display_manager is
     port (
-      clk                      : in  std_logic;
-      rst                      : in  std_logic;
-      game_en                  : in  std_logic;
-      in_vbp                   : in  std_logic;
-      user_direction_selection : in  DIRECTION;
-      current_draw_location    : in  POINT;
-      gameinfo_o               : out GAME_INFO;
-      data                     : out COLOR
+      clk                   : in  std_logic;
+      rst                   : in  std_logic;
+      game_en               : in  std_logic;
+      in_vbp                : in  std_logic;
+      buttons               : in  NES_BUTTONS;
+      current_draw_location : in  POINT;
+      gameinfo_o            : out GAME_INFO;
+      data                  : out COLOR
+      );
+  end component;
+
+  component nes_controller is
+    port(
+      clk        : in  std_logic;
+      rst        : in  std_logic;
+      power_pin  : out std_logic;
+      data_pin   : in  std_logic;
+      latch_pin  : out std_logic;
+      pulse_pin  : out std_logic;
+      ground_pin : out std_logic;
+      buttons    : out NES_BUTTONS
       );
   end component;
 
@@ -74,17 +88,25 @@ architecture Behavioral of top_level is
   signal rst                             : std_logic := '0';
   signal direction                       : DIRECTION := NONE;
   signal gameinfo                        : GAME_INFO;
+  signal buttons                         : NES_BUTTONS;
+  signal locked                          : std_logic := '0';
   
 begin
   
   rst <= btn(1) and btn(0);
 
-  red            <= color_data.R when vidon = '1'                  else "000";
-  green          <= color_data.G when vidon = '1'                  else "000";
-  blue           <= color_data.B when vidon = '1'                  else "00";
-  ld(0)          <= '1'          when gameinfo.ghostmode = SCATTER else '0';
-  ld(7 downto 6) <= gameinfo.level(1 downto 0) + "01";
-  ld(5 downto 1) <= std_logic_vector(to_unsigned(gameinfo.score, 5));
+  red   <= color_data.R when vidon = '1'                     else "000";
+  green <= color_data.G when vidon = '1'                     else "000";
+  blue  <= color_data.B when vidon = '1'                     else "00";
+  ld(0) <= '1'          when gameinfo.ghostmode = SCATTER    else '0';
+  ld(1) <= '1'          when gameinfo.ghostmode = FRIGHTENED else '0';
+  ld(2) <= buttons.RIGHT_BUTTON;
+  ld(3) <= buttons.DOWN_BUTTON;
+  ld(4) <= buttons.UP_BUTTON;
+  ld(5) <= buttons.LEFT_BUTTON;
+  ld(6) <= '0';
+  ld(7) <= '0';
+
 
   clks : clock_divider
     port map (
@@ -93,14 +115,14 @@ begin
       clk_25mhz => clk_25mhz
       );
 
-  clockdcm : dcm
+  dcm1 : dcm
     port map(
       CLKIN_IN        => mclk,
       RST_IN          => '0',
       CLKFX_OUT       => clk_65mhz,
       CLKIN_IBUFG_OUT => clk_50mhz,
       CLK0_OUT        => open,
-      LOCKED_OUT      => open
+      LOCKED_OUT      => locked
       );
 
   vga_driver : vga_1024x768
@@ -120,32 +142,28 @@ begin
 
   display : display_manager
     port map (
-      clk                      => clk_65mhz,
-      rst                      => rst,
-      game_en                  => rst,
-      in_vbp                   => in_vbp,
-      current_draw_location    => current_draw_location,
-      user_direction_selection => direction,
-      gameinfo_o               => gameinfo,
-      data                     => color_data
+      clk                   => clk_65mhz,
+      rst                   => rst,
+      game_en               => rst,
+      in_vbp                => in_vbp,
+      current_draw_location => current_draw_location,
+      buttons               => buttons,
+      gameinfo_o            => gameinfo,
+      data                  => color_data
       ); 
 
-  process(clk_25mhz)
-  begin
-    if clk_25mhz = '1' and clk_25mhz'event then
-      if btn(0) = '1' then
-        direction <= R;
-      elsif btn(1) = '1' then
-        direction <= DOWN;
-      elsif btn(2) = '1' then
-        direction <= UP;
-      elsif btn(3) = '1' then
-        direction <= L;
-      else
-        direction <= NONE;
-      end if;
-    end if;
-  end process;
+  NES : nes_controller
+    port map (
+      clk        => clk_50mhz,
+      rst        => rst,
+      power_pin  => j(0),
+      data_pin   => j(1),
+      latch_pin  => j(2),
+      pulse_pin  => j(3),
+      ground_pin => open,               --j(4),
+      buttons    => buttons
+      );
+  j(1) <= 'Z';                          --high impedance for input
   
 end Behavioral;
 

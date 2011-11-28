@@ -10,6 +10,7 @@ entity game_machine is
     rst                   : in  std_logic;
     game_en               : in  std_logic;
     collision             : in  std_logic;
+    buttons               : in  NES_BUTTONS;
     current_draw_location : in  POINT;
     pacman_tile_location  : in  POINT;
     rom_data_in           : in  std_logic_vector(4 downto 0);

@@ -16,7 +16,8 @@ architecture behavior of top_level_tb is
       btn   : in  std_logic_vector(3 downto 0);
       red   : out std_logic_vector(2 downto 0);
       green : out std_logic_vector(2 downto 0);
-      blue  : out std_logic_vector(1 downto 0)
+      blue  : out std_logic_vector(1 downto 0);
+	  j     : inout std_logic_vector(3 downto 0)  --j4 is already gnd
       );
   end component;
 
@@ -30,11 +31,13 @@ architecture behavior of top_level_tb is
   signal red   : std_logic_vector(2 downto 0);
   signal green : std_logic_vector(2 downto 0);
   signal blue  : std_logic_vector(1 downto 0);
-  signal j     : std_logic_vector(0 downto 0);
+  signal j     : std_logic_vector(3 downto 0);
   signal dir   : std_logic_vector(3 downto 0);
 
   -- Clock period definitions
-  constant mclk_period : time := 20 ns;
+  constant mclk_period : time      := 20 ns;
+  signal   data        : std_logic := '1';
+  signal   pulse       : std_logic := '0';
 
 begin
 
@@ -46,8 +49,11 @@ begin
     btn   => dir,
     red   => red,
     green => green,
-    blue  => blue
+    blue  => blue,
+	j => j
     );
+	j(1) <= data;
+	pulse <= j(3);
 
   -- Clock process definitions
   mclk_process : process
@@ -59,21 +65,31 @@ begin
   end process;
 
 
-  -- Stimulus process
-  stim_proc : process
+  stim_proc : process(pulse)
+    variable count : integer range 0 to 7 := 0;
   begin
-    dir <= "0011";                      --reset
-    wait for 120ns;
-    dir <= "1000";
-    wait for 4000us;
-    dir <= "0010";
-    --wait for 100ns;
-    --dir <= "0000";
-    --wait for 300us;
-    --dir <= "0100";
-    -- wait for 300us;
-    --dir <= "1000";
-    wait;
+    if pulse = '1' and pulse'event then
+      case count is
+        when 0 =>
+          data <= '1';
+        when 1 =>
+          data <= '1';
+        when 2 =>
+          data <= '1';
+        when 3 =>
+          data <= '1';
+        when 4 =>
+          data <= '0';
+        when 5 =>
+          data <= '1';
+        when 6 =>
+          data <= '1';
+        when 7 =>
+          data <= '1';
+        when others => null;
+      end case;
+      count := count + 1;
+    end if;
   end process;
 
 end;

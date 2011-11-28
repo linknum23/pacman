@@ -45,6 +45,18 @@ package pacage is
     CAGED : boolean;
   end record;
 
+  type NES_BUTTONS is
+  record
+    A_BUTTON      : std_logic;
+    B_BUTTON      : std_logic;
+    SELECT_BUTTON : std_logic;
+    START_BUTTON  : std_logic;
+    UP_BUTTON     : std_logic;
+    DOWN_BUTTON   : std_logic;
+    LEFT_BUTTON   : std_logic;
+    RIGHT_BUTTON  : std_logic;
+  end record;
+
   type GAME_INFO is
   record
     ghostmode         : GHOST_MODE;
@@ -177,6 +189,7 @@ package pacage is
       rst                   : in  std_logic;
       game_en               : in  std_logic;
       collision             : in  std_logic;
+	  buttons :in NES_BUTTONS;
       current_draw_location : in  POINT;
       pacman_tile_location  : in  POINT;
       rom_data_in           : in  std_logic_vector(4 downto 0);

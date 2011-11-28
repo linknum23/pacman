@@ -1,1 +1,1 @@
--intstyle "ise" -incremental -o "C:/projects/Pacman/pacman/top_level_tb_isim_beh.exe" -prj "C:/projects/Pacman/pacman/top_level_tb_beh.prj" "top_level_tb" 
+-intstyle "ise" -incremental -o "C:/projects/Pacman/pacman/nes_controller_TB_isim_beh.exe" -prj "C:/projects/Pacman/pacman/nes_controller_TB_beh.prj" "work.nes_controller_TB" 

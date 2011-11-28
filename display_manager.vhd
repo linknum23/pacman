@@ -5,14 +5,14 @@ use work.pacage.all;
 
 entity display_manager is
   port (
-    clk                      : in  std_logic;
-    rst                      : in  std_logic;
-    game_en                  : in  std_logic;
-    in_vbp                   : in  std_logic;
-    current_draw_location    : in  POINT;
-    user_direction_selection : in  DIRECTION;
-    gameinfo_o               : out GAME_INFO;
-    data                     : out COLOR
+    clk                   : in  std_logic;
+    rst                   : in  std_logic;
+    game_en               : in  std_logic;
+    in_vbp                : in  std_logic;
+    current_draw_location : in  POINT;
+    buttons               : in  NES_BUTTONS;
+    gameinfo_o            : out GAME_INFO;
+    data                  : out COLOR
     );
 end display_manager;
 
@@ -61,7 +61,7 @@ architecture Behavioral of display_manager is
   signal collision : std_logic;
 
   --direction signals
-  signal pacman_direction_selection : DIRECTION;
+  signal pacman_direction_selection, direction : DIRECTION;
 
   --rom signals
   signal pacman_rom_request          : std_logic := '0';
@@ -85,6 +85,11 @@ architecture Behavioral of display_manager is
 begin
 
   gameinfo_o <= gameinfo;
+
+  direction <= L when buttons.LEFT_BUTTON = '1' else
+               R    when buttons.RIGHT_BUTTON = '1' else
+               UP   when buttons.UP_BUTTON = '1'    else
+               DOWN when buttons.DOWN_BUTTON = '1'  else NONE;
 
   board : grid_display
     generic map (
@@ -180,7 +185,7 @@ begin
     port map (
       clk                          => clk,
       rst                          => rst,
-      direction_selection          => user_direction_selection,
+      direction_selection          => direction,
       pacman_current_tile_location => pacman_tile_location,
       pacman_current_tile_offset   => pacman_tile_location_offset,
       rom_data_in                  => grid_data,
@@ -196,6 +201,7 @@ begin
       rst                   => rst,
       game_en               => game_en,
       collision             => collision,
+      buttons               => buttons,
       current_draw_location => current_draw_location,
       pacman_tile_location  => pacman_tile_location,
       rom_data_in           => grid_data,
