@@ -49,42 +49,112 @@ constant L9_to_11_ELROY1_THRESH : natural range 0 to 244 := 244-60;
 constant L12_to_14_ELROY1_THRESH : natural range 0 to 244 := 244-80;
 constant L15_to_18_ELROY1_THRESH : natural range 0 to 244 := 244-100;
 constant L19_to_255_ELROY1_THRESH : natural range 0 to 244 := 244-120;
+
+constant L1_ELROY2_THRESH : natural range 0 to 244 := 244-10;
+constant L2_ELROY2_THRESH : natural range 0 to 244 := 244-15;
+constant L3_to_5_ELROY2_THRESH : natural range 0 to 244 := 244-20;
+constant L6_to_8_ELROY2_THRESH : natural range 0 to 244 := 244-25;
+constant L9_to_11_ELROY2_THRESH : natural range 0 to 244 := 244-30;
+constant L12_to_14_ELROY2_THRESH : natural range 0 to 244 := 244-40;
+constant L15_to_18_ELROY2_THRESH : natural range 0 to 244 := 244-50;
+constant L19_to_255_ELROY2_THRESH : natural range 0 to 244 := 244-60;
+
+signal tunnel_speed, fright_speed, normal_speed, elroy_1_speed, elroy_2_speed : SPEED;
+signal elroy_1_thresh, elroy_2_thresh : natural range 0 to 244;
+
  begin
   
-  speeds : process(gameinfo.LEVEL, gameinfo.NUMBER_EATEN_DOTS,	blinky.MODE, pinky.MODE, inky.MODE, clyde.MODE,
-					blinky_is_in_tunnel,pinky_is_in_tunnel,inky_is_in_tunnel,clyde_is_in_tunnel)
+  --output the speeds based on the current level
+  standard_speeds : process(gameinfo.LEVEL)
+  begin
+	 if gameinfo.LEVEL >4 then
+		tunnel_speed <= L5_TO_255_TUNNEL_SPEED;
+		fright_speed <= L5_TO_255_FRIGHT_SPEED;
+		normal_speed <= L5_TO_255_NORM_SPEED;
+		elroy_1_speed <= L5_TO_255_ELROY1_SPEED;
+		elroy_2_speed <= L5_TO_255_ELROY2_SPEED;
+	 elsif gameinfo.LEVEL >1 then
+		tunnel_speed <= L2_TO_4_TUNNEL_SPEED;
+		fright_speed <= L2_TO_4_FRIGHT_SPEED;
+		normal_speed <= L2_TO_4_NORM_SPEED;
+		elroy_1_speed <= L2_TO_4_ELROY1_SPEED;
+		elroy_2_speed <= L2_TO_4_ELROY2_SPEED;
+	 else 
+		tunnel_speed <= L1_TUNNEL_SPEED;
+		fright_speed <= L1_FRIGHT_SPEED;
+		normal_speed <= L1_NORM_SPEED;
+		elroy_1_speed <= L1_ELROY1_SPEED;
+		elroy_2_speed <= L1_ELROY2_SPEED;
+	 end if;
+	 
+	if gameinfo.LEVEL >18 then
+	   elroy_1_thresh <= L19_to_255_ELROY1_THRESH;
+	   elroy_2_thresh <= L19_to_255_ELROY2_THRESH;
+	elsif gameinfo.LEVEL >14 then
+	   elroy_1_thresh <= L15_to_18_ELROY1_THRESH;
+	   elroy_2_thresh <= L15_to_18_ELROY2_THRESH;
+	elsif gameinfo.LEVEL >11 then
+	   elroy_1_thresh <= L12_to_14_ELROY1_THRESH;
+	   elroy_2_thresh <= L12_to_14_ELROY2_THRESH;
+	elsif gameinfo.LEVEL >8 then
+	   elroy_1_thresh <= L9_to_11_ELROY1_THRESH;
+	   elroy_2_thresh <= L9_to_11_ELROY2_THRESH;
+	elsif gameinfo.LEVEL >5 then
+	   elroy_1_thresh <= L6_to_8_ELROY1_THRESH;
+	   elroy_2_thresh <= L6_to_8_ELROY2_THRESH;
+	elsif gameinfo.LEVEL >2 then
+	   elroy_1_thresh <= L3_to_5_ELROY1_THRESH;
+	   elroy_2_thresh <= L3_to_5_ELROY2_THRESH;
+	elsif gameinfo.LEVEL =2 then
+	   elroy_1_thresh <= L2_ELROY1_THRESH;
+	   elroy_2_thresh <= L2_ELROY2_THRESH;
+	elsif gameinfo.LEVEL <= 1 then
+	   elroy_1_thresh <= L1_ELROY1_THRESH;
+	   elroy_2_thresh <= L1_ELROY2_THRESH;
+	end if;
+	 
+	end process;
+  
+  speeds : process(gameinfo.NUMBER_EATEN_DOTS,	blinky.MODE, pinky.MODE, inky.MODE, clyde.MODE,
+					blinky_is_in_tunnel,pinky_is_in_tunnel,inky_is_in_tunnel,clyde_is_in_tunnel,
+					tunnel_speed, fright_speed, normal_speed, elroy_1_speed, elroy_2_speed,
+					elroy_1_thresh, elroy_2_thresh)
   begin
   --speed setting for all of the ghosts
   if blinky.MODE = FRIGHTENED then
-    blinky_speed <= L1_FRIGHT_SPEED;
+    blinky_speed <= fright_speed;
   elsif blinky_is_in_tunnel then
-	 blinky_speed <= L1_TUNNEL_SPEED;
-  else 
-    blinky_speed <= L1_NORM_SPEED;
+	 blinky_speed <= tunnel_speed;
+  elsif gameinfo.NUMBER_EATEN_DOTS > elroy_2_thresh then
+    blinky_speed <= elroy_2_speed;
+  elsif gameinfo.NUMBER_EATEN_DOTS > elroy_1_thresh then
+    blinky_speed <= elroy_1_speed;
+  else
+    blinky_speed <= normal_speed;
   end if;
   
-    if pinky.MODE = FRIGHTENED then
-    pinky_speed <= L1_FRIGHT_SPEED;
+  if pinky.MODE = FRIGHTENED then
+    pinky_speed <= fright_speed;
   elsif pinky_is_in_tunnel then
-	 pinky_speed <= L1_TUNNEL_SPEED;
+	 pinky_speed <= tunnel_speed;
   else 
-    pinky_speed <= L1_NORM_SPEED;
+    pinky_speed <= normal_speed;
   end if;
   
   if inky.MODE = FRIGHTENED then
-    inky_speed <= L1_FRIGHT_SPEED;
+    inky_speed <= fright_speed;
   elsif inky_is_in_tunnel then
-	 inky_speed <= L1_TUNNEL_SPEED;
+	 inky_speed <= tunnel_speed;
   else 
-    inky_speed <= L1_NORM_SPEED;
+    inky_speed <= normal_speed;
   end if;
   
   if clyde.MODE = FRIGHTENED then
-    clyde_speed <= L1_FRIGHT_SPEED;
-  elsif blinky_is_in_tunnel then
-	 clyde_speed <= L1_TUNNEL_SPEED;
+    clyde_speed <= fright_speed;
+  elsif clyde_is_in_tunnel then
+	 clyde_speed <= tunnel_speed;
   else 
-    clyde_speed <= L1_NORM_SPEED;
+    clyde_speed <= normal_speed;
   end if;
   end process;
   

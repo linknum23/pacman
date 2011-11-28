@@ -17,6 +17,10 @@ entity move_ghost is
     rom_data      : in  std_logic;
     done          : out std_logic;
     gameinfo      : in  GAME_INFO;
+	blinky_is_in_tunnel : in boolean;
+	pinky_is_in_tunnel : in boolean;
+	inky_is_in_tunnel : in boolean;
+	clyde_is_in_tunnel : in boolean;
     blinky_target : in  POINT;
     pinky_target  : in  POINT;
     inky_target   : in  POINT;
@@ -108,7 +112,7 @@ architecture Behavioral of move_ghost is
   signal clocks                                        : std_logic_vector(22 downto 0):= (others => '0');
   signal move,last_move,do_move	: std_logic := '0';
   signal in_no_up_turns_zone  								: boolean := false;
-  signal blinky_is_in_tunnel,pinky_is_in_tunnel,inky_is_in_tunnel,clyde_is_in_tunnel : boolean := false; 
+  --signal blinky_is_in_tunnel,pinky_is_in_tunnel,inky_is_in_tunnel,clyde_is_in_tunnel : boolean := false; 
 
 begin
 
@@ -160,10 +164,6 @@ begin
         ghosts(I_CLYDE)  <= CLYDE_INIT;
 		move_state <= SDONE;
 			do_move <= '0';
-			blinky_is_in_tunnel <= false;
-			pinky_is_in_tunnel <= false;
-			inky_is_in_tunnel <= false;
-			clyde_is_in_tunnel <= false;
       else
 		   if last_move = '0' and move = '1' then
 				do_move <= '1';
@@ -237,29 +237,6 @@ begin
 				pinky_clr_flag <= '0';
 				inky_clr_flag <= '0';
 				clyde_clr_flag <= '0';
-				
-				if ghost_rc.Y =  14 and ((ghost_rc.X >= 0 and ghost_rc.X < 6) or (ghost_rc.X > 21 and ghost_rc.X <= 27)) then
-					--check tunnel
-					if index = I_PINKY then
-					  pinky_is_in_tunnel <= true;
-					elsif index = I_BLINKY then
-					  blinky_is_in_tunnel <= true;
-					elsif index = I_INKY then
-					  inky_is_in_tunnel <= true;
-					else
-					  clyde_is_in_tunnel <= true;
-					end if;
-				else 
-					if index = I_PINKY then
-					  pinky_is_in_tunnel <= false;
-					elsif index = I_BLINKY then
-					  blinky_is_in_tunnel <= false;
-					elsif index = I_INKY then
-					  inky_is_in_tunnel <= false;
-					else
-					  clyde_is_in_tunnel <= false;
-					end if;
-				end if;
 			 
 				-- using a square pipeline to compute the squares
 				-- after 2 clocks it has a result

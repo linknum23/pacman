@@ -27,6 +27,7 @@ entity ghost_ai is
                         inky_tile_loc   : out POINT;
                         clyde_tile_loc  : out POINT; 
                         squiggle        : out std_logic;
+								blink           : out std_logic;
                         collision       : out std_logic
                         );
 end ghost_ai;
@@ -58,6 +59,15 @@ architecture Behavioral of ghost_ai is
   signal pinky_tile_loc_int  : POINT;
   signal inky_tile_loc_int   : POINT;
   signal clyde_tile_loc_int  : POINT;
+  signal blinky_is_in_tunnel,pinky_is_in_tunnel,inky_is_in_tunnel,clyde_is_in_tunnel : boolean := false;
+  
+  
+component ghost_frightened_blink is
+port (
+	gamemode : in GAME_INFO;
+	clk_65 : in std_logic;
+	blink : out std_logic);
+end component;
 
 
   signal pacman_tile_location,
@@ -91,6 +101,13 @@ begin
       collision_index      => collision_index,
       collision            => collision
       );
+		
+		blinker : ghost_frightened_blink
+		port map(
+		  gamemode => gameinfo,
+		  clk_65 => clk,
+		  blink=> blink
+		);
 
   blinky_tile_loc <= blinky_tile_loc_int;
   pinky_tile_loc  <= pinky_tile_loc_int;
@@ -137,6 +154,10 @@ begin
       rom_data      => rom_data,
       done          => calc_move_done,
       gameinfo      => gameinfo,
+	blinky_is_in_tunnel => blinky_is_in_tunnel,
+	pinky_is_in_tunnel  => pinky_is_in_tunnel,
+	inky_is_in_tunnel => inky_is_in_tunnel,
+	clyde_is_in_tunnel  => clyde_is_in_tunnel,
       blinky_target => blinky_target,
       pinky_target  => pinky_target,
       inky_target   => inky_target,
@@ -147,6 +168,18 @@ begin
       clyde_info    => clyde_info_int, 
       squiggle      => squiggle
       );
+		
+		tunnel_check : ghost_tunnel_check 
+port map(
+	blinky_tile_loc => blinky_tile_loc_int,
+	pinky_tile_loc => pinky_tile_loc_int,
+	inky_tile_loc => inky_tile_loc_int,
+	clyde_tile_loc => clyde_tile_loc_int,
+	blinky_is_in_tunnel => blinky_is_in_tunnel,
+	pinky_is_in_tunnel  => pinky_is_in_tunnel,
+	inky_is_in_tunnel => inky_is_in_tunnel,
+	clyde_is_in_tunnel  => clyde_is_in_tunnel
+);
 
   ai_routine_next : process(clk, rst)
   begin

@@ -63,6 +63,7 @@ architecture Behavioral of ghost_display is
 	
 	signal data : std_logic_vector(1 downto 0);
 	signal gmode : GHOST_DISP_MODE;
+	signal squiggle1,squiggle2 : std_logic; --offset squiggle by two to keep in sync with pipeline 
 	
 	component ghost_rom is
   port(
@@ -71,6 +72,14 @@ architecture Behavioral of ghost_display is
 	 mode : in GHOST_DISP_MODE;
 	 squiggle : in std_logic;
     data   : out std_logic_vector(1 downto 0)
+    );
+end component;
+
+component simple_ghost_rom is
+  port(
+    addr   : in  POINT;
+	squiggle : in std_logic;
+    data   : out std_logic
     );
 end component;
 
@@ -83,10 +92,20 @@ end component;
 			pinky_draw_loc_x, pinky_draw_loc_y, 
 			inky_draw_loc_x, inky_draw_loc_y, 
 			clyde_draw_loc_x, clyde_draw_loc_y : integer range 0 to 2047;
+		signal blinky_draw_loc_x1, blinky_draw_loc_y1, 
+			pinky_draw_loc_x1, pinky_draw_loc_y1, 
+			inky_draw_loc_x1, inky_draw_loc_y1, 
+			clyde_draw_loc_x1, clyde_draw_loc_y1 : integer range 0 to 2047;
 	--signal blinky_in_x_range,pinky_in_x_range,inky_in_x_range,clyde_in_x_range : std_logic;
 	signal blinky_in_range,pinky_in_range,inky_in_range,clyde_in_range : std_logic;
+	signal blinky_is_valid,pinky_is_valid,inky_is_valid,clyde_is_valid : std_logic;
 	
 	signal ghost_draw_location1,	ghost_draw_location2  : POINT;
+	
+	signal blinky_draw_loc, 
+			pinky_draw_loc,  
+			inky_draw_loc,   
+			clyde_draw_loc : POINT;
 
 
 begin
@@ -147,30 +166,40 @@ begin
 		end if;
 		
 		--stage 3
-		if blinky_in_range = '1' then
-			ghost_location.X <= blinky_draw_loc_x;
-			ghost_location.Y <= blinky_draw_loc_y;
+		
+	   blinky_draw_loc_x1 <= blinky_draw_loc_x;
+		blinky_draw_loc_y1 <= blinky_draw_loc_y;
+		pinky_draw_loc_x1 <= pinky_draw_loc_x;
+		pinky_draw_loc_y1 <= pinky_draw_loc_y;
+		inky_draw_loc_x1 <= inky_draw_loc_x;
+		inky_draw_loc_y1 <= inky_draw_loc_y;		
+		clyde_draw_loc_x1 <= clyde_draw_loc_x;
+		clyde_draw_loc_y1 <= clyde_draw_loc_y;
+		
+		if blinky_in_range = '1' then -- and blinky_is_valid  = '1' then
+			ghost_location.X <= blinky_draw_loc_x1;
+			ghost_location.Y <= blinky_draw_loc_y1;
 			dir <= blinky_info.DIR;
 			gbody_color <= BLINKY_BODY_COLOR;
 			gmode <= blinky_info.MODE;
 			no_ghost_here <= '0';
-		elsif pinky_in_range = '1' then
-			ghost_location.X <= pinky_draw_loc_x;
-			ghost_location.Y <= pinky_draw_loc_y;
+		elsif pinky_in_range = '1' then -- and blinky_is_valid = '1'  then
+			ghost_location.X <= pinky_draw_loc_x1;
+			ghost_location.Y <= pinky_draw_loc_y1;
 			dir <= pinky_info.DIR;
 			gbody_color <= PINKY_BODY_COLOR;
 			gmode <= pinky_info.MODE;
 			no_ghost_here <= '0';
-		elsif inky_in_range = '1' then 
-			ghost_location.X <= inky_draw_loc_x;
-			ghost_location.Y <= inky_draw_loc_y;
+		elsif inky_in_range = '1' then -- and blinky_is_valid = '1' then 
+			ghost_location.X <= inky_draw_loc_x1;
+			ghost_location.Y <= inky_draw_loc_y1;
 			dir <= inky_info.DIR;
 			gbody_color <= INKY_BODY_COLOR;
 			gmode <= inky_info.MODE;
 			no_ghost_here <= '0';
-		elsif clyde_in_range = '1' then
-			ghost_location.X <= clyde_draw_loc_x;
-			ghost_location.Y <= clyde_draw_loc_y;
+		elsif clyde_in_range = '1' then -- and blinky_is_valid = '1'  then
+			ghost_location.X <= clyde_draw_loc_x1;
+			ghost_location.Y <= clyde_draw_loc_y1;
 			dir <= clyde_info.DIR;
 			gbody_color <= CLYDE_BODY_COLOR;
 			gmode <= clyde_info.MODE;
@@ -181,7 +210,9 @@ begin
 			no_ghost_here <= '1';
 		end if;
 		
-		--stage4 
+		--stage4
+		squiggle1 <= squiggle;
+		squiggle2 <= squiggle1;
 		if no_ghost_here = '0' then 
 			case data is 
 				when BKG =>
@@ -226,82 +257,41 @@ grom: ghost_rom
     addr=> ghost_location,
     dir => dir,
 	 mode => gmode,
-	 squiggle => squiggle,
+	 squiggle => squiggle2,
     data  => data
     );
-
---process (blinky_info.PT.X,blinky_info.PT.Y,pinky_info.PT.X,pinky_info.PT.Y,inky_info.PT.X,inky_info.PT.Y,clyde_info.PT.X,clyde_info.PT.Y,board_draw_location.X, board_draw_location.Y) 
---	variable gbody_color_v : COLOR;
---begin
---	no_ghost_here <= '0';
---	gbody_color <= BLINKY_BODY_COLOR;
---	if blinky_info.PT.X <= ghost_draw_location.X and blinky_offset_x > ghost_draw_location.X and 
---		blinky_info.PT.Y <= ghost_draw_location.Y and blinky_offset_y >ghost_draw_location.Y then
---		
---			ghost_location.X <= board_draw_location.X+GHOST_DRAW_OFFSET-blinky_info.PT.X;
---			ghost_location.Y <= board_draw_location.Y+GHOST_DRAW_OFFSET-blinky_info.PT.Y;
---			dir <= blinky_info.DIR;
---			gbody_color <= BLINKY_BODY_COLOR;
---			
---	elsif pinky_info.PT.X <= board_draw_location.X + GHOST_DRAW_OFFSET and pinky_info.PT.X + GHOST_WIDTH > board_draw_location.X + GHOST_DRAW_OFFSET and 
---		pinky_info.PT.Y <= board_draw_location.Y + GHOST_DRAW_OFFSET and pinky_info.PT.Y + GHOST_HEIGHT > board_draw_location.Y + GHOST_DRAW_OFFSET then
---		
---			ghost_location.X <= board_draw_location.X+ GHOST_DRAW_OFFSET-pinky_info.PT.X;
---			ghost_location.Y <= board_draw_location.Y+ GHOST_DRAW_OFFSET-pinky_info.PT.Y;
---			dir <= pinky_info.DIR;
---			gbody_color <= PINKY_BODY_COLOR;
---			
---	elsif inky_info.PT.X <= board_draw_location.X + GHOST_DRAW_OFFSET and inky_info.PT.X + GHOST_WIDTH > board_draw_location.X + GHOST_DRAW_OFFSET and 
---		inky_info.PT.Y <= board_draw_location.Y + GHOST_DRAW_OFFSET and inky_info.PT.Y + GHOST_HEIGHT > board_draw_location.Y + GHOST_DRAW_OFFSET then
---		
---			ghost_location.X <= board_draw_location.X+ GHOST_DRAW_OFFSET-inky_info.PT.X;
---			ghost_location.Y <= board_draw_location.Y+ GHOST_DRAW_OFFSET -inky_info.PT.Y;
---			dir <= inky_info.DIR;
---			gbody_color <= INKY_BODY_COLOR;
---			
---	elsif clyde_info.PT.X <= board_draw_location.X + GHOST_DRAW_OFFSET and clyde_info.PT.X + GHOST_WIDTH > board_draw_location.X + GHOST_DRAW_OFFSET and 
---		clyde_info.PT.Y <= board_draw_location.Y + GHOST_DRAW_OFFSET and clyde_info.PT.Y + GHOST_HEIGHT > board_draw_location.Y + GHOST_DRAW_OFFSET then
---		
---			ghost_location.X <= board_draw_location.X+ GHOST_DRAW_OFFSET-clyde_info.PT.X;
---			ghost_location.Y <= board_draw_location.Y+GHOST_DRAW_OFFSET-clyde_info.PT.Y;
---			dir <= clyde_info.DIR;
---			gbody_color <= CLYDE_BODY_COLOR;
---	else 
---		ghost_location <= (X=>0,Y=>0);
---		no_ghost_here <= '1';
---	end if;
---end process;
---
---process (clk) 
---begin
---	if rising_edge(clk) then
---		if no_ghost_here = '0' then 
---			case data is 
---				when BKG =>
---					ghost_color <= BKG_COLOR;
---					ghost_valid <= '0';
---				when BDY =>
---					if ghostmode = SCATTER then 
---						ghost_color <= SCATTER_BODY_COLOR;
---					else
---						ghost_color <= gbody_color;
---					end if;
---					ghost_valid <= '1';
---				when EYE =>
---					ghost_color <= EYE_COLOR;
---					ghost_valid <= '1';
---				when PUPIL =>
---					ghost_color <= PUPIL_COLOR;
---					ghost_valid <= '1';
---				when others =>
---					ghost_valid <= '0';
---			end case;
---		else 
---			ghost_valid <= '0';
---			ghost_color <= BKG_COLOR;
---		end if;
---	end if;
---end process;
-
+	
+blinky_draw_loc <=  (X=>blinky_draw_loc_x ,Y=>blinky_draw_loc_y);
+pinky_draw_loc <= (X=>pinky_draw_loc_x ,Y=>pinky_draw_loc_y);
+inky_draw_loc <= (X=> inky_draw_loc_x,Y=>inky_draw_loc_y);
+clyde_draw_loc <= (X=> clyde_draw_loc_x,Y=>clyde_draw_loc_y);
+	 
+brom: simple_ghost_rom
+port map(
+    addr   => blinky_draw_loc,
+	squiggle => squiggle,
+    data   => blinky_is_valid
+    );
+	 
+	 prom: simple_ghost_rom
+	 port map(
+    addr   => pinky_draw_loc,
+	squiggle => squiggle,
+    data   => pinky_is_valid
+    );
+	 
+	 irom: simple_ghost_rom
+	 port map(
+    addr   => inky_draw_loc,
+	squiggle => squiggle,
+    data   => inky_is_valid
+    );
+	 
+	 crom: simple_ghost_rom
+	 port map(
+    addr   => clyde_draw_loc,
+	squiggle => squiggle,
+    data   => clyde_is_valid
+    );
 end Behavioral;
 

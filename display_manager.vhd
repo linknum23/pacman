@@ -55,6 +55,7 @@ architecture Behavioral of display_manager is
   signal game_machine_data_out       : std_logic_vector(4 downto 0);
 
   --ghost info -- used for display
+  signal fright_blink : std_logic;
 
   signal blinky, pinky, inky, clyde : GHOST_INFO;
 
@@ -153,7 +154,7 @@ begin
       inky_info             => inky,
       clyde_info            => clyde,
       ghostmode             => gameinfo.ghostmode,
-      fright_blink          => '0',     --need to connect this later
+      fright_blink          => fright_blink,
       current_draw_location => current_draw_location,
       ghost_valid           => ghost_valid,
       ghost_color           => ghost_color_data,
@@ -180,7 +181,8 @@ begin
       inky_info   => inky,
       clyde_info  => clyde,
       collision   => collision,
-      squiggle    => squiggle
+      squiggle    => squiggle,
+		blink       => fright_blink
       );
 
   directionz : direction_manager

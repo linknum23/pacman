@@ -51,7 +51,7 @@ architecture Behavioral of simple_ghost_rom is
     "0111111111111110",
     "0110111001110110",
     "0100011001100010",
-    "0000000000000000"
+    "0000000000000000");
 
 	
   signal why : unsigned(7 downto 0);
@@ -63,7 +63,7 @@ begin
   process(squiggle)
   begin
 	if squiggle = '1' then 
-		offset<= 16;
+		offset<= 32;
 	else
 		offset <= 0;
 	end if;
@@ -72,14 +72,14 @@ begin
   why <= to_unsigned(offset + addr.Y, why'length);
   ex  <= to_unsigned(addr.X, ex'length);
 
-  process(why, ex, offset)
+  process(why, ex)
     variable newy : unsigned(why'high downto 0);
     variable newx : unsigned(ex'high downto 0);
   begin
-    data <= "00";
+    data <= '0';
     newy := '0' & why(why'high downto 1);
     newx := '0' & ex(ex'high downto 1);
-    if newy < 32 and newy >= 0 and newx < 16 and newx >= 0 then
+    if newy < 16 and newy >= 0 and newx < 16 and newx >= 0 then
       data <= rom(to_integer(newy))(to_integer(newx));
     end if;
   end process;

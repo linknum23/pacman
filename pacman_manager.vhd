@@ -101,7 +101,7 @@ begin
 
   speed_gen : speed_clock
     port map(
-      uspeed    => speed,
+      uspeed    => pspeed,
       clk_50mhz => clk,
       flag      => speed_flag,
       clr_flag  => speed_clear
@@ -112,20 +112,20 @@ begin
     if clk = '1' and clk'event then
       if gameinfo.level = 0 then
         if gameinfo.ghostmode = FRIGHTENED then
-          speed <= SPEED_90;
+          pspeed <= SPEED_90;
         else
-          speed <= SPEED_80;
+          pspeed <= SPEED_80;
         end if;
       elsif gameinfo.level >= 1 and gameinfo.level < 4 then
         if gameinfo.ghostmode = FRIGHTENED then
-          speed <= SPEED_95;
+          pspeed <= SPEED_95;
         else
-          speed <= SPEED_90;
+          pspeed <= SPEED_90;
         end if;
       elsif gameinfo.level >= 4 and gameinfo.level < 20 then
-        speed <= SPEED_100;
+        pspeed <= SPEED_100;
       else
-        speed <= SPEED_90;
+        pspeed <= SPEED_90;
       end if;
     end if;
   end process;

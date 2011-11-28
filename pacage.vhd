@@ -175,7 +175,8 @@ package pacage is
       inky_info   : out GHOST_INFO;
       clyde_info  : out GHOST_INFO;
       collision   : out std_logic;
-      squiggle    : out std_logic
+      squiggle    : out std_logic;
+		blink       : out std_logic
       );
   end component;
 
@@ -259,6 +260,10 @@ package pacage is
       rom_data      : in  std_logic;
       done          : out std_logic;
       gameinfo      :     GAME_INFO;
+	blinky_is_in_tunnel : in boolean;
+	pinky_is_in_tunnel : in boolean;
+	inky_is_in_tunnel : in boolean;
+	clyde_is_in_tunnel : in boolean;
       blinky_target : in  POINT;
       pinky_target  : in  POINT;
       inky_target   : in  POINT;
@@ -292,4 +297,17 @@ package pacage is
       clr_flag  : in  std_logic
       );
   end component;
+  
+  component ghost_tunnel_check is 
+port(
+	blinky_tile_loc : in POINT;
+	pinky_tile_loc : in POINT;
+	inky_tile_loc : in POINT;
+	clyde_tile_loc : in POINT;
+	blinky_is_in_tunnel : out boolean;
+	pinky_is_in_tunnel : out boolean;
+	inky_is_in_tunnel : out boolean;
+	clyde_is_in_tunnel : out boolean
+);
+end component;
 end package;
