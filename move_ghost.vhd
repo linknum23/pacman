@@ -72,14 +72,23 @@ architecture Behavioral of move_ghost is
     inky2,
     clyde2
     );
---  component speed_clock is
---port(
---	uspeed : in SPEED;
---	clk_50mhz : in std_logic;
---	flag :  out std_logic;
---	clr_flag : in std_logic
---	);
---	end component;
+	 
+	   component ghost_speed_selector is 
+  port(
+	blinky : in GHOST_INFO;
+	pinky : in GHOST_INFO;
+	inky : in GHOST_INFO;
+	clyde : in GHOST_INFO;
+	blinky_is_in_tunnel : in boolean;
+	pinky_is_in_tunnel : in boolean;
+	inky_is_in_tunnel : in boolean;
+	clyde_is_in_tunnel : in boolean;
+	gameinfo : in GAME_INFO;
+	blinky_speed : out SPEED;
+	pinky_speed : out SPEED;
+	inky_speed : out SPEED;
+	clyde_speed : out SPEED);
+ end component;
 
   signal ghost_rc                                      : POINT;
   type   state is (START, SDONE, DO_NEXT, GET_RC,CALC_TARGET_DISTS,
@@ -100,15 +109,6 @@ architecture Behavioral of move_ghost is
   signal move,last_move,do_move	: std_logic := '0';
   signal in_no_up_turns_zone  								: boolean := false;
   signal blinky_is_in_tunnel,pinky_is_in_tunnel,inky_is_in_tunnel,clyde_is_in_tunnel : boolean := false; 
-constant L1_TUNNEL_SPEED : SPEED := SPEED_40;
-constant L2_TO_4_TUNNEL_SPEED : SPEED := SPEED_45;
-constant L5_TO_255_TUNNEL_SPEED : SPEED := SPEED_50;
-constant L1_NORM_SPEED : SPEED := SPEED_75;
-constant L2_TO_4_NORM_SPEED : SPEED := SPEED_85;
-constant L5_TO_255_NORM_SPEED : SPEED := SPEED_95;
-constant L1_FRIGHT_SPEED : SPEED := SPEED_50;
-constant L2_TO_4_FRIGHT_SPEED : SPEED := SPEED_55;
-constant L5_TO_255_FRIGHT_SPEED : SPEED := SPEED_60;
 
 begin
 
@@ -128,41 +128,22 @@ begin
   squiggle <= clocks(18);
   move  <= clocks(19);
   
-  speeds : process(gameinfo.LEVEL, gameinfo.NUMBER_EATEN_DOTS)
-  begin
-  --speed setting for all of the ghosts
-  if ghosts(I_BLINKY).MODE = FRIGHTENED then
-    blinky_speed <= L1_FRIGHT_SPEED;
-  elsif blinky_is_in_tunnel then
-	 blinky_speed <= L1_TUNNEL_SPEED;
-  else 
-    blinky_speed <= L1_NORM_SPEED;
-  end if;
-  
-    if ghosts(I_PINKY).MODE = FRIGHTENED then
-    pinky_speed <= L1_FRIGHT_SPEED;
-  elsif pinky_is_in_tunnel then
-	 pinky_speed <= L1_TUNNEL_SPEED;
-  else 
-    pinky_speed <= L1_NORM_SPEED;
-  end if;
-  
-  if ghosts(I_INKY).MODE = FRIGHTENED then
-    inky_speed <= L1_FRIGHT_SPEED;
-  elsif inky_is_in_tunnel then
-	 inky_speed <= L1_TUNNEL_SPEED;
-  else 
-    inky_speed <= L1_NORM_SPEED;
-  end if;
-  
-  if ghosts(I_CLYDE).MODE = FRIGHTENED then
-    clyde_speed <= L1_FRIGHT_SPEED;
-  elsif blinky_is_in_tunnel then
-	 clyde_speed <= L1_TUNNEL_SPEED;
-  else 
-    clyde_speed <= L1_NORM_SPEED;
-  end if;
-  end process;
+  speeds : ghost_speed_selector
+  port map(
+	blinky => ghosts(I_BLINKY),
+	pinky   => ghosts(I_PINKY),
+	inky  => ghosts(I_INKY),
+	clyde => ghosts(I_CLYDE),
+	blinky_is_in_tunnel  => blinky_is_in_tunnel,
+	pinky_is_in_tunnel  => pinky_is_in_tunnel,
+	inky_is_in_tunnel  =>inky_is_in_tunnel,
+	clyde_is_in_tunnel  => clyde_is_in_tunnel,
+	gameinfo => gameinfo,
+	blinky_speed  => blinky_speed,
+	pinky_speed  => pinky_speed,
+	inky_speed  =>inky_speed,
+	clyde_speed  => clyde_speed
+   );
   
   --iterate through each ghost making simple movements
   simple_move : process(clk, rst)
@@ -257,7 +238,7 @@ begin
 				inky_clr_flag <= '0';
 				clyde_clr_flag <= '0';
 				
-				if ghost_rc.Y =  14 and (ghost_rc.X < 6 or ghost_rc.X > 21) then
+				if ghost_rc.Y =  14 and ((ghost_rc.X >= 0 and ghost_rc.X < 6) or (ghost_rc.X > 21 and ghost_rc.X <= 27)) then
 					--check tunnel
 					if index = I_PINKY then
 					  pinky_is_in_tunnel <= true;
@@ -329,7 +310,11 @@ begin
 				
             --left dist logic
             if rom_data = '1' then
-              tdist_left <= sq_out+y_sqdiff;
+              --if ghosts(index).MODE = FRIGHTENED then
+					--	tdist_left <= to_integer(unsigned("0000" &clocks(5 downto 2)));
+					--else
+						tdist_left <= y_sqdiff+sq_out;
+					--end if;
             else
               tdist_left <= REALLY_FAR*REALLY_FAR;
             end if;
@@ -350,7 +335,11 @@ begin
 				
             --right dist logic
             if rom_data = '1' then
-              tdist_right <= sq_out+y_sqdiff;
+              --if ghosts(index).MODE = FRIGHTENED then
+					--	tdist_right <= to_integer(unsigned("0000" &clocks(5 downto 2)));
+					--else
+						tdist_right <= y_sqdiff+sq_out;
+					--end if;
             else
               tdist_right <= REALLY_FAR*REALLY_FAR;
             end if;
@@ -370,7 +359,11 @@ begin
 				
             --up dist logic
             if rom_data = '1' and not in_no_up_turns_zone then
-              tdist_up <= x_sqdiff+sq_out;
+              --if ghosts(index).MODE = FRIGHTENED then
+					--	tdist_up <= to_integer(unsigned("0000" &clocks(5 downto 2)));
+					--else
+						tdist_up <= x_sqdiff+sq_out;
+					--end if;
             else
               tdist_up <= REALLY_FAR*REALLY_FAR;
             end if;
@@ -379,7 +372,11 @@ begin
 			 when CALC_TARGET_DISTS_6 =>
 				--down dist calc
             if rom_data = '1' then
-              tdist_down <= x_sqdiff+sq_out;
+					--if ghosts(index).MODE = FRIGHTENED then
+					--	tdist_down <= to_integer(unsigned("0000" &clocks(5 downto 2)));
+					--else
+						tdist_down <= x_sqdiff+sq_out;
+					--end if;
             else
               tdist_down <= REALLY_FAR*REALLY_FAR;
             end if;
@@ -398,14 +395,47 @@ begin
 						ghosts(index).DIR <= UP;
 					end if;
 				 end if;
+				 
+				 --update ghost mode
+				 case  gameinfo.GHOSTMODE is
+					when FRIGHTENED =>
+						ghosts(index).MODE <= FRIGHTENED;
+					when others =>
+						ghosts(index).MODE <= NORM;
+				 end case;
+				 
 				 move_state <= UPDATE_LOC;
+				 
+			  elsif ghosts(index).MODE = NORM and gameinfo.GHOSTMODE = FRIGHTENED then
+			     --this ghost is entering fright mode at which point it changes direction
+				  ghosts(index).MODE <= FRIGHTENED;
+					--reverse direction
+				   case ghosts(index).DIR is
+							when L =>
+							  ghosts(index).DIR <= R;
+							when R =>
+							  ghosts(index).DIR <= L;
+							when UP =>
+							  ghosts(index).DIR <= DOWN;
+							when DOWN =>
+							  ghosts(index).DIR <= UP;
+							when others =>
+								null;
+						 end case;
+					move_state <= UPDATE_LOC;
 			  else
+				   --update ghost mode
+				 case  gameinfo.GHOSTMODE is
+					when FRIGHTENED =>
+						ghosts(index).MODE <= FRIGHTENED;
+					when others =>
+						ghosts(index).MODE <= NORM;
+				 end case;
 					--check to see if both X and Y indexes are a multiple of 16
 					-- this is the logic for whether a not a ghost can change direction
 					if xconv(3 downto 0) = "0000" and yconv(3 downto 0) = "0000" then
 						--this does three comparisons of 10 bit numbers
 						-- too much?
-						--ghosts(index).DIR <= update_ghost_direction(ghosts(index), tdist_left, tdist_right, tdist_up, tdist_down);
 						case ghosts(index).DIR is
 							when L =>
 							  --cant go right
@@ -505,7 +535,8 @@ begin
 				elsif last_x = GAME_SIZE.X-1 and ghosts(index).DIR = R then
 					 ghosts(index).PT.X <= 0;
 				end if;
-            move_state       <= DO_NEXT;
+            --move_state       <= DO_NEXT;
+				move_state       <= SDONE;
           when SDONE =>
             if en = '1' then
               done       <= '0';

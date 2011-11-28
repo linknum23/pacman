@@ -14,7 +14,7 @@ entity pacman_target_selection is
     rom_enable         : in  std_logic;
     rom_location       : out POINT;
     rom_use_done       : out std_logic;
-    speed              : out std_logic
+    pspeed              : out std_logic
     );
 end pacman_target_selection;
 
@@ -29,7 +29,7 @@ architecture Behavioral of pacman_target_selection is
   signal enable_move            : std_logic := '0';
 
 begin
-  --check the next location in our direction and set the speed to 0 or 1.
+  --check the next location in our direction and set the pspeed to 0 or 1.
   process(clk)
   begin
     if clk = '1' and clk'event then
@@ -72,12 +72,12 @@ begin
   process(enable_move, edge)
   begin
     if enable_move = '1' then
-      speed <= '1';
+      pspeed <= '1';
     elsif enable_move = '0' and edge = '0' then
       --diabled but havent hit the edge yet
-      speed <= '1';
+      pspeed <= '1';
     else
-      speed <= '0';
+      pspeed <= '0';
     end if;
   end process;
 

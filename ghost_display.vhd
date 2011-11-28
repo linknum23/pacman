@@ -9,18 +9,18 @@ generic (
 GAME_OFFSET : POINT
 );
 port(
-		  clk  				: in std_logic;
-        blinky_info     : in GHOST_INFO;
-        pinky_info      : in GHOST_INFO;
-        inky_info       : in GHOST_INFO;
-        clyde_info      : in GHOST_INFO;
-		  ghostmode       : in GHOST_MODE;
-		  fright_blink		: in std_logic;
-		  current_draw_location       : in  POINT;
-		  ghost_valid     : out std_logic;
-		  ghost_color 		: out COLOR;
-		  squiggle : in std_logic
-		  );
+  clk  				: in std_logic;
+  blinky_info     : in GHOST_INFO;
+  pinky_info      : in GHOST_INFO;
+  inky_info       : in GHOST_INFO;
+  clyde_info      : in GHOST_INFO;
+  ghostmode       : in GHOST_MODE;
+  fright_blink		: in std_logic;
+  current_draw_location       : in  POINT;
+  ghost_valid     : out std_logic;
+  ghost_color 		: out COLOR;
+  squiggle : in std_logic
+  );
 end ghost_display;
 
 architecture Behavioral of ghost_display is

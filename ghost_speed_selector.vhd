@@ -32,10 +32,27 @@ constant L5_TO_255_NORM_SPEED : SPEED := SPEED_95;
 constant L1_FRIGHT_SPEED : SPEED := SPEED_50;
 constant L2_TO_4_FRIGHT_SPEED : SPEED := SPEED_55;
 constant L5_TO_255_FRIGHT_SPEED : SPEED := SPEED_60;
- 
+
+constant L1_ELROY1_SPEED : SPEED := SPEED_80;
+constant L2_TO_4_ELROY1_SPEED : SPEED := SPEED_90;
+constant L5_TO_255_ELROY1_SPEED : SPEED := SPEED_100;
+
+constant L1_ELROY2_SPEED : SPEED := SPEED_85;
+constant L2_TO_4_ELROY2_SPEED : SPEED := SPEED_95;
+constant L5_TO_255_ELROY2_SPEED : SPEED := SPEED_105;
+
+constant L1_ELROY1_THRESH : natural range 0 to 244 := 244-20;
+constant L2_ELROY1_THRESH : natural range 0 to 244 := 244-30;
+constant L3_to_5_ELROY1_THRESH : natural range 0 to 244 := 244-40;
+constant L6_to_8_ELROY1_THRESH : natural range 0 to 244 := 244-50;
+constant L9_to_11_ELROY1_THRESH : natural range 0 to 244 := 244-60;
+constant L12_to_14_ELROY1_THRESH : natural range 0 to 244 := 244-80;
+constant L15_to_18_ELROY1_THRESH : natural range 0 to 244 := 244-100;
+constant L19_to_255_ELROY1_THRESH : natural range 0 to 244 := 244-120;
  begin
   
-  speeds : process(gameinfo.LEVEL, gameinfo.NUMBER_EATEN_DOTS,	blinky.MODE, pinky.MODE, inky.MODE, clyde.MODE )
+  speeds : process(gameinfo.LEVEL, gameinfo.NUMBER_EATEN_DOTS,	blinky.MODE, pinky.MODE, inky.MODE, clyde.MODE,
+					blinky_is_in_tunnel,pinky_is_in_tunnel,inky_is_in_tunnel,clyde_is_in_tunnel)
   begin
   --speed setting for all of the ghosts
   if blinky.MODE = FRIGHTENED then
