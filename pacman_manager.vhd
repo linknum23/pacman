@@ -287,7 +287,7 @@ begin
       clocks <= clocks + 1;
     end if;
   end process;
-  wacka_clk <= clocks(22);
+  wacka_clk <= clocks(23);
 
 
 --based on the wacka speed,

@@ -26,11 +26,13 @@ architecture Behavioral of display_manager is
   signal space_valid  : std_logic := '0';
   signal pacman_valid : std_logic := '0';
   signal ghost_valid  : std_logic := '0';
+  signal font_valid   : std_logic := '0';
 
   --color signals
   signal grid_color_data   : COLOR;
   signal pacman_color_data : COLOR;
   signal ghost_color_data  : COLOR;
+  signal font_color_data   : COLOR;
 
   --state enable and done signals
   -- these are used to notify a subcomponent when they can read from the rom
@@ -214,127 +216,144 @@ begin
       );  
 
 
-  -------------------------------------------------
-  --grid and its mux
-  -------------------------------------------------
-  the_grid : game_grid
+  --scoring and fonts
+  fonts : score_manager
+    generic map (
+      GAME_SIZE   => GAME_SIZE,
+      GAME_OFFSET => GAME_OFFSET
+      )
     port map(
-      clk      => clk,
-      rst      => rst,
-      data_in  => grid_rom_data_in,
-      we       => grid_rom_we,
-      addr.X   => rom_tile_location.X,
-      addr.Y   => rom_tile_location.Y,
-      data_out => grid_data
+      clk                   => clk,
+      rst                   => rst,
+      current_draw_location => current_draw_location,
+      gameinfo              => gameinfo,
+      data                  => font_color_data,
+      valid_location        => font_valid
       );
 
-  process(vga_en, grid_tile_location, ghost_tile_location, pacman_rom_tile_location, ghost_en, pacman_en, direction_en, direction_tile_location, game_machine_en, game_machine_tile_location, game_machine_we, game_machine_data_out)
-  begin
-    grid_rom_data_in <= (others => '0');
-    grid_rom_we      <= '0';
-    if vga_en = '1' then
-      rom_tile_location <= grid_tile_location;
-    elsif ghost_read = '1' then
-      rom_tile_location <= ghost_tile_location;
-    elsif pacman_en = '1' then
-      rom_tile_location <= pacman_rom_tile_location;
-    elsif direction_en = '1' then
-      rom_tile_location <= direction_tile_location;
-    elsif game_machine_en = '1' then
-      rom_tile_location <= game_machine_tile_location;
-      grid_rom_we       <= game_machine_we;
-      grid_rom_data_in  <= game_machine_data_out;
-    else
-      rom_tile_location <= (X => -1, Y => -1);
-    end if;
-  end process;
+-------------------------------------------------
+--grid and its mux
+-------------------------------------------------
+the_grid : game_grid
+  port map(
+    clk      => clk,
+    rst      => rst,
+    data_in  => grid_rom_data_in,
+    we       => grid_rom_we,
+    addr.X   => rom_tile_location.X,
+    addr.Y   => rom_tile_location.Y,
+    data_out => grid_data
+    );
+
+process(vga_en, grid_tile_location, ghost_tile_location, pacman_rom_tile_location, ghost_en, pacman_en, direction_en, direction_tile_location, game_machine_en, game_machine_tile_location, game_machine_we, game_machine_data_out)
+begin
+  grid_rom_data_in <= (others => '0');
+  grid_rom_we      <= '0';
+  if vga_en = '1' then
+    rom_tile_location <= grid_tile_location;
+  elsif ghost_read = '1' then
+    rom_tile_location <= ghost_tile_location;
+  elsif pacman_en = '1' then
+    rom_tile_location <= pacman_rom_tile_location;
+  elsif direction_en = '1' then
+    rom_tile_location <= direction_tile_location;
+  elsif game_machine_en = '1' then
+    rom_tile_location <= game_machine_tile_location;
+    grid_rom_we       <= game_machine_we;
+    grid_rom_data_in  <= game_machine_data_out;
+  else
+    rom_tile_location <= (X => -1, Y => -1);
+  end if;
+end process;
 
 ------------------------------------------------
 -- basic state controller for pacman
 --  this should be put in a seperate file when it gets bigger
 -------------------------------------------------------
-  process(clk)
-  begin
-    if clk'event and clk = '1' then
-      if in_vbp = '0' or rst = '1' then
-        vga_en <= '1';
-        gstate <= VGA_READ;
-      else
-        vga_en       <= '0';
-        ghost_en     <= '0';
-        pacman_en    <= '0';
-        direction_en <= '0';
-        ghost_read   <= '0';
-        case gstate is
-          when VGA_READ =>
-            vga_en <= '1';
-            if in_vbp = '1' then
-              gstate   <= GHOST_UPDATE;
-              vga_en   <= '0';
-              ghost_en <= '1';
-            else
-              gstate <= VGA_READ;
-            end if;
-          when GHOST_UPDATE =>
-            ghost_read <= '1';
-            if ghost_done = '1' then
-              pacman_en <= '1';
-              gstate    <= PACMAN_UPDATE;
-            else
-              gstate <= GHOST_UPDATE;
-            end if;
-          when PACMAN_UPDATE =>
+process(clk)
+begin
+  if clk'event and clk = '1' then
+    if in_vbp = '0' or rst = '1' then
+      vga_en <= '1';
+      gstate <= VGA_READ;
+    else
+      vga_en       <= '0';
+      ghost_en     <= '0';
+      pacman_en    <= '0';
+      direction_en <= '0';
+      ghost_read   <= '0';
+      case gstate is
+        when VGA_READ =>
+          vga_en <= '1';
+          if in_vbp = '1' then
+            gstate   <= GHOST_UPDATE;
+            vga_en   <= '0';
+            ghost_en <= '1';
+          else
+            gstate <= VGA_READ;
+          end if;
+        when GHOST_UPDATE =>
+          ghost_read <= '1';
+          if ghost_done = '1' then
             pacman_en <= '1';
-            if pacman_done = '1' then
-              direction_en <= '1';
-              pacman_en    <= '0';
-              gstate       <= DIRECTION_UPDATE;
-            else
-              gstate <= PACMAN_UPDATE;
-            end if;
-          when DIRECTION_UPDATE =>
+            gstate    <= PACMAN_UPDATE;
+          else
+            gstate <= GHOST_UPDATE;
+          end if;
+        when PACMAN_UPDATE =>
+          pacman_en <= '1';
+          if pacman_done = '1' then
             direction_en <= '1';
-            if direction_done = '1' then
-              direction_en <= '0';
-              gstate       <= GAME_UPDATE;
-            else
-              gstate <= DIRECTION_UPDATE;
-            end if;
-            
-          when GAME_UPDATE =>
-            game_machine_en <= '1';
-            if game_machine_done = '1' then
-              game_machine_en <= '0';
-              gstate          <= PAUSE;
-            else
-              gstate <= GAME_UPDATE;
-            end if;
-          when PAUSE =>
+            pacman_en    <= '0';
+            gstate       <= DIRECTION_UPDATE;
+          else
+            gstate <= PACMAN_UPDATE;
+          end if;
+        when DIRECTION_UPDATE =>
+          direction_en <= '1';
+          if direction_done = '1' then
+            direction_en <= '0';
+            gstate       <= GAME_UPDATE;
+          else
+            gstate <= DIRECTION_UPDATE;
+          end if;
+          
+        when GAME_UPDATE =>
+          game_machine_en <= '1';
+          if game_machine_done = '1' then
+            game_machine_en <= '0';
+            gstate          <= PAUSE;
+          else
+            gstate <= GAME_UPDATE;
+          end if;
+        when PAUSE =>
                                         --wait until we get out of the backporch
-            gstate <= PAUSE;
-        end case;
-      end if;
+          gstate <= PAUSE;
+      end case;
     end if;
-  end process;
+  end if;
+end process;
 
 
                                         -------------------------------------------------
                                         --mux the output color for the display
                                         -------------------------------------------------
-  process(ghost_valid, ghost_color_data, pacman_color_data,
-          pacman_valid, grid_color_data, grid_valid)
-  begin
-    data.R <= "000";
-    data.G <= "000";
-    data.B <= "00";
-    if ghost_valid = '1' then
-      data <= ghost_color_data;
-    elsif pacman_valid = '1' then
-      data <= pacman_color_data;
-    elsif grid_valid = '1' then
-      data <= grid_color_data;
-    end if;
-  end process;
+process(ghost_valid, ghost_color_data, pacman_color_data,
+        pacman_valid, grid_color_data, grid_valid, font_valid, font_color_data)
+begin
+  data.R <= "000";
+  data.G <= "000";
+  data.B <= "00";
+  if ghost_valid = '1' then
+    data <= ghost_color_data;
+  elsif pacman_valid = '1' then
+    data <= pacman_color_data;
+  elsif font_valid = '1' then
+    data <= font_color_data;
+  elsif grid_valid = '1' then
+    data <= grid_color_data;
+  end if;
+end process;
 
 end Behavioral;
 

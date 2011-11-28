@@ -10,14 +10,14 @@ architecture behavior of top_level_tb is
 
   component top_level
     port(
-      mclk  : in  std_logic;
-      hsync : out std_logic;
-      vsync : out std_logic;
-      btn   : in  std_logic_vector(3 downto 0);
-      red   : out std_logic_vector(2 downto 0);
-      green : out std_logic_vector(2 downto 0);
-      blue  : out std_logic_vector(1 downto 0);
-	  j     : inout std_logic_vector(3 downto 0)  --j4 is already gnd
+      mclk  : in    std_logic;
+      hsync : out   std_logic;
+      vsync : out   std_logic;
+      btn   : in    std_logic_vector(3 downto 0);
+      red   : out   std_logic_vector(2 downto 0);
+      green : out   std_logic_vector(2 downto 0);
+      blue  : out   std_logic_vector(1 downto 0);
+      j     : inout std_logic_vector(3 downto 0)  --j4 is already gnd
       );
   end component;
 
@@ -50,10 +50,10 @@ begin
     red   => red,
     green => green,
     blue  => blue,
-	j => j
+    j     => j
     );
-	j(1) <= data;
-	pulse <= j(3);
+  j(1)  <= data;
+  pulse <= j(3);
 
   -- Clock process definitions
   mclk_process : process
@@ -79,11 +79,11 @@ begin
         when 3 =>
           data <= '1';
         when 4 =>
-          data <= '0';
+          data <= '1';
         when 5 =>
           data <= '1';
         when 6 =>
-          data <= '1';
+          data <= '0';
         when 7 =>
           data <= '1';
         when others => null;

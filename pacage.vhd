@@ -68,7 +68,29 @@ package pacage is
     reset_level       : std_logic;
     level_complete    : std_logic;
   end record;
+  
+  component score_manager is
+    generic (
+      GAME_OFFSET : POINT;
+      GAME_SIZE   : POINT
+      );
+    port(
+      clk                   : in  std_logic;
+      rst                   : in  std_logic;
+      current_draw_location : in  POINT;
+      gameinfo              : in  GAME_INFO;
+      data                  : out COLOR;
+      valid_location        : out std_logic
+      );
+  end component;
 
+  component number_rom is
+    port(
+      addr  : in  POINT;
+      value : in  integer;
+      data  : out std_logic
+      );
+  end component;
 
   --components
   component grid_display is
@@ -189,7 +211,7 @@ package pacage is
       rst                   : in  std_logic;
       game_en               : in  std_logic;
       collision             : in  std_logic;
-	  buttons :in NES_BUTTONS;
+      buttons               : in  NES_BUTTONS;
       current_draw_location : in  POINT;
       pacman_tile_location  : in  POINT;
       rom_data_in           : in  std_logic_vector(4 downto 0);
