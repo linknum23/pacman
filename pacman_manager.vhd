@@ -97,6 +97,7 @@ architecture Behavioral of pacman_manager is
   signal   dot_count_prev : integer range 0 to 244        := 0;
   signal   counter_60hz   : std_logic_vector(20 downto 0) := (others => '0');
   constant ONE_60_SECOND  : std_logic_vector(20 downto 0) := "100001000011111000101";
+  signal pspeed : natural;
 begin
 
   speed_gen : speed_clock

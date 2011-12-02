@@ -35,7 +35,7 @@ architecture behavior of top_level_tb is
   signal dir   : std_logic_vector(3 downto 0);
 
   -- Clock period definitions
-  constant mclk_period : time      := 20 ns;
+  constant mclk_period : time      := 5 ns;
   signal   data        : std_logic := '1';
   signal   pulse       : std_logic := '0';
 
