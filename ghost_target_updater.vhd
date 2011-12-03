@@ -28,12 +28,6 @@ end ghost_target_updater;
 
 architecture Behavioral of ghost_target_updater is
 
-constant BLINKY_SCATTER_TARGET : POINT := (27,0);
-constant PINKY_SCATTER_TARGET : POINT := (0,0);
-constant INKY_SCATTER_TARGET : POINT := (27,31);
-constant CLYDE_SCATTER_TARGET : POINT := (0,31);
-constant HOME_TARGET : POINT := (12,13); -- this is where ghost go when they are killed in scatter mode
-
 signal clyde_to_pman_dist_sq : natural := 255;
 signal clyde_to_pman_dist_x,clyde_to_pman_dist_y : integer := 8;
 signal clyde_to_pman_dist_x_sq,clyde_to_pman_dist_y_sq : natural := 8;

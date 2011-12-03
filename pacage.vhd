@@ -19,7 +19,8 @@ package pacage is
   type DIRECTION is (L, R, UP, DOWN, NONE, STILL);
   type GHOST_MODE is (NORMAL, SCATTER, FRIGHTENED);
   type GHOST_DISP_MODE is (NORM, SCATTER, FRIGHTENED, EYES);
-
+  
+  --relative speeds used for move clocks
   subtype SPEED is natural range 0 to 22; 
   constant SPEED_40 : SPEED := 8; 
   constant SPEED_45 : SPEED := 9;
@@ -35,6 +36,24 @@ package pacage is
   constant SPEED_95  : SPEED := 19;
   constant SPEED_100 : SPEED := 20;
   constant SPEED_105 : SPEED := 21;
+  
+  --ghost names to indices
+  constant I_BLINKY : natural := 0;
+  constant I_PINKY  : natural := 1;
+  constant I_INKY   : natural := 2;
+  constant I_CLYDE  : natural := 3;
+  
+  --ghost targets 
+	constant BLINKY_SCATTER_TARGET : POINT := (27,0);
+	constant PINKY_SCATTER_TARGET : POINT := (0,0);
+	constant INKY_SCATTER_TARGET : POINT := (27,31);
+	constant CLYDE_SCATTER_TARGET : POINT := (0,31);
+	constant HOME_TARGET : POINT := (12,13); -- this is where ghost go when they are killed in scatter mode
+	constant HOME : POINT := HOME_TARGET;
+	
+	--65MHZ time constants
+	constant HALF_SECOND    : std_logic_vector(24 downto 0) := "1111011111110100100100000";--"0000000000000110010110010";--
+   constant ONE_6_SECOND : std_logic_vector(23 downto 0) :=  "101001010100110110110010";--  "000000000000010000111011"; --
 
 
   type GHOST_INFO is
@@ -162,6 +181,7 @@ package pacage is
       );
     port (
       clk         : in  std_logic;
+		clk_25          : in  std_logic;
       en          : in  std_logic;
       rst         : in  std_logic;
       rom_addr    : out POINT;
@@ -254,10 +274,11 @@ package pacage is
       );
     port (
       clk           : in  std_logic;
+		clk_25          : in  std_logic;
       en            : in  std_logic;
       rst           : in  std_logic;
       rom_addr      : out POINT;
-      rom_data      : in  std_logic;
+      loc_valid      : in  boolean;
       done          : out std_logic;
       gameinfo      :     GAME_INFO;
 	blinky_is_in_tunnel : in boolean;
@@ -272,7 +293,9 @@ package pacage is
       pinky_info    : out GHOST_INFO;
       inky_info     : out GHOST_INFO;
       clyde_info    : out GHOST_INFO;
-      squiggle      : out std_logic
+      squiggle      : out std_logic;
+	   collision     : in std_logic;
+	   collision_index : in natural range 0 to 3
       );
   end component;
 

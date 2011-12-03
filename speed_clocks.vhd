@@ -19,7 +19,7 @@ begin
 		counter <= counter + speed;
 		last_bit <= counter(22);
 		--check for rising edge on speed bit
-		if(last_bit = '0' and counter(22) = '1' then
+		if last_bit = '0' and counter(22) = '1' then
 			--set flag
 			flag <= '1';
 		elsif clr_flag = '1' then

@@ -55,6 +55,7 @@ architecture Behavioral of top_level is
   component display_manager is
     port (
       clk                   : in  std_logic;
+		clk_25                : in std_logic;
       rst                   : in  std_logic;
       game_en               : in  std_logic;
       in_vbp                : in  std_logic;
@@ -143,6 +144,7 @@ begin
   display : display_manager
     port map (
       clk                   => clk_65mhz,
+		clk_25                => clk_25mhz,
       rst                   => rst,
       game_en               => rst,
       in_vbp                => in_vbp,

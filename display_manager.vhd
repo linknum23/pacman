@@ -6,6 +6,7 @@ use work.pacage.all;
 entity display_manager is
   port (
     clk                   : in  std_logic;
+	 clk_25                : in  std_logic;
     rst                   : in  std_logic;
     game_en               : in  std_logic;
     in_vbp                : in  std_logic;
@@ -168,6 +169,7 @@ begin
       )
     port map (
       clk         => clk,
+		clk_25      => clk_25,
       en          => ghost_en,
       rst         => rst,
       rom_addr    => ghost_tile_location,
@@ -288,9 +290,9 @@ begin
         when VGA_READ =>
           vga_en <= '1';
           if in_vbp = '1' then
-            gstate   <= GHOST_UPDATE;
+				gstate    <= PACMAN_UPDATE;--gstate   <= GHOST_UPDATE;
             vga_en   <= '0';
-            ghost_en <= '1';
+				pacman_en <= '1';--ghost_en <= '1';
           else
             gstate <= VGA_READ;
           end if;

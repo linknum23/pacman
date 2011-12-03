@@ -67,13 +67,13 @@ signal elroy_1_thresh, elroy_2_thresh : natural range 0 to 244;
   --output the speeds based on the current level
   standard_speeds : process(gameinfo.LEVEL)
   begin
-	 if gameinfo.LEVEL >4 then
+	 if gameinfo.LEVEL+1 >4 then
 		tunnel_speed <= L5_TO_255_TUNNEL_SPEED;
 		fright_speed <= L5_TO_255_FRIGHT_SPEED;
 		normal_speed <= L5_TO_255_NORM_SPEED;
 		elroy_1_speed <= L5_TO_255_ELROY1_SPEED;
 		elroy_2_speed <= L5_TO_255_ELROY2_SPEED;
-	 elsif gameinfo.LEVEL >1 then
+	 elsif gameinfo.LEVEL+1 >1 then
 		tunnel_speed <= L2_TO_4_TUNNEL_SPEED;
 		fright_speed <= L2_TO_4_FRIGHT_SPEED;
 		normal_speed <= L2_TO_4_NORM_SPEED;
@@ -87,28 +87,28 @@ signal elroy_1_thresh, elroy_2_thresh : natural range 0 to 244;
 		elroy_2_speed <= L1_ELROY2_SPEED;
 	 end if;
 	 
-	if gameinfo.LEVEL >18 then
+	if gameinfo.LEVEL+1 >18 then
 	   elroy_1_thresh <= L19_to_255_ELROY1_THRESH;
 	   elroy_2_thresh <= L19_to_255_ELROY2_THRESH;
-	elsif gameinfo.LEVEL >14 then
+	elsif gameinfo.LEVEL+1 >14 then
 	   elroy_1_thresh <= L15_to_18_ELROY1_THRESH;
 	   elroy_2_thresh <= L15_to_18_ELROY2_THRESH;
-	elsif gameinfo.LEVEL >11 then
+	elsif gameinfo.LEVEL+1 >11 then
 	   elroy_1_thresh <= L12_to_14_ELROY1_THRESH;
 	   elroy_2_thresh <= L12_to_14_ELROY2_THRESH;
-	elsif gameinfo.LEVEL >8 then
+	elsif gameinfo.LEVEL+1 >8 then
 	   elroy_1_thresh <= L9_to_11_ELROY1_THRESH;
 	   elroy_2_thresh <= L9_to_11_ELROY2_THRESH;
-	elsif gameinfo.LEVEL >5 then
+	elsif gameinfo.LEVEL+1 >5 then
 	   elroy_1_thresh <= L6_to_8_ELROY1_THRESH;
 	   elroy_2_thresh <= L6_to_8_ELROY2_THRESH;
-	elsif gameinfo.LEVEL >2 then
+	elsif gameinfo.LEVEL+1 >2 then
 	   elroy_1_thresh <= L3_to_5_ELROY1_THRESH;
 	   elroy_2_thresh <= L3_to_5_ELROY2_THRESH;
-	elsif gameinfo.LEVEL =2 then
+	elsif gameinfo.LEVEL+1 =2 then
 	   elroy_1_thresh <= L2_ELROY1_THRESH;
 	   elroy_2_thresh <= L2_ELROY2_THRESH;
-	elsif gameinfo.LEVEL <= 1 then
+	elsif gameinfo.LEVEL+1 <= 1 then
 	   elroy_1_thresh <= L1_ELROY1_THRESH;
 	   elroy_2_thresh <= L1_ELROY2_THRESH;
 	end if;

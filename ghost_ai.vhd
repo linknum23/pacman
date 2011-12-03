@@ -10,6 +10,7 @@ entity ghost_ai is
                     GAME_SIZE   : POINT
                     );
                   port (clk             : in  std_logic;
+						      clk_25          : in  std_logic;
                         en              : in  std_logic;
                         rst             : in  std_logic;
                         rom_addr        : out POINT;
@@ -43,6 +44,8 @@ architecture Behavioral of ghost_ai is
   signal do_calc_move      : std_logic;
   signal calc_targets_done : std_logic;
   signal calc_move_done    : std_logic;
+  
+  signal collision_int : std_logic;
 
   signal move_rom_addr, target_rom_addr : POINT;
   signal collision_index                : natural range 0 to 3;
@@ -61,6 +64,9 @@ architecture Behavioral of ghost_ai is
   signal clyde_tile_loc_int  : POINT;
   signal blinky_is_in_tunnel,pinky_is_in_tunnel,inky_is_in_tunnel,clyde_is_in_tunnel : boolean := false;
   
+  	signal board_loc : POINT;
+	signal loc_is_valid : boolean;
+  
   
 component ghost_frightened_blink is
 port (
@@ -68,6 +74,14 @@ port (
 	clk_65 : in std_logic;
 	blink : out std_logic);
 end component;
+
+  component simple_game_board is
+  port(
+	  clk : in std_logic;
+	  addr : in POINT;
+	  valid : out boolean
+  );
+  end component;
 
 
   signal pacman_tile_location,
@@ -88,6 +102,8 @@ begin
   inky_tile_loc_int.Y   <= to_integer(to_unsigned(inky_info_int.PT.Y, 9) srl 4);
   clyde_tile_loc_int.X  <= to_integer(to_unsigned(clyde_info_int.PT.X, 9) srl 4);
   clyde_tile_loc_int.Y  <= to_integer(to_unsigned(clyde_info_int.PT.Y, 9) srl 4);
+  
+  collision <= collision_int;
 
   collision_check : collision_machine
     port map(
@@ -99,7 +115,7 @@ begin
       inky_tile_location   => inky_tile_loc_int,
       clyde_tile_location  => clyde_tile_loc_int,
       collision_index      => collision_index,
-      collision            => collision
+      collision            => collision_int
       );
 		
 		blinker : ghost_frightened_blink
@@ -118,6 +134,13 @@ begin
   pinky_info  <= pinky_info_int;
   inky_info   <= inky_info_int;
   clyde_info  <= clyde_info_int;
+  
+    board : simple_game_board
+  port map(
+	  clk => clk,
+	  addr => board_loc,
+	  valid => loc_is_valid
+  );
 
 
   target_ai : ghost_target_updater
@@ -148,16 +171,17 @@ begin
       )
     port map(
       clk           => clk,
+		clk_25        => clk_25,
       en            => do_calc_move,
       rst           => rst,
-      rom_addr      => move_rom_addr,
-      rom_data      => rom_data,
+      rom_addr      => board_loc,
+      loc_valid      => loc_is_valid,
       done          => calc_move_done,
       gameinfo      => gameinfo,
-	blinky_is_in_tunnel => blinky_is_in_tunnel,
-	pinky_is_in_tunnel  => pinky_is_in_tunnel,
-	inky_is_in_tunnel => inky_is_in_tunnel,
-	clyde_is_in_tunnel  => clyde_is_in_tunnel,
+	   blinky_is_in_tunnel => blinky_is_in_tunnel,
+	   pinky_is_in_tunnel  => pinky_is_in_tunnel,
+	   inky_is_in_tunnel => inky_is_in_tunnel,
+	   clyde_is_in_tunnel  => clyde_is_in_tunnel,
       blinky_target => blinky_target,
       pinky_target  => pinky_target,
       inky_target   => inky_target,
@@ -166,10 +190,12 @@ begin
       pinky_info    => pinky_info_int,
       inky_info     => inky_info_int,
       clyde_info    => clyde_info_int, 
-      squiggle      => squiggle
+      squiggle      => squiggle,
+		collision     => collision_int,
+		collision_index => collision_index
       );
 		
-		tunnel_check : ghost_tunnel_check 
+tunnel_check : ghost_tunnel_check 
 port map(
 	blinky_tile_loc => blinky_tile_loc_int,
 	pinky_tile_loc => pinky_tile_loc_int,
@@ -213,11 +239,11 @@ port map(
     case state is
       when START =>
         next_state <= CALC_TARGETS; 
-   do_calc_targets <= '1';
+        do_calc_targets <= '1';
       when CALC_TARGETS =>
         if calc_targets_done = '1' then
           next_state <= CALC_MOVE; 
-        do_calc_move <= '1';
+          do_calc_move <= '1';
         else
           next_state <= CALC_TARGETS;
         end if;

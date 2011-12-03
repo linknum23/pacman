@@ -28,16 +28,16 @@ begin
 	if clk = '1' and clk'event then
 		if pacman_tile_location = blinky_tile_location then
 			collision <= '1'; 
-			collision_index <= 3; 
+			collision_index <= I_BLINKY; 
 		elsif pacman_tile_location = pinky_tile_location then 
 			collision <= '1'; 
-			collision_index <= 2; 
+			collision_index <= I_PINKY; 
 		elsif pacman_tile_location = inky_tile_location then
 			collision <= '1'; 
-			collision_index <= 1; 
+			collision_index <= I_INKY; 
 		elsif pacman_tile_location = clyde_tile_location then
 			collision <= '1'; 
-			collision_index <= 0;
+			collision_index <= I_CLYDE;
 		else
 			collision <= '0';
 		end if;

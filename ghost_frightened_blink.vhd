@@ -20,8 +20,6 @@ architecture Behavioral of ghost_frightened_blink is
   signal   fright_second_counter,count : std_logic_vector(27 downto 0) := (others => '0');
 
   --second counter
-  constant HALF_SECOND    : std_logic_vector(24 downto 0) := "1111011111110100100100000";--"0000000000000110010110010";--
-  constant ONE_6_SECOND : std_logic_vector(23 downto 0) :=  "101001010100110110110010";--  "000000000000010000111011"; --
   signal blink_sug : std_logic:= '0';
   signal last_mode : GHOST_MODE;
 begin

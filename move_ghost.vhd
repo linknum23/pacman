@@ -11,16 +11,17 @@ entity move_ghost is
       );
   port (
     clk           : in  std_logic;
+	 clk_25           : in std_logic;
     en            : in  std_logic;
     rst           : in  std_logic;
     rom_addr      : out POINT;
-    rom_data      : in  std_logic;
+    loc_valid      : in  boolean;
     done          : out std_logic;
     gameinfo      : in  GAME_INFO;
-	blinky_is_in_tunnel : in boolean;
-	pinky_is_in_tunnel : in boolean;
-	inky_is_in_tunnel : in boolean;
-	clyde_is_in_tunnel : in boolean;
+	 blinky_is_in_tunnel : in boolean;
+	 pinky_is_in_tunnel : in boolean;
+	 inky_is_in_tunnel : in boolean;
+	 clyde_is_in_tunnel : in boolean;
     blinky_target : in  POINT;
     pinky_target  : in  POINT;
     inky_target   : in  POINT;
@@ -29,17 +30,14 @@ entity move_ghost is
     pinky_info    : out GHOST_INFO;
     inky_info     : out GHOST_INFO;
     clyde_info    : out GHOST_INFO;
-	 squiggle      : out std_logic
+	 squiggle      : out std_logic;
+	 collision     : in std_logic;
+	 collision_index : in natural range 0 to 3
     );
 end move_ghost;
 
 architecture Behavioral of move_ghost is
   constant REALLY_FAR : natural := 31;
-
-  constant I_BLINKY : natural := 0;
-  constant I_PINKY  : natural := 1;
-  constant I_INKY   : natural := 2;
-  constant I_CLYDE  : natural := 3;
 
   constant ROW_SIZE : natural := 16;
   constant COL_SIZE : natural := 16;
@@ -92,7 +90,7 @@ architecture Behavioral of move_ghost is
 	pinky_speed : out SPEED;
 	inky_speed : out SPEED;
 	clyde_speed : out SPEED);
- end component;
+  end component;
 
   signal ghost_rc                                      : POINT;
   type   state is (START, SDONE, DO_NEXT, GET_RC,CALC_TARGET_DISTS,
@@ -112,8 +110,6 @@ architecture Behavioral of move_ghost is
   signal clocks                                        : std_logic_vector(22 downto 0):= (others => '0');
   signal move,last_move,do_move	: std_logic := '0';
   signal in_no_up_turns_zone  								: boolean := false;
-  --signal blinky_is_in_tunnel,pinky_is_in_tunnel,inky_is_in_tunnel,clyde_is_in_tunnel : boolean := false; 
-
 begin
 
 
@@ -132,6 +128,7 @@ begin
   squiggle <= clocks(18);
   move  <= clocks(19);
   
+ 
   speeds : ghost_speed_selector
   port map(
 	blinky => ghosts(I_BLINKY),
@@ -162,8 +159,8 @@ begin
         ghosts(I_PINKY)  <= PINKY_INIT;
         ghosts(I_INKY)   <= INKY_INIT;
         ghosts(I_CLYDE)  <= CLYDE_INIT;
-		move_state <= SDONE;
-			do_move <= '0';
+		  move_state <= SDONE;
+		  do_move <= '0';
       else
 		   if last_move = '0' and move = '1' then
 				do_move <= '1';
@@ -171,11 +168,7 @@ begin
         case move_state is
           when START =>
             index      := -1;
-				--if do_move = '1' then
-					move_state <= DO_NEXT;
-				--else
-				--	move_state <= SDONE;
-				--end if;
+				move_state <= DO_NEXT;
 				blinky_clr_flag <= '0';
 				pinky_clr_flag <= '0';
 				inky_clr_flag <= '0';
@@ -199,23 +192,35 @@ begin
 				ghost_rc.Y <= to_integer(yconv(8 downto 4));
             
             if index = I_PINKY then
-              target <= pinky_target;	  
-				  if blinky_move_flag = '1' then
-					move_state <= CALC_TARGET_DISTS;
-					blinky_clr_flag <= '1';
+				  if ghosts(I_PINKY).MODE = EYES then
+						target <= HOME;
 				  else
-					move_state <= DO_NEXT;
+						target <= pinky_target;	  
 				  end if;
-            elsif index = I_BLINKY then
-              target <= blinky_target;
 				  if pinky_move_flag = '1' then
 					move_state <= CALC_TARGET_DISTS;
 					pinky_clr_flag <= '1';
 				  else
 					move_state <= DO_NEXT;
 				  end if;
+            elsif index = I_BLINKY then
+              if ghosts(I_BLINKY).MODE = EYES then
+						target <= HOME;
+				  else
+						target <= blinky_target;	  
+				  end if;
+				  if blinky_move_flag = '1' then
+					move_state <= CALC_TARGET_DISTS;
+					blinky_clr_flag <= '1';
+				  else
+					move_state <= DO_NEXT;
+				  end if;
             elsif index = I_INKY then
-              target <= inky_target;
+              if ghosts(I_INKY).MODE = EYES then
+						target <= HOME;
+				  else
+						target <= inky_target;	  
+				  end if;
 				  if inky_move_flag = '1' then
 					move_state <= CALC_TARGET_DISTS;
 					inky_clr_flag <= '1';
@@ -223,7 +228,11 @@ begin
 					move_state <= DO_NEXT;
 				  end if;
             else
-              target <= clyde_target;
+              if ghosts(I_CLYDE).MODE = EYES then
+						target <= HOME;
+				  else
+						target <= clyde_target;	  
+				  end if;
 				  if clyde_move_flag = '1' then
 					move_state <= CALC_TARGET_DISTS;
 					clyde_clr_flag <= '1';
@@ -231,6 +240,12 @@ begin
 					move_state <= DO_NEXT;
 				  end if;
             end if;
+				
+				--
+				if gameinfo.GHOSTMODE = FRIGHTENED and collision = '1' then
+				   ghosts(collision_index).MODE <= EYES;
+				end if;
+				
 			 when CALC_TARGET_DISTS =>
 				--stop clearing
 				blinky_clr_flag <= '0';
@@ -286,12 +301,12 @@ begin
             rom_addr.Y <= ghost_rc.Y;			
 				
             --left dist logic
-            if rom_data = '1' then
-              --if ghosts(index).MODE = FRIGHTENED then
-					--	tdist_left <= to_integer(unsigned("0000" &clocks(5 downto 2)));
-					--else
+            if loc_valid then
+               if ghosts(index).MODE = FRIGHTENED then
+						tdist_left <= to_integer(unsigned("0000" &clocks(5 downto 2)));
+					else
 						tdist_left <= y_sqdiff+sq_out;
-					--end if;
+					end if;
             else
               tdist_left <= REALLY_FAR*REALLY_FAR;
             end if;
@@ -311,12 +326,12 @@ begin
             rom_addr.Y <= ghost_rc.Y-1;
 				
             --right dist logic
-            if rom_data = '1' then
-              --if ghosts(index).MODE = FRIGHTENED then
-					--	tdist_right <= to_integer(unsigned("0000" &clocks(5 downto 2)));
-					--else
+            if loc_valid then
+              if ghosts(index).MODE = FRIGHTENED then
+					tdist_right <= to_integer(unsigned("0000" &clocks(5 downto 2)));
+				  else
 						tdist_right <= y_sqdiff+sq_out;
-					--end if;
+					end if;
             else
               tdist_right <= REALLY_FAR*REALLY_FAR;
             end if;
@@ -335,12 +350,12 @@ begin
             rom_addr.Y <= ghost_rc.Y+1;
 				
             --up dist logic
-            if rom_data = '1' and not in_no_up_turns_zone then
-              --if ghosts(index).MODE = FRIGHTENED then
-					--	tdist_up <= to_integer(unsigned("0000" &clocks(5 downto 2)));
-					--else
+            if loc_valid and not in_no_up_turns_zone then
+              if ghosts(index).MODE = FRIGHTENED then
+					tdist_up <= to_integer(unsigned("0000" &clocks(5 downto 2)));
+					else
 						tdist_up <= x_sqdiff+sq_out;
-					--end if;
+					end if;
             else
               tdist_up <= REALLY_FAR*REALLY_FAR;
             end if;
@@ -348,12 +363,12 @@ begin
 				
 			 when CALC_TARGET_DISTS_6 =>
 				--down dist calc
-            if rom_data = '1' then
-					--if ghosts(index).MODE = FRIGHTENED then
-					--	tdist_down <= to_integer(unsigned("0000" &clocks(5 downto 2)));
-					--else
+            if loc_valid then
+					if ghosts(index).MODE = FRIGHTENED then
+						tdist_down <= to_integer(unsigned("0000" &clocks(5 downto 2)));
+					else
 						tdist_down <= x_sqdiff+sq_out;
-					--end if;
+					end if;
             else
               tdist_down <= REALLY_FAR*REALLY_FAR;
             end if;
@@ -376,7 +391,9 @@ begin
 				 --update ghost mode
 				 case  gameinfo.GHOSTMODE is
 					when FRIGHTENED =>
-						ghosts(index).MODE <= FRIGHTENED;
+					   if ghosts(index).MODE /= EYES then
+							ghosts(index).MODE <= FRIGHTENED;
+						end if;
 					when others =>
 						ghosts(index).MODE <= NORM;
 				 end case;
@@ -404,7 +421,9 @@ begin
 				   --update ghost mode
 				 case  gameinfo.GHOSTMODE is
 					when FRIGHTENED =>
-						ghosts(index).MODE <= FRIGHTENED;
+					   if ghosts(index).MODE /= EYES then
+							ghosts(index).MODE <= FRIGHTENED;
+						end if;
 					when others =>
 						ghosts(index).MODE <= NORM;
 				 end case;
@@ -512,16 +531,16 @@ begin
 				elsif last_x = GAME_SIZE.X-1 and ghosts(index).DIR = R then
 					 ghosts(index).PT.X <= 0;
 				end if;
-            --move_state       <= DO_NEXT;
-				move_state       <= SDONE;
-          when SDONE =>
-            if en = '1' then
+            move_state       <= DO_NEXT;
+				--move_state       <= SDONE;
+         when SDONE =>
+            --if en = '1' then
               done       <= '0';
               move_state <= START;
-            else
-              done       <= '1';
-              move_state <= SDONE;
-            end if;
+            --else
+             -- done       <= '1';
+            --  move_state <= SDONE;
+            --end if;
           when others =>
             move_state <= SDONE;
         end case;

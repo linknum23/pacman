@@ -219,18 +219,21 @@ begin
 					ghost_color <= BKG_COLOR;
 					ghost_valid <= '0';
 				when BDY =>
-					if ghostmode = FRIGHTENED then 
+				   ghost_valid <= '1';
+					if gmode = FRIGHTENED then 
 						if fright_blink = '1' then 
 							ghost_color <= FRIGHT_BLINK_BODY_COLOR;
 						else
 							ghost_color <= FRIGHT_BODY_COLOR;
 						end if;
+					elsif gmode = EYES then -- only show eyes
+						ghost_color <= BKG_COLOR;
+						ghost_valid <= '0';
 					else
 						ghost_color <= gbody_color;
-					end if;
-					ghost_valid <= '1';
+					end if;	
 				when EYE =>
-					if fright_blink = '1' and  ghostmode = FRIGHTENED  then 
+					if fright_blink = '1' and  gmode = FRIGHTENED  then 
 						ghost_color <= FRIGHT_BLINK_EYE_COLOR;
 					else
 						ghost_color <= EYE_COLOR;
