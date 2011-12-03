@@ -9,6 +9,7 @@ entity game_grid is
     clk      : in  std_logic;
     rst      : in  std_logic;
     addr     : in  POINT;
+    cs       : in  std_logic;
     we       : in  std_logic;
     data_in  : in  std_logic_vector(4 downto 0);
     data_out : out std_logic_vector(4 downto 0)
@@ -64,35 +65,39 @@ architecture Behavioral of game_grid is
     row30
     );
 
-  type   dot_grid is array (integer range 0 to 30) of std_logic_vector(0 to 27);
-  signal used_dot_grid : dot_grid  := (others => (others => '0'));
-  signal out_of_range  : std_logic := '0';
+  type   dot_grid is array (integer range 0 to 31) of std_logic_vector(0 to 27);
+  signal used_dot_grid      : dot_grid  := (others => (others => '0'));
+  signal out_of_range       : std_logic := '0';
+  signal newaddrx, newaddry : integer range 0 to 30;
+  signal rom_data           : std_logic_vector(4 downto 0);
+  signal bit_rom_data       : std_logic_vector(0 to 27);
+  signal data_to_write      : std_logic_vector(0 to 27);
 
 begin
+  --infer a block ram!
+  rom_data <= grid(newaddry)(newaddrx);
 
-  out_of_range <= '1' when addr.X < -1 or addr.Y < -1 or addr.X > 27 or addr.Y > 30 else '0';
-  process(addr,used_dot_grid)
+  data_out <= rom_data when addr.X >= 0 and addr.Y >= 0 and bit_rom_data(newaddrx) = '0' else "10000";
+
+  newaddrx <= 0 when addr.X < 0 else addr.X;
+  newaddry <= 0 when addr.Y < 0 else addr.Y;
+
+  process(newaddrx)
   begin
-    data_out <= "10000";
-	--valid locations must be given except for -1,-1
-    if addr.Y >= 0 and addr.X >= 0 then
-      if used_dot_grid (addr.Y)(addr.X) = '0' then
-        data_out <= grid(addr.Y)(addr.X);
-      end if;
-    end if;
+    data_to_write           <= (others => '0');
+    data_to_write(newaddrx) <= '1';
   end process;
 
   process(clk)
   begin
     if clk = '1' and clk'event then
-      if rst = '1' then
-        used_dot_grid <= (others => (others => '0'));
-      elsif we = '1' then
-        --writing into rom
-        --make sure we have a dot
-        --if grid(addr.Y)(addr.X)(4) = '1' and addr.Y < 31 and addr.X < 28 and addr.Y >= 0 and addr.X >= 0 then
-          used_dot_grid(addr.Y)(addr.X) <= '1';
-        --end if;
+      if cs = '1' then
+        if we = '1' then
+          --writing into rom        
+          used_dot_grid(newaddry) <= data_to_write;
+        else
+          bit_rom_data <= used_dot_grid(newaddry);
+        end if;
       end if;
     end if;
   end process;
