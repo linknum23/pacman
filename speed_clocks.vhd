@@ -15,6 +15,9 @@ architecture Behavioral of speed_clocks is
 	signal counter : std_logic_vector(24 downto 0):= (others => '0');
 	signal last_bit : std_logic := '0';
 begin
+process(clk_50mhz)
+begin
+
 	if rising_edge(clk_50mhz) then
 		counter <= counter + speed;
 		last_bit <= counter(22);

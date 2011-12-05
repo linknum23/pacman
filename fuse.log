@@ -1,28 +1,68 @@
-Running: /opt/Xilinx/13.3/ISE_DS/ISE/bin/lin/unwrapped/fuse -relaunch -intstyle "ise" -incremental -o "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/direction_TB_isim_beh.exe" -prj "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/direction_TB_beh.prj" "work.direction_TB" 
-ISim O.76xd (signature 0x8ddf5b5d)
-Number of CPUs detected in this system: 2
-Turning on mult-threading, number of parallel sub-compilation jobs: 4 
+Running: C:\Xilinx\13.3\ISE_DS\ISE\bin\nt\unwrapped\fuse.exe -intstyle ise -incremental -o C:/projects/Pacman/pacman/top_level_tb_isim_beh.exe -prj C:/projects/Pacman/pacman/top_level_tb_beh.prj work.top_level_tb 
+ISim O.76xd (signature 0x2f00eba5)
+Number of CPUs detected in this system: 4
+Turning on mult-threading, number of parallel sub-compilation jobs: 8 
 Determining compilation order of HDL files
-Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/pacage.vhd" into library work
-Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/pacman_target_selection.vhd" into library work
-Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/direction_manager.vhd" into library work
-Parsing VHDL file "/home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/direction_TB.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/pacage.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/speed_clock.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/pacman_target_selection.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/pacman_rom.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/number_rom.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/grid.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/score_manager.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/pacman_manager.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/grid_display.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/game_machine.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/game_grid.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/vga1024x768.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/nes_controller.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/ipcore_dir/dcm.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/display_manager.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/clock_divider.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/top_level.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/top_level_tb.vhd" into library work
 Starting static elaboration
 Completed static elaboration
-Fuse Memory Usage: 37476 KB
-Fuse CPU Usage: 1510 ms
+Fuse Memory Usage: 75656 KB
+Fuse CPU Usage: 390 ms
 Compiling package standard
 Compiling package std_logic_1164
 Compiling package numeric_std
 Compiling package pacage
 Compiling package std_logic_arith
 Compiling package std_logic_unsigned
-Compiling architecture behavioral of entity direction_manager [direction_manager_default]
-Compiling architecture behavioral of entity pacman_target_selection [pacman_target_selection_default]
-Compiling architecture behavior of entity direction_tb
+Compiling package vcomponents
+Compiling architecture behavioral of entity clock_divider [clock_divider_default]
+Compiling package textio
+Compiling package vital_timing
+Compiling package vital_primitives
+Compiling package vpkg
+Compiling architecture bufg_v of entity BUFG [bufg_default]
+Compiling architecture ibufg_v of entity IBUFG [\IBUFG("DONT_CARE","0",true,"DEF...]
+Compiling architecture dcm_sp_clock_divide_by_2_v of entity dcm_sp_clock_divide_by_2 [dcm_sp_clock_divide_by_2_default]
+Compiling architecture dcm_sp_maximum_period_check_v of entity dcm_sp_maximum_period_check [\dcm_sp_maximum_period_check("*"...]
+Compiling architecture dcm_sp_maximum_period_check_v of entity dcm_sp_maximum_period_check [\dcm_sp_maximum_period_check("*"...]
+Compiling architecture dcm_sp_clock_lost_v of entity dcm_sp_clock_lost [dcm_sp_clock_lost_default]
+Compiling architecture dcm_sp_v of entity DCM_SP [\DCM_SP(true,"*",true,false,2.0,...]
+Compiling architecture behavioral of entity dcm [dcm_default]
+Compiling architecture behavioral of entity vga_1024x768 [vga_1024x768_default]
+Compiling architecture behavioral of entity grid_roms [grid_roms_default]
+Compiling architecture behavioral of entity grid_display [\grid_display((288,136),(448,496...]
+Compiling architecture behavioral of entity speed_clock [speed_clock_default]
+Compiling architecture behavioral of entity pacman_target_selection [\pacman_target_selection((288,13...]
+Compiling architecture behavioral of entity pacman_rom [pacman_rom_default]
+Compiling architecture behavioral of entity pacman_manager [\pacman_manager((288,136),(448,4...]
+Compiling architecture behavioral of entity game_machine [game_machine_default]
+Compiling architecture behavioral of entity number_rom [number_rom_default]
+Compiling architecture behavioral of entity score_manager [\score_manager((288,136),(448,49...]
+Compiling architecture behavioral of entity game_grid [game_grid_default]
+Compiling architecture behavioral of entity display_manager [display_manager_default]
+Compiling architecture behavioral of entity nes_controller [nes_controller_default]
+Compiling architecture behavioral of entity top_level [top_level_default]
+Compiling architecture behavior of entity top_level_tb
 Time Resolution for simulation is 1ps.
-Compiled 11 VHDL Units
-Built simulation executable /home/bryant/Documents/flowpaths_checkout/flowpaths/Pacman/pacman/direction_TB_isim_beh.exe
-Fuse Memory Usage: 89924 KB
-Fuse CPU Usage: 1720 ms
-GCC CPU Usage: 330 ms
+Waiting for 1 sub-compilation(s) to finish...
+Compiled 58 VHDL Units
+Built simulation executable C:/projects/Pacman/pacman/top_level_tb_isim_beh.exe
+Fuse Memory Usage: 111756 KB
+Fuse CPU Usage: 1187 ms

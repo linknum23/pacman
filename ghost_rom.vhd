@@ -197,8 +197,8 @@ architecture Behavioral of ghost_rom is
     "00000000000000000000000000000000"
     );
 
-  signal why : unsigned(8 downto 0);
-  signal ex  : unsigned(4 downto 0);
+  signal why : unsigned(13 downto 0);
+  signal ex  : unsigned(12 downto 0);
   signal offset : natural range 0 to 511;
 
 begin

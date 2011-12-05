@@ -13,7 +13,7 @@ entity grid_display is
     clk                   : in  std_logic;
     rst                   : in  std_logic;
     current_draw_location : in  POINT;
-    mode                  : in  std_logic_vector(2 downto 0);
+    gameinfo              : in  GAME_INFO;
     current_tile_location : out POINT;
     valid_location        : out std_logic;
     data_type             : in  std_logic_vector(4 downto 0);
@@ -47,6 +47,8 @@ architecture Behavioral of grid_display is
   signal clocks                   : std_logic_vector(24 downto 0) := (others => '0');
   signal game_location_unsigned_X : unsigned(11 downto 0);
   signal game_location_unsigned_Y : unsigned(11 downto 0);
+
+  signal dot_on : std_logic := '0';
 begin
   roms : grid_roms
     port map(
@@ -59,7 +61,7 @@ begin
   begin
     if clk = '1' and clk 'event then
       --offset by 1 for the register delay
-      if current_draw_location.X >= GAME_OFFSET.X-2 and current_draw_location.X < GAME_OFFSET.X + GAME_SIZE.X - 2
+      if current_draw_location.X >= GAME_OFFSET.X - 2 and current_draw_location.X < GAME_OFFSET.X + GAME_SIZE.X - 2
         and current_draw_location.Y >= GAME_OFFSET.Y and current_draw_location.Y < GAME_OFFSET.Y + GAME_SIZE.Y then
         --valid here
         valid <= '1';
@@ -94,13 +96,19 @@ begin
   rom_addr.X <= to_integer(game_location_unsigned_X(TILE_SIZE.X-1 downto 0));
   rom_addr.Y <= to_integer(game_location_unsigned_Y(TILE_SIZE.X-1 downto 0));
 
-  process(data_type,clocks(23))
+  process(data_type, dot_on, gameinfo.level_complete)
   begin
     if data_type <= 16 then
-      data.R <= "000";
-      data.G <= "000";
-      data.B <= "11";
-    elsif (data_type = 18 and clocks(23) = '1') or data_type = 17 then
+      if (gameinfo.level_complete = '1' and dot_on = '0') then
+        data.R <= "111";
+        data.G <= "111";
+        data.B <= "11";
+      else
+        data.R <= "000";
+        data.G <= "000";
+        data.B <= "11";
+      end if;
+    elsif (data_type = 18 and dot_on = '1') or data_type = 17 then
       data.R <= "111";
       data.G <= "101";
       data.B <= "10";
@@ -116,6 +124,13 @@ begin
   begin
     if clk = '1' and clk'event then
       clocks <= clocks + 1;
+    end if;
+  end process;
+
+  process(clocks(22))
+  begin
+    if clocks(22)'event and clocks(22) = '1' then
+      dot_on <= not dot_on;
     end if;
   end process;
 

@@ -1,5 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+use work.pacage.all;
 
 entity top_level_tb is
 end top_level_tb;
@@ -38,7 +40,8 @@ architecture behavior of top_level_tb is
   constant mclk_period : time      := 5 ns;
   signal   data        : std_logic := '1';
   signal   pulse       : std_logic := '0';
-
+  signal   buttons     : NES_BUTTONS;
+  
 begin
 
   -- Instantiate the Unit Under Test (UUT)
@@ -51,9 +54,15 @@ begin
     green => green,
     blue  => blue,
     j     => j
+    -- buttons => buttons
     );
   j(1)  <= data;
   pulse <= j(3);
+
+  --buttons.LEFT_BUTTON  <= '1' after 1ms, '0' after 2ms, '1' after 4ms;
+  --buttons.RIGHT_BUTTON <= '1' after 500ns, '0' after 2.5ms;
+  --buttons.UP_BUTTON    <= '1' after 2.6ms, '0' after 2.7ms;
+  --buttons.DOWN_BUTTON <= '1' after 1us, '0' after 2us;
 
   -- Clock process definitions
   mclk_process : process
@@ -81,9 +90,9 @@ begin
         when 4 =>
           data <= '1';
         when 5 =>
-          data <= '1';
-        when 6 =>
           data <= '0';
+        when 6 =>
+          data <= '1';
         when 7 =>
           data <= '1';
         when others => null;

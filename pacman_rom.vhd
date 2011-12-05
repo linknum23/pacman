@@ -15,7 +15,7 @@ end pacman_rom;
 architecture Behavioral of pacman_rom is
 
   type rom_array is array (integer range <>) of std_logic_vector (0 to 15);
-  constant rom : rom_array (0 to 31) := (
+  constant rom : rom_array (0 to 47) := (
     --0
     "0000000000000000",
     "0000001111100000",
@@ -33,7 +33,7 @@ architecture Behavioral of pacman_rom is
     "0000001111100000",
     "0000000000000000",
     "0000000000000000",
---1
+--1     
     "0000000000000000",
     "0000001111100000",
     "0000111111111000",
@@ -49,11 +49,28 @@ architecture Behavioral of pacman_rom is
     "0000111111111000",
     "0000001111100000",
     "0000000000000000",
+    "0000000000000000",
+--2     
+    "0000000000000000",
+    "0000001111100000",
+    "0000011111111000",
+    "0000001111111100",
+    "0000000111111100",
+    "0000000011111110",
+    "0000000001111110",
+    "0000000000111110",
+    "0000000001111110",
+    "0000000011111110",
+    "0000000111111100",
+    "0000001111111100",
+    "0000011111111000",
+    "0000001111100000",
+    "0000000000000000",
     "0000000000000000"
     );
 
-  signal why : unsigned(5 downto 0);
-  signal ex  : unsigned(4 downto 0);
+  signal why : unsigned(8 downto 0);
+  signal ex  : unsigned(8 downto 0);
 
 begin
 
@@ -67,9 +84,8 @@ begin
     data <= '0';
     newy := '0' & why(why'high downto 1);
     newx := '0' & ex(ex'high downto 1);
-    if newy < 32 and newy >= 0 and newx < 16 and newx >= 0 then
-      data <= rom(to_integer(newy))(to_integer(newx));
-    end if;
+    data <= rom(to_integer(newy))(to_integer(newx));
+    
   end process;
 
 end Behavioral;

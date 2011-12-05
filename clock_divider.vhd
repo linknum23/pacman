@@ -25,7 +25,7 @@ begin
     end if;
   end process;
 
-  clk_25mhz <= count(3);
+  clk_25mhz <= count(0);
 
 end Behavioral;
 

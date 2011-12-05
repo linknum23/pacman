@@ -20,10 +20,10 @@ package pacage is
   type GHOST_MODE is (NORMAL, SCATTER, FRIGHTENED);
   type GHOST_DISP_MODE is (NORM, SCATTER, FRIGHTENED, EYES);
   
-  --relative speeds used for move clocks
-  subtype SPEED is natural range 0 to 40; 
-  constant SPEED_40 : SPEED := 8; 
-  constant SPEED_45 : SPEED := 9;
+    --relative speeds used for move clocks
+    subtype  SPEED is natural range 0 to 40; 
+    constant SPEED_40 : SPEED := 8; 
+                                               constant SPEED_45 : SPEED := 9;
   constant SPEED_50  : SPEED := 10;
   constant SPEED_55  : SPEED := 11;
   constant SPEED_60  : SPEED := 12;
@@ -36,25 +36,25 @@ package pacage is
   constant SPEED_95  : SPEED := 19;
   constant SPEED_100 : SPEED := 20;
   constant SPEED_105 : SPEED := 21;
-  constant SPEED_200 : SPEED := 40;
-  
-  --ghost names to indices
-  constant I_BLINKY : natural := 0;
-  constant I_PINKY  : natural := 1;
-  constant I_INKY   : natural := 2;
-  constant I_CLYDE  : natural := 3;
-  
-  --ghost targets 
-	constant BLINKY_SCATTER_TARGET : POINT := (27,0);
-	constant PINKY_SCATTER_TARGET : POINT := (0,0);
-	constant INKY_SCATTER_TARGET : POINT := (27,31);
-	constant CLYDE_SCATTER_TARGET : POINT := (0,31);
-	constant HOME_TARGET : POINT := (13,11); -- this is where ghost go when they are killed in scatter mode
-	constant HOME : POINT := HOME_TARGET;
-	
-	--65MHZ time constants
-	constant HALF_SECOND    : std_logic_vector(24 downto 0) := "1111011111110100100100000";--"0000000000000110010110010";--
-   constant ONE_6_SECOND : std_logic_vector(23 downto 0) :=  "101001010100110110110010";--  "000000000000010000111011"; --
+  constant SPEED_200 : SPEED := 40; 
+                                
+                                --ghost names to indices
+ constant I_BLINKY : natural := 0; 
+                                      constant I_PINKY : natural := 1; 
+                                     constant I_INKY : natural := 2; 
+                                                                         constant I_CLYDE : natural := 3; 
+                                                                       
+                                        --ghost targets 
+                                                                       constant BLINKY_SCATTER_TARGET : POINT := (27, 0); 
+                                                                                                            constant PINKY_SCATTER_TARGET : POINT := (0, 0); 
+                                                                                                                            constant INKY_SCATTER_TARGET : POINT := (27, 31); 
+                                                                                                                                                               constant CLYDE_SCATTER_TARGET : POINT := (0, 31); 
+                                                                                                                                                                                constant HOME_TARGET : POINT := (13, 11);  -- this is where ghost go when they are killed in scatter mode
+  constant HOME : POINT := HOME_TARGET; 
+                           
+                           --65MHZ time constants
+constant HALF_SECOND : std_logic_vector(24 downto 0) := "1111011111110100100100000";  --"0000000000000110010110010";--
+  constant ONE_6_SECOND : std_logic_vector(23 downto 0) := "101001010100110110110010";  --  "000000000000010000111011"; --
 
 
   type GHOST_INFO is
@@ -87,15 +87,19 @@ package pacage is
     level             : std_logic_vector(8 downto 0);
     reset_level       : std_logic;
     level_complete    : std_logic;
+    small_dot_eaten   : std_logic;
+    big_dot_eaten     : std_logic;
+    ghost_eaten       : std_logic;
+    pacman_dead       : std_logic;
   end record;
-  
+
   component score_manager is
     generic (
       GAME_OFFSET : POINT;
       GAME_SIZE   : POINT
       );
     port(
-      clk                   : in  std_logic;
+      clk, clk_25           : in  std_logic;
       rst                   : in  std_logic;
       current_draw_location : in  POINT;
       gameinfo              : in  GAME_INFO;
@@ -112,6 +116,49 @@ package pacage is
       );
   end component;
 
+  component pacman_rom is
+    port(
+      addr   : in  POINT;
+      offset : in  POINT;
+      data   : out std_logic
+      );
+  end component;
+
+  component pacman_target_selection is
+    generic (
+      GAME_OFFSET : POINT;
+      GAME_SIZE   : POINT
+      );
+    port(
+      clk                   : in  std_logic;
+      direction_selection   : in  DIRECTION;
+      gameinfo              : in  GAME_INFO;
+      rom_data_type         : in  std_logic_vector(4 downto 0);
+      rom_enable            : in  std_logic;
+      current_location      : out POINT;
+      current_location_tile : out POINT;
+      current_direction     : out DIRECTION;
+      rom_location          : out POINT;
+      rom_use_done          : out std_logic;
+      move_in_progress      : out std_logic
+      );
+  end component;
+
+  component pacman_lives is
+    generic (
+      GAME_OFFSET : POINT;
+      GAME_SIZE   : POINT
+      );
+    port(
+      clk                   : in  std_logic;
+      rst                   : in  std_logic;
+      current_draw_location : in  POINT;
+      gameinfo              : in  GAME_INFO;
+      data                  : out COLOR;
+      valid_location        : out std_logic
+      );
+  end component;
+
   --components
   component grid_display is
     generic (
@@ -122,9 +169,9 @@ package pacage is
       clk                   : in  std_logic;
       rst                   : in  std_logic;
       current_draw_location : in  POINT;
+      gameinfo              : in  GAME_INFO;
       data_type             : in  std_logic_vector(4 downto 0);
       current_tile_location : out POINT;
-      mode                  : in  std_logic_vector(2 downto 0);
       data                  : out COLOR;
       valid_location        : out std_logic
       );
@@ -155,23 +202,19 @@ package pacage is
       GAME_SIZE   : POINT
       );
     port(
-      clk                         : in  std_logic;
-      rst                         : in  std_logic;
-      collision                   : in  std_logic;
-      direction_select            : in  DIRECTION;
-      current_draw_location       : in  POINT;
-      gameinfo                    : in  GAME_INFO;
-      mode                        : in  std_logic_vector(2 downto 0);
-      rom_data_in                 : in  std_logic_vector(4 downto 0);
-      pacman_pixel_location       : out POINT;
-      pacman_tile_location        : out POINT;
-      pacman_rom_tile_location    : out POINT;
-      pacman_tile_location_offset : out POINT;
-      pacman_direction            : out DIRECTION;
-      data                        : out COLOR;
-      valid_location              : out std_logic;
-      rom_enable                  : in  std_logic;
-      rom_use_done                : out std_logic
+      clk, clk_25           : in  std_logic;
+      rst                   : in  std_logic;
+      direction_select      : in  DIRECTION;
+      current_draw_location : in  POINT;
+      rom_data_in           : in  std_logic_vector(4 downto 0);
+      gameinfo              : in  GAME_INFO;
+      tile_location         : out POINT;
+      rom_location          : out POINT;
+      current_direction     : out DIRECTION;
+      data                  : out COLOR;
+      valid_location        : out std_logic;
+      rom_enable            : in  std_logic;
+      rom_use_done          : out std_logic
       );
   end component;
 
@@ -182,7 +225,7 @@ package pacage is
       );
     port (
       clk         : in  std_logic;
-		clk_25          : in  std_logic;
+      clk_25      : in  std_logic;
       en          : in  std_logic;
       rst         : in  std_logic;
       rom_addr    : out POINT;
@@ -196,8 +239,8 @@ package pacage is
       inky_info   : out GHOST_INFO;
       clyde_info  : out GHOST_INFO;
       collision   : out std_logic;
-      squiggle    : out std_logic;
-		blink       : out std_logic
+      squiggle    : out std_logic; 
+      blink       : out std_logic
       );
   end component;
 
@@ -206,7 +249,7 @@ package pacage is
       clk      : in  std_logic;
       rst      : in  std_logic;
       addr     : in  POINT;
-      we       : in  std_logic;
+      we, cs   : in  std_logic;
       data_in  : in  std_logic_vector(4 downto 0);
       data_out : out std_logic_vector(4 downto 0)
       );
@@ -274,29 +317,29 @@ package pacage is
       GAME_SIZE   : POINT
       );
     port (
-      clk           : in  std_logic;
-		clk_25          : in  std_logic;
-      en            : in  std_logic;
-      rst           : in  std_logic;
-      rom_addr      : out POINT;
-      loc_valid      : in  boolean;
-      done          : out std_logic;
-      gameinfo      :     GAME_INFO;
-	blinky_is_in_tunnel : in boolean;
-	pinky_is_in_tunnel : in boolean;
-	inky_is_in_tunnel : in boolean;
-	clyde_is_in_tunnel : in boolean;
-      blinky_target : in  POINT;
-      pinky_target  : in  POINT;
-      inky_target   : in  POINT;
-      clyde_target  : in  POINT;
-      blinky_info   : out GHOST_INFO;
-      pinky_info    : out GHOST_INFO;
-      inky_info     : out GHOST_INFO;
-      clyde_info    : out GHOST_INFO;
-      squiggle      : out std_logic;
-	   collision     : in std_logic;
-	   collision_index : in natural range 0 to 3
+      clk                 : in  std_logic;
+      clk_25              : in  std_logic;
+      en                  : in  std_logic;
+      rst                 : in  std_logic;
+      rom_addr            : out POINT;
+      loc_valid           : in  boolean;
+      done                : out std_logic;
+      gameinfo            :     GAME_INFO;
+      blinky_is_in_tunnel : in  boolean;
+      pinky_is_in_tunnel  : in  boolean;
+      inky_is_in_tunnel   : in  boolean;
+      clyde_is_in_tunnel  : in  boolean;
+      blinky_target       : in  POINT;
+      pinky_target        : in  POINT;
+      inky_target         : in  POINT;
+      clyde_target        : in  POINT;
+      blinky_info         : out GHOST_INFO;
+      pinky_info          : out GHOST_INFO;
+      inky_info           : out GHOST_INFO;
+      clyde_info          : out GHOST_INFO;
+      squiggle            : out std_logic;
+      collision           : in  std_logic;
+      collision_index     : in  natural range 0 to 3
       );
   end component;
 
@@ -320,18 +363,18 @@ package pacage is
       flag      : out std_logic;
       clr_flag  : in  std_logic
       );
-  end component;
-  
-  component ghost_tunnel_check is 
-port(
-	blinky_tile_loc : in POINT;
-	pinky_tile_loc : in POINT;
-	inky_tile_loc : in POINT;
-	clyde_tile_loc : in POINT;
-	blinky_is_in_tunnel : out boolean;
-	pinky_is_in_tunnel : out boolean;
-	inky_is_in_tunnel : out boolean;
-	clyde_is_in_tunnel : out boolean
-);
-end component;
+  end component; 
+    
+    component ghost_tunnel_check is 
+                                      port(
+                                           blinky_tile_loc     : in  POINT; 
+                                           pinky_tile_loc      : in  POINT; 
+                                           inky_tile_loc       : in  POINT; 
+                                           clyde_tile_loc      : in  POINT; 
+                                           blinky_is_in_tunnel : out boolean; 
+                                           pinky_is_in_tunnel  : out boolean; 
+                                           inky_is_in_tunnel   : out boolean; 
+                                           clyde_is_in_tunnel  : out boolean
+                                           );
+    end component;
 end package;

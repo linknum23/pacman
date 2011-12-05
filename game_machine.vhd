@@ -33,8 +33,6 @@ architecture Behavioral of game_machine is
   signal   fright_second_counter : std_logic_vector(26 downto 0) := (others => '0');
 
   --second counter
-  --constant ONE_SECOND    : std_logic_vector(25 downto 0) := "11110111111101001001000000";
-  --constant ONE_60_SECOND : std_logic_vector(20 downto 0) := "100001000011111000101";
   constant ONE_SECOND    : integer := 65000000;
   constant ONE_60_SECOND : integer := ONE_SECOND/60;
 
@@ -67,20 +65,36 @@ architecture Behavioral of game_machine is
   signal   level_reset_en                 : std_logic                 := '0';
   signal   level_complete                 : std_logic                 := '0';
   signal   game_in_progress               : std_logic                 := '1';
+  signal   ghost_eaten, big_dot_eaten     : std_logic                 := '0';
+  signal   small_dot_eaten, pacman_dead   : std_logic                 := '0';
+
+
+
+  type   game_mode is (START_SCREEN, IN_GAME, POST_SCREEN);
+  signal gamemode : game_mode := START_SCREEN;
 
   signal counter_1_60 : std_logic_vector(25 downto 0) := (others => '0');
-  
+
+
+  --collision machine
+  type   cstate_type is (WAIT_FOR_COLLISION, GHOST_DEAD, PAC_DEAD, WAIT_SEC);
+  signal cstate      : cstate_type                   := WAIT_FOR_COLLISION;
+  signal pause_clock : std_logic_vector(25 downto 0) := (others => '0');
+  signal pause       : std_logic                     := '0';
   
 begin
   gameinfo.number_eaten_dots <= dots_eaten;
   gameinfo.score             <= game_score;
   gameinfo.reset_level       <= level_reset_en;
-  gameinfo.ghostmode         <= FRIGHTENED when in_fright_mode = '1'
-                                else SCATTER when in_scatter_mode = '1' else NORMAL;
+  gameinfo.ghostmode         <= FRIGHTENED when in_fright_mode = '1' else SCATTER when in_scatter_mode = '1' else NORMAL;
   gameinfo.level             <= std_logic_vector(to_unsigned(level_num, 9));
   gameinfo.number_lives_left <= number_lives_left;
   gameinfo.level_complete    <= level_complete;
   gameinfo.game_in_progress  <= game_in_progress;
+  gameinfo.big_dot_eaten     <= big_dot_eaten;
+  gameinfo.small_dot_eaten   <= small_dot_eaten;
+  gameinfo.ghost_eaten       <= ghost_eaten;
+  gameinfo.pacman_dead       <= pacman_dead;
 
   -----------------------------
   --Keep track of dot eating
@@ -88,9 +102,11 @@ begin
   process(clk)
   begin
     if clk'event and clk = '1' then
-      rom_use_done   <= '0';
-      rom_we         <= '0';
-      fright_mode_en <= '0';
+      rom_use_done    <= '0';
+      rom_we          <= '0';
+      fright_mode_en  <= '0';
+      small_dot_eaten <= '0';
+      big_dot_eaten   <= '0';
       case state is
         when WAIT_FOR_MOVEMENT =>
           if pacman_tile_location /= last_pacman_tile_location then
@@ -115,19 +131,13 @@ begin
           state <= OVERWRITE_ROM;
           if rom_data_in = 17 then
             --small dot
-            --increment score by 10 and increment dots count
-            game_score   <= game_score + 10;
-            dots_eaten   <= dots_eaten + 1;
-            rom_we       <= '1';
-            rom_data_out <= "10000";
+            small_dot_eaten <= '1';
+            rom_we          <= '1';
           elsif rom_data_in = 18 then
             --big dot
-            --increment score by 10 and increment dots count
-            game_score     <= game_score + 50;
-            dots_eaten     <= dots_eaten + 1;
+            big_dot_eaten  <= '1';
             rom_we         <= '1';
             fright_mode_en <= '1';
-            rom_data_out   <= "10000";
           else
             state <= WAIT_FOR_MOVEMENT;
           end if;
@@ -144,57 +154,103 @@ begin
   -----------------------------
   process(clk)
   begin
-    if clk = '1' and clk'event then
-      if game_en = '1' then
-        game_in_progress <= '1';
-      end if;
-      if number_lives_left = 0 then
-        game_in_progress <= '0';
-      end if;
-    end if;
-  end process;
-
-  -----------------------------
-  --increment level when complete
-  -----------------------------
-  process(clk)
-  begin
     if clk'event and clk = '1' then
-      if level_complete = '1' then
-        level_num <= level_num + 1;
+      if gamemode = START_SCREEN then
+        if buttons.START_BUTTON = '1' then
+          gamemode <= IN_GAME;
+        end if;
+      elsif gamemode = IN_GAME then
+        if number_lives_left = 0 then
+          gamemode <= POST_SCREEN;
+        end if;
       end if;
     end if;
   end process;
 
-  -----------------------------
-  --level completion and resetting
-  -----------------------------
+  process(clk)
+    variable running_ghost_score : std_logic_vector(10 downto 0) := "00011001000";  --200
+  begin
+    if clk = '1' and clk'event then
+      --score
+      if big_dot_eaten = '1' then
+        --increment score by 50
+        game_score <= game_score + 50;
+      end if;
+      if small_dot_eaten = '1' then
+        --increment score by 10
+        game_score <= game_score + 10;
+      end if;
+
+      ghost_eaten <= '0';
+      pacman_dead <= '0';
+
+      case cstate is
+        when WAIT_FOR_COLLISION =>
+          --wait for a collision and decide what to do
+          if collision = '1' then
+            if in_fright_mode = '1' then
+              cstate <= GHOST_DEAD;
+            else
+              cstate <= PAC_DEAD;
+            end if;
+          else
+            cstate <= WAIT_FOR_COLLISION;
+          end if;
+        when GHOST_DEAD =>
+          game_score          <= game_score + to_integer(unsigned(running_ghost_score));
+          running_ghost_score := running_ghost_score(9 downto 0) & '0';  --x by 2
+          ghost_eaten         <= '1';
+          cstate              <= WAIT_SEC;
+        when PAC_DEAD =>
+          number_lives_left <= number_lives_left - 1;
+          pacman_dead       <= '1';
+          cstate            <= WAIT_SEC;
+        when WAIT_SEC =>
+          pause       <= '1';
+          pause_clock <= pause_clock + 1;
+          if pause_clock = ONE_SECOND -1 then
+            pause_clock <= (others => '0');
+            pause       <= '1';
+            cstate      <= WAIT_FOR_COLLISION;
+          end if;
+        when others => null;
+      end case;
+      if in_fright_mode = '0' then
+        running_ghost_score := "00011001000";
+      end if;
+    end if;
+  end process;
+
+-----------------------------
+--level completion and resetting
+-----------------------------
   process(clk)
   begin
     if clk = '1' and clk'event then
-      if collision = '1' then
-        --decrement lives
-        number_lives_left <= number_lives_left - 1;
-        --reset level
-        -- level_reset_en    <= '1';
-      elsif game_en = '1' then
+      level_reset_en <= '0';
+
+      if big_dot_eaten = '1' or small_dot_eaten = '1' then
+        dots_eaten <= dots_eaten + 1;
+      end if;
+
+      if cstate = PAC_DEAD then
         level_reset_en <= '1';
-      else
-        level_reset_en <= '0';
       end if;
 
       if dots_eaten = MAX_DOTS then
         level_reset_en <= '1';
         level_complete <= '1';
+        level_num      <= level_num + 1;
+        dots_eaten     <= 0;
       else
         level_complete <= '0';
       end if;
     end if;
   end process;
 
-  -----------------------------
-  --control when fright mode is enabled based on eating big dots
-  -----------------------------
+-----------------------------
+--control when fright mode is enabled based on eating big dots
+-----------------------------
   process(clk)
     variable fright_time : integer range 1 to 6 := 6;
   begin
@@ -222,9 +278,9 @@ begin
     end if;
   end process;
 
-  -----------------------------
-  --control when in scatter modes and normal modes
-  -----------------------------  
+-----------------------------
+--control when in scatter modes and normal modes
+-----------------------------  
   process(clk)
     variable level_index  : integer range 0 to 2 := 0;
     variable time_to_wait : integer              := 0;

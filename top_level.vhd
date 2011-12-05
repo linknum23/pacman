@@ -85,22 +85,55 @@ architecture Behavioral of top_level is
   signal in_vbp                          : std_logic := '0';
   signal hc, vc                          : std_logic_vector(10 downto 0);
   signal color_data                      : COLOR;
+  signal hs, vs                          : std_logic;
   signal current_draw_location           : POINT;
   signal rst                             : std_logic := '0';
   signal direction                       : DIRECTION := NONE;
   signal gameinfo                        : GAME_INFO;
   signal buttons                         : NES_BUTTONS;
   signal locked                          : std_logic := '0';
+
+  -- VGA output registers
+  signal R_reg  : std_logic_vector(2 downto 0) := (others => '0');
+  signal G_reg  : std_logic_vector(2 downto 0) := (others => '0');
+  signal B_reg  : std_logic_vector(1 downto 0) := (others => '0');
+  signal HS_reg : std_logic                    := '0';
+  signal VS_reg : std_logic                    := '0';
   
 begin
   
   rst <= btn(1) and btn(0);
 
-  red   <= color_data.R when vidon = '1'                     else "000";
-  green <= color_data.G when vidon = '1'                     else "000";
-  blue  <= color_data.B when vidon = '1'                     else "00";
-  ld(0) <= '1'          when gameinfo.ghostmode = SCATTER    else '0';
-  ld(1) <= '1'          when gameinfo.ghostmode = FRIGHTENED else '0';
+  -- register HS, VS, color
+  process(clk_65mhz)
+  begin
+    if clk_65mhz = '1' and clk_65mhz'event then
+		if vidon = '0' then
+			R_reg  <= "000"; 
+	        G_reg  <= "000"; 
+	        B_reg  <= "00";
+		else
+			R_reg  <= color_data.R; 
+	        G_reg  <= color_data.G; 
+	        B_reg  <= color_data.B;
+		end if;
+		HS_reg <= hs;
+		VS_reg <= vs;		  
+    end if;
+  end process;
+
+  -- wire outputs
+  red   <= R_reg;
+  green <= G_reg;
+  blue  <= B_reg;
+  hsync <= HS_reg;
+  vsync <= VS_reg;
+
+
+
+
+  ld(0) <= '1' when gameinfo.ghostmode = SCATTER    else '0';
+  ld(1) <= '1' when gameinfo.ghostmode = FRIGHTENED else '0';
   ld(2) <= buttons.RIGHT_BUTTON;
   ld(3) <= buttons.DOWN_BUTTON;
   ld(4) <= buttons.UP_BUTTON;
@@ -129,8 +162,8 @@ begin
   vga_driver : vga_1024x768
     port map (
       clk    => clk_65mhz,
-      hsync  => hsync,
-      vsync  => vsync,
+      hsync  => hs,
+      vsync  => vs,
       hc     => hc,
       vc     => vc,
       in_vbp => open,                   --in_vbp,

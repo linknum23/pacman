@@ -6,9 +6,9 @@ use work.pacage.all;
 
 entity simple_ghost_rom is
   port(
-    addr   : in  POINT;
-	squiggle : in std_logic;
-    data   : out std_logic
+    addr     : in  POINT;
+    squiggle : in  std_logic;
+    data     : out std_logic
     );
 end simple_ghost_rom;
 
@@ -17,35 +17,35 @@ architecture Behavioral of simple_ghost_rom is
   type rom_array is array (integer range <>) of std_logic_vector (0 to 15);
   constant rom : rom_array (0 to 31) := (
 
-	--squiggle1
-	"0000000000000000",
+    --squiggle1
+    "0000000000000000",
     "0000001111000000",
-	"0000111111110000",
-	"0001111111111000",
-	"0011111111111100",
-	"0011111111111100",
-	"0011111111111100",
-	"0111111111111110",
+    "0000111111110000",
+    "0001111111111000",
+    "0011111111111100",
+    "0011111111111100",
+    "0011111111111100",
     "0111111111111110",
     "0111111111111110",
-	"0111111111111110",
+    "0111111111111110",
+    "0111111111111110",
     "0111111111111110",
     "0111111111111110",
     "0111101111011110",
     "0011000110001100",
     "0000000000000000",
-	                                                 
-	--squiggle2                              
-	"0000000000000000",
+
+    --squiggle2                              
+    "0000000000000000",
     "0000001111000000",
-	"0000111111110000",
-	"0001111111111000",
-	"0011111111111100",
-	"0011111111111100",
-	"0011111111111100",
-	"0111111111111110",
+    "0000111111110000",
+    "0001111111111000",
+    "0011111111111100",
+    "0011111111111100",
+    "0011111111111100",
     "0111111111111110",
-	"0111111111111110",
+    "0111111111111110",
+    "0111111111111110",
     "0111111111111110",
     "0111111111111110",
     "0111111111111110",
@@ -53,20 +53,20 @@ architecture Behavioral of simple_ghost_rom is
     "0100011001100010",
     "0000000000000000");
 
-	
-  signal why : unsigned(7 downto 0);
-  signal ex  : unsigned(4 downto 0);
-  signal offset : integer range 0 to 511;
+  
+  signal why    : unsigned(10 downto 0);
+  signal ex     : unsigned(10 downto 0);
+  signal offset : integer range 0 to 63;
 
 begin
 
   process(squiggle)
   begin
-	if squiggle = '1' then 
-		offset<= 32;
-	else
-		offset <= 0;
-	end if;
+    if squiggle = '1' then
+      offset <= 32;
+    else
+      offset <= 0;
+    end if;
   end process;
 
   why <= to_unsigned(offset + addr.Y, why'length);
