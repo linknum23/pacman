@@ -1,133 +1,199 @@
-V3 91
-FL C:/projects/Pacman/pacman/clock_divider.vhd 2011/11/25.16:24:32 O.76xd
-EN work/clock_divider 1322357976 FL C:/projects/Pacman/pacman/clock_divider.vhd \
+V3 131
+FL C:/projects/Pacman/pacman/clock_divider.vhd 2011/12/01.23:00:47 O.61xd
+EN work/clock_divider 1323027293 FL C:/projects/Pacman/pacman/clock_divider.vhd \
       PB ieee/std_logic_1164 1308643377 PB ieee/STD_LOGIC_UNSIGNED 1308643379
-AR work/clock_divider/Behavioral 1322357977 \
-      FL C:/projects/Pacman/pacman/clock_divider.vhd EN work/clock_divider 1322357976
-FL C:/projects/Pacman/pacman/collision_machine.vhd 2011/11/26.20:29:52 O.76xd
-EN work/collision_machine 1322357948 \
+AR work/clock_divider/Behavioral 1323027294 \
+      FL C:/projects/Pacman/pacman/clock_divider.vhd EN work/clock_divider 1323027293
+FL C:/projects/Pacman/pacman/collision_machine.vhd 2011/12/03.01:31:25 O.61xd
+EN work/collision_machine 1323027255 \
       FL C:/projects/Pacman/pacman/collision_machine.vhd PB ieee/std_logic_1164 1308643377 \
-      PB ieee/NUMERIC_STD 1308643378 PH work/pacage 1322357947
-AR work/collision_machine/Behavioral 1322357949 \
+      PB ieee/NUMERIC_STD 1308643378 PH work/pacage 1323027248
+AR work/collision_machine/Behavioral 1323027256 \
       FL C:/projects/Pacman/pacman/collision_machine.vhd \
-      EN work/collision_machine 1322357948
-FL C:/projects/Pacman/pacman/direction_manager.vhd 2011/11/25.17:34:59 O.76xd
-EN work/direction_manager 1322357970 \
+      EN work/collision_machine 1323027255
+FL C:/projects/Pacman/pacman/direction_manager.vhd 2011/12/01.23:00:47 O.61xd
+EN work/direction_manager 1323027285 \
       FL C:/projects/Pacman/pacman/direction_manager.vhd PB ieee/std_logic_1164 1308643377 \
       PB ieee/NUMERIC_STD 1308643378 PB ieee/STD_LOGIC_UNSIGNED 1308643379 \
-      PH work/pacage 1322357947
-AR work/direction_manager/Behavioral 1322357971 \
+      PH work/pacage 1323027248
+AR work/direction_manager/Behavioral 1323027286 \
       FL C:/projects/Pacman/pacman/direction_manager.vhd \
-      EN work/direction_manager 1322357970
-FL C:/projects/Pacman/pacman/display_manager.vhd 2011/11/26.20:37:13 O.76xd
-EN work/display_manager 1322357982 \
+      EN work/direction_manager 1323027285
+FL C:/projects/Pacman/pacman/display_manager.vhd 2011/12/03.04:24:55 O.61xd
+EN work/display_manager 1323027299 \
       FL C:/projects/Pacman/pacman/display_manager.vhd PB ieee/std_logic_1164 1308643377 \
-      PB ieee/NUMERIC_STD 1308643378 PH work/pacage 1322357947
-AR work/display_manager/Behavioral 1322357983 \
-      FL C:/projects/Pacman/pacman/display_manager.vhd EN work/display_manager 1322357982 \
+      PB ieee/NUMERIC_STD 1308643378 PH work/pacage 1323027248
+AR work/display_manager/Behavioral 1323027300 \
+      FL C:/projects/Pacman/pacman/display_manager.vhd EN work/display_manager 1323027299 \
       CP grid_display CP pacman_manager CP ghost_display CP ghost_ai \
-      CP direction_manager CP game_machine CP game_grid
-FL C:/projects/Pacman/pacman/game_grid.vhd 2011/11/26.16:20:23 O.76xd
-EN work/game_grid 1322357974 FL C:/projects/Pacman/pacman/game_grid.vhd \
+      CP direction_manager CP game_machine CP score_manager CP game_grid
+FL C:/projects/Pacman/pacman/game_grid.vhd 2011/12/01.23:00:47 O.61xd
+EN work/game_grid 1323027291 FL C:/projects/Pacman/pacman/game_grid.vhd \
       PB ieee/std_logic_1164 1308643377 PB ieee/STD_LOGIC_UNSIGNED 1308643379 \
-      PB ieee/NUMERIC_STD 1308643378 PH work/pacage 1322357947
-AR work/game_grid/Behavioral 1322357975 \
-      FL C:/projects/Pacman/pacman/game_grid.vhd EN work/game_grid 1322357974
-FL C:/projects/Pacman/pacman/game_machine.vhd 2011/11/26.20:33:20 O.76xd
-EN work/game_machine 1322357972 FL C:/projects/Pacman/pacman/game_machine.vhd \
+      PB ieee/NUMERIC_STD 1308643378 PH work/pacage 1323027248
+AR work/game_grid/Behavioral 1323027292 \
+      FL C:/projects/Pacman/pacman/game_grid.vhd EN work/game_grid 1323027291
+FL C:/projects/Pacman/pacman/game_machine.vhd 2011/12/01.23:00:47 O.61xd
+EN work/game_machine 1323027287 FL C:/projects/Pacman/pacman/game_machine.vhd \
       PB ieee/std_logic_1164 1308643377 PB ieee/STD_LOGIC_UNSIGNED 1308643379 \
-      PB ieee/NUMERIC_STD 1308643378 PH work/pacage 1322357947
-AR work/game_machine/Behavioral 1322357973 \
-      FL C:/projects/Pacman/pacman/game_machine.vhd EN work/game_machine 1322357972
-FL C:/projects/Pacman/pacman/ghost_ai.vhd 2011/11/26.20:30:03 O.76xd
-EN work/ghost_ai 1322357968 FL C:/projects/Pacman/pacman/ghost_ai.vhd \
+      PB ieee/NUMERIC_STD 1308643378 PH work/pacage 1323027248
+AR work/game_machine/Behavioral 1323027288 \
+      FL C:/projects/Pacman/pacman/game_machine.vhd EN work/game_machine 1323027287
+FL C:/projects/Pacman/pacman/ghost_ai.vhd 2011/12/03.04:30:30 O.61xd
+EN work/ghost_ai 1323027283 FL C:/projects/Pacman/pacman/ghost_ai.vhd \
       PB ieee/std_logic_1164 1308643377 PB ieee/STD_LOGIC_UNSIGNED 1308643379 \
-      PH work/pacage 1322357947 PB ieee/NUMERIC_STD 1308643378
-AR work/ghost_ai/Behavioral 1322357969 \
-      FL C:/projects/Pacman/pacman/ghost_ai.vhd EN work/ghost_ai 1322357968 \
-      CP collision_machine CP ghost_target_updater CP move_ghost
-FL C:/projects/Pacman/pacman/ghost_display.vhd 2011/11/26.18:38:29 O.76xd
-EN work/ghost_display 1322357966 FL C:/projects/Pacman/pacman/ghost_display.vhd \
+      PH work/pacage 1323027248 PB ieee/NUMERIC_STD 1308643378
+AR work/ghost_ai/Behavioral 1323027284 \
+      FL C:/projects/Pacman/pacman/ghost_ai.vhd EN work/ghost_ai 1323027283 \
+      CP collision_machine CP ghost_frightened_blink CP simple_game_board \
+      CP ghost_target_updater CP move_ghost CP ghost_tunnel_check
+FL C:/projects/Pacman/pacman/ghost_display.vhd 2011/12/03.01:16:13 O.61xd
+EN work/ghost_display 1323027281 FL C:/projects/Pacman/pacman/ghost_display.vhd \
       PB ieee/std_logic_1164 1308643377 PB ieee/NUMERIC_STD 1308643378 \
-      PH work/pacage 1322357947
-AR work/ghost_display/Behavioral 1322357967 \
-      FL C:/projects/Pacman/pacman/ghost_display.vhd EN work/ghost_display 1322357966 \
-      CP ghost_rom
-FL C:/projects/Pacman/pacman/ghost_rom.vhd 2011/11/26.18:38:29 O.76xd
-EN work/ghost_rom 1322357954 FL C:/projects/Pacman/pacman/ghost_rom.vhd \
+      PH work/pacage 1323027248
+AR work/ghost_display/Behavioral 1323027282 \
+      FL C:/projects/Pacman/pacman/ghost_display.vhd EN work/ghost_display 1323027281 \
+      CP ghost_rom CP simple_ghost_rom
+FL C:/projects/Pacman/pacman/ghost_frightened_blink.vhd 2011/12/03.00:36:25 O.61xd
+EN work/ghost_frightened_blink 1323027257 \
+      FL C:/projects/Pacman/pacman/ghost_frightened_blink.vhd \
       PB ieee/std_logic_1164 1308643377 PB ieee/STD_LOGIC_UNSIGNED 1308643379 \
-      PB ieee/NUMERIC_STD 1308643378 PH work/pacage 1322357947
-AR work/ghost_rom/Behavioral 1322357955 \
-      FL C:/projects/Pacman/pacman/ghost_rom.vhd EN work/ghost_rom 1322357954
-FL C:/projects/Pacman/pacman/ghost_target_updater.vhd 2011/11/26.18:38:29 O.76xd
-EN work/ghost_target_updater 1322357950 \
+      PB ieee/NUMERIC_STD 1308643378 PH work/pacage 1323027248
+AR work/ghost_frightened_blink/Behavioral 1323027258 \
+      FL C:/projects/Pacman/pacman/ghost_frightened_blink.vhd \
+      EN work/ghost_frightened_blink 1323027257
+FL C:/projects/Pacman/pacman/ghost_rom.vhd 2011/12/01.23:00:47 O.61xd
+EN work/ghost_rom 1323027267 FL C:/projects/Pacman/pacman/ghost_rom.vhd \
+      PB ieee/std_logic_1164 1308643377 PB ieee/STD_LOGIC_UNSIGNED 1308643379 \
+      PB ieee/NUMERIC_STD 1308643378 PH work/pacage 1323027248
+AR work/ghost_rom/Behavioral 1323027268 \
+      FL C:/projects/Pacman/pacman/ghost_rom.vhd EN work/ghost_rom 1323027267
+FL C:/projects/Pacman/pacman/ghost_speed_selector.vhd 2011/12/04.12:57:37 O.61xd
+EN work/ghost_speed_selector 1323027249 \
+      FL C:/projects/Pacman/pacman/ghost_speed_selector.vhd \
+      PB ieee/std_logic_1164 1308643377 PB ieee/STD_LOGIC_UNSIGNED 1308643379 \
+      PH work/pacage 1323027248 PB ieee/NUMERIC_STD 1308643378
+AR work/ghost_speed_selector/behavioral 1323027250 \
+      FL C:/projects/Pacman/pacman/ghost_speed_selector.vhd \
+      EN work/ghost_speed_selector 1323027249
+FL C:/projects/Pacman/pacman/ghost_target_updater.vhd 2011/12/03.00:35:57 O.61xd
+EN work/ghost_target_updater 1323027261 \
       FL C:/projects/Pacman/pacman/ghost_target_updater.vhd \
-      PB ieee/std_logic_1164 1308643377 PH work/pacage 1322357947 \
+      PB ieee/std_logic_1164 1308643377 PH work/pacage 1323027248 \
       PB ieee/NUMERIC_STD 1308643378
-AR work/ghost_target_updater/Behavioral 1322357951 \
+AR work/ghost_target_updater/Behavioral 1323027262 \
       FL C:/projects/Pacman/pacman/ghost_target_updater.vhd \
-      EN work/ghost_target_updater 1322357950
-FL C:/projects/Pacman/pacman/grid.vhd 2011/11/26.17:59:00 O.76xd
-EN work/grid_roms 1322357960 FL C:/projects/Pacman/pacman/grid.vhd \
+      EN work/ghost_target_updater 1323027261
+FL C:/projects/Pacman/pacman/ghost_tunnel_check.vhd 2011/12/01.23:00:47 O.61xd
+EN work/ghost_tunnel_check 1323027265 \
+      FL C:/projects/Pacman/pacman/ghost_tunnel_check.vhd PB ieee/std_logic_1164 1308643377 \
+      PB ieee/STD_LOGIC_UNSIGNED 1308643379 PH work/pacage 1323027248 \
+      PB ieee/NUMERIC_STD 1308643378
+AR work/ghost_tunnel_check/behavioral 1323027266 \
+      FL C:/projects/Pacman/pacman/ghost_tunnel_check.vhd \
+      EN work/ghost_tunnel_check 1323027265
+FL C:/projects/Pacman/pacman/grid.vhd 2011/12/01.23:00:47 O.61xd
+EN work/grid_roms 1323027275 FL C:/projects/Pacman/pacman/grid.vhd \
       PB ieee/std_logic_1164 1308643377 PB ieee/STD_LOGIC_UNSIGNED 1308643379 \
-      PB ieee/NUMERIC_STD 1308643378 PH work/pacage 1322357947
-AR work/grid_roms/Behavioral 1322357961 \
-      FL C:/projects/Pacman/pacman/grid.vhd EN work/grid_roms 1322357960
-FL C:/projects/Pacman/pacman/grid_display.vhd 2011/11/26.16:06:03 O.76xd
-EN work/grid_display 1322357962 FL C:/projects/Pacman/pacman/grid_display.vhd \
+      PB ieee/NUMERIC_STD 1308643378 PH work/pacage 1323027248
+AR work/grid_roms/Behavioral 1323027276 \
+      FL C:/projects/Pacman/pacman/grid.vhd EN work/grid_roms 1323027275
+FL C:/projects/Pacman/pacman/grid_display.vhd 2011/12/01.23:00:47 O.61xd
+EN work/grid_display 1323027277 FL C:/projects/Pacman/pacman/grid_display.vhd \
       PB ieee/std_logic_1164 1308643377 PB ieee/STD_LOGIC_UNSIGNED 1308643379 \
-      PB ieee/NUMERIC_STD 1308643378 PH work/pacage 1322357947
-AR work/grid_display/Behavioral 1322357963 \
-      FL C:/projects/Pacman/pacman/grid_display.vhd EN work/grid_display 1322357962 \
+      PB ieee/NUMERIC_STD 1308643378 PH work/pacage 1323027248
+AR work/grid_display/Behavioral 1323027278 \
+      FL C:/projects/Pacman/pacman/grid_display.vhd EN work/grid_display 1323027277 \
       CP grid_roms
-FL C:/projects/Pacman/pacman/ipcore_dir/dcm.vhd 2011/11/25.16:24:31 O.76xd
-EN work/dcm 1322357978 FL C:/projects/Pacman/pacman/ipcore_dir/dcm.vhd \
+FL C:/projects/Pacman/pacman/ipcore_dir/dcm.vhd 2011/12/01.23:00:47 O.61xd
+EN work/dcm 1323027295 FL C:/projects/Pacman/pacman/ipcore_dir/dcm.vhd \
       PB ieee/std_logic_1164 1308643377 PB ieee/NUMERIC_STD 1308643378 LB UNISIM \
       PH unisim/VCOMPONENTS 1308643377
-AR work/dcm/BEHAVIORAL 1322357979 \
-      FL C:/projects/Pacman/pacman/ipcore_dir/dcm.vhd EN work/dcm 1322357978 \
+AR work/dcm/BEHAVIORAL 1323027296 \
+      FL C:/projects/Pacman/pacman/ipcore_dir/dcm.vhd EN work/dcm 1323027295 \
       CP BUFG CP IBUFG CP DCM_SP
-FL C:/projects/Pacman/pacman/move_ghost.vhd 2011/11/26.20:29:52 O.76xd
-EN work/move_ghost 1322357952 FL C:/projects/Pacman/pacman/move_ghost.vhd \
+FL C:/projects/Pacman/pacman/move_ghost.vhd 2011/12/04.14:32:58 O.61xd
+EN work/move_ghost 1323027263 FL C:/projects/Pacman/pacman/move_ghost.vhd \
       PB ieee/std_logic_1164 1308643377 PB ieee/STD_LOGIC_UNSIGNED 1308643379 \
-      PH work/pacage 1322357947 PB ieee/NUMERIC_STD 1308643378
-AR work/move_ghost/Behavioral 1322357953 \
-      FL C:/projects/Pacman/pacman/move_ghost.vhd EN work/move_ghost 1322357952
-FL C:/projects/Pacman/pacman/pacage.vhd 2011/11/26.20:37:53 O.76xd
-PH work/pacage 1322357947 FL C:/projects/Pacman/pacman/pacage.vhd \
-      PB ieee/std_logic_1164 1308643377 CD grid_display CD ghost_display \
-      CD pacman_manager CD ghost_ai CD game_grid CD direction_manager \
-      CD game_machine CD ghost_target_updater CD move_ghost CD collision_machine
-FL C:/projects/Pacman/pacman/pacman_manager.vhd 2011/11/26.18:16:29 O.76xd
-EN work/pacman_manager 1322357964 FL C:/projects/Pacman/pacman/pacman_manager.vhd \
+      PH work/pacage 1323027248 PB ieee/NUMERIC_STD 1308643378
+AR work/move_ghost/Behavioral 1323027264 \
+      FL C:/projects/Pacman/pacman/move_ghost.vhd EN work/move_ghost 1323027263 \
+      CP ghost_speed_selector CP speed_clock
+FL C:/projects/Pacman/pacman/nes_controller.vhd 2011/12/01.23:00:47 O.61xd
+EN work/nes_controller 1323027301 FL C:/projects/Pacman/pacman/nes_controller.vhd \
       PB ieee/std_logic_1164 1308643377 PB ieee/STD_LOGIC_UNSIGNED 1308643379 \
-      PB ieee/NUMERIC_STD 1308643378 PH work/pacage 1322357947
-AR work/pacman_manager/Behavioral 1322357965 \
-      FL C:/projects/Pacman/pacman/pacman_manager.vhd EN work/pacman_manager 1322357964 \
-      CP pacman_target_selection CP pacman_rom
-FL C:/projects/Pacman/pacman/pacman_rom.vhd 2011/11/25.18:59:44 O.76xd
-EN work/pacman_rom 1322357958 FL C:/projects/Pacman/pacman/pacman_rom.vhd \
+      PB ieee/NUMERIC_STD 1308643378 PH work/pacage 1323027248
+AR work/nes_controller/Behavioral 1323027302 \
+      FL C:/projects/Pacman/pacman/nes_controller.vhd EN work/nes_controller 1323027301
+FL C:/projects/Pacman/pacman/number_rom.vhd 2011/12/01.23:00:47 O.61xd
+EN work/number_rom 1323027253 FL C:/projects/Pacman/pacman/number_rom.vhd \
       PB ieee/std_logic_1164 1308643377 PB ieee/STD_LOGIC_UNSIGNED 1308643379 \
-      PB ieee/NUMERIC_STD 1308643378 PH work/pacage 1322357947
-AR work/pacman_rom/Behavioral 1322357959 \
-      FL C:/projects/Pacman/pacman/pacman_rom.vhd EN work/pacman_rom 1322357958
-FL C:/projects/Pacman/pacman/pacman_target_selection.vhd 2011/11/26.03:31:34 O.76xd
-EN work/pacman_target_selection 1322357956 \
+      PB ieee/NUMERIC_STD 1308643378 PH work/pacage 1323027248
+AR work/number_rom/Behavioral 1323027254 \
+      FL C:/projects/Pacman/pacman/number_rom.vhd EN work/number_rom 1323027253
+FL C:/projects/Pacman/pacman/pacage.vhd 2011/12/04.13:52:40 O.61xd
+PH work/pacage 1323027248 FL C:/projects/Pacman/pacman/pacage.vhd \
+      PB ieee/std_logic_1164 1308643377 CD score_manager CD number_rom \
+      CD grid_display CD ghost_display CD pacman_manager CD ghost_ai CD game_grid \
+      CD direction_manager CD game_machine CD ghost_target_updater CD move_ghost \
+      CD collision_machine CD speed_clock CD ghost_tunnel_check
+FL C:/projects/Pacman/pacman/pacman_manager.vhd 2011/12/01.23:00:47 O.61xd
+EN work/pacman_manager 1323027279 FL C:/projects/Pacman/pacman/pacman_manager.vhd \
+      PB ieee/std_logic_1164 1308643377 PB ieee/STD_LOGIC_UNSIGNED 1308643379 \
+      PB ieee/NUMERIC_STD 1308643378 PH work/pacage 1323027248
+AR work/pacman_manager/Behavioral 1323027280 \
+      FL C:/projects/Pacman/pacman/pacman_manager.vhd EN work/pacman_manager 1323027279 \
+      CP speed_clock CP pacman_target_selection CP pacman_rom
+FL C:/projects/Pacman/pacman/pacman_rom.vhd 2011/12/01.23:00:47 O.61xd
+EN work/pacman_rom 1323027273 FL C:/projects/Pacman/pacman/pacman_rom.vhd \
+      PB ieee/std_logic_1164 1308643377 PB ieee/STD_LOGIC_UNSIGNED 1308643379 \
+      PB ieee/NUMERIC_STD 1308643378 PH work/pacage 1323027248
+AR work/pacman_rom/Behavioral 1323027274 \
+      FL C:/projects/Pacman/pacman/pacman_rom.vhd EN work/pacman_rom 1323027273
+FL C:/projects/Pacman/pacman/pacman_target_selection.vhd 2011/12/01.23:00:47 O.61xd
+EN work/pacman_target_selection 1323027271 \
       FL C:/projects/Pacman/pacman/pacman_target_selection.vhd \
       PB ieee/std_logic_1164 1308643377 PB ieee/STD_LOGIC_UNSIGNED 1308643379 \
-      PB ieee/NUMERIC_STD 1308643378 PH work/pacage 1322357947
-AR work/pacman_target_selection/Behavioral 1322357957 \
+      PB ieee/NUMERIC_STD 1308643378 PH work/pacage 1323027248
+AR work/pacman_target_selection/Behavioral 1323027272 \
       FL C:/projects/Pacman/pacman/pacman_target_selection.vhd \
-      EN work/pacman_target_selection 1322357956
-FL C:/projects/Pacman/pacman/top_level.vhd 2011/11/26.20:39:03 O.76xd
-EN work/top_level 1322357984 FL C:/projects/Pacman/pacman/top_level.vhd \
+      EN work/pacman_target_selection 1323027271
+FL C:/projects/Pacman/pacman/score_manager.vhd 2011/12/01.23:00:47 O.61xd
+EN work/score_manager 1323027289 FL C:/projects/Pacman/pacman/score_manager.vhd \
+      PB ieee/std_logic_1164 1308643377 PB ieee/STD_LOGIC_UNSIGNED 1308643379 \
+      PB ieee/NUMERIC_STD 1308643378 PH work/pacage 1323027248
+AR work/score_manager/Behavioral 1323027290 \
+      FL C:/projects/Pacman/pacman/score_manager.vhd EN work/score_manager 1323027289 \
+      CP number_rom
+FL C:/projects/Pacman/pacman/simple_game_board.vhd 2011/12/03.03:00:14 O.61xd
+EN work/simple_game_board 1323027259 \
+      FL C:/projects/Pacman/pacman/simple_game_board.vhd PB ieee/std_logic_1164 1308643377 \
+      PB ieee/NUMERIC_STD 1308643378 PH work/pacage 1323027248
+AR work/simple_game_board/behavioral 1323027260 \
+      FL C:/projects/Pacman/pacman/simple_game_board.vhd \
+      EN work/simple_game_board 1323027259
+FL C:/projects/Pacman/pacman/simple_ghost_rom.vhd 2011/12/01.23:00:47 O.61xd
+EN work/simple_ghost_rom 1323027269 \
+      FL C:/projects/Pacman/pacman/simple_ghost_rom.vhd PB ieee/std_logic_1164 1308643377 \
+      PB ieee/STD_LOGIC_UNSIGNED 1308643379 PB ieee/NUMERIC_STD 1308643378 \
+      PH work/pacage 1323027248
+AR work/simple_ghost_rom/Behavioral 1323027270 \
+      FL C:/projects/Pacman/pacman/simple_ghost_rom.vhd EN work/simple_ghost_rom 1323027269
+FL C:/projects/Pacman/pacman/speed_clock.vhd 2011/12/01.23:00:47 O.61xd
+EN work/speed_clock 1323027251 FL C:/projects/Pacman/pacman/speed_clock.vhd \
       PB ieee/std_logic_1164 1308643377 PB ieee/NUMERIC_STD 1308643378 \
-      PH work/pacage 1322357947
-AR work/top_level/Behavioral 1322357985 \
-      FL C:/projects/Pacman/pacman/top_level.vhd EN work/top_level 1322357984 \
-      CP clock_divider CP dcm CP vga_1024x768 CP display_manager
-FL C:/projects/Pacman/pacman/vga1024x768.vhd 2011/11/25.18:37:44 O.76xd
-EN work/vga_1024x768 1322357980 FL C:/projects/Pacman/pacman/vga1024x768.vhd \
+      PB ieee/STD_LOGIC_UNSIGNED 1308643379 PH work/pacage 1323027248
+AR work/speed_clock/Behavioral 1323027252 \
+      FL C:/projects/Pacman/pacman/speed_clock.vhd EN work/speed_clock 1323027251
+FL C:/projects/Pacman/pacman/top_level.vhd 2011/12/03.04:29:42 O.61xd
+EN work/top_level 1323027303 FL C:/projects/Pacman/pacman/top_level.vhd \
+      PB ieee/std_logic_1164 1308643377 PB ieee/STD_LOGIC_UNSIGNED 1308643379 \
+      PB ieee/NUMERIC_STD 1308643378 PH work/pacage 1323027248
+AR work/top_level/Behavioral 1323027304 \
+      FL C:/projects/Pacman/pacman/top_level.vhd EN work/top_level 1323027303 \
+      CP clock_divider CP dcm CP vga_1024x768 CP display_manager CP nes_controller
+FL C:/projects/Pacman/pacman/vga1024x768.vhd 2011/12/01.23:00:47 O.61xd
+EN work/vga_1024x768 1323027297 FL C:/projects/Pacman/pacman/vga1024x768.vhd \
       PB ieee/std_logic_1164 1308643377 PB ieee/STD_LOGIC_UNSIGNED 1308643379
-AR work/vga_1024x768/Behavioral 1322357981 \
-      FL C:/projects/Pacman/pacman/vga1024x768.vhd EN work/vga_1024x768 1322357980
+AR work/vga_1024x768/Behavioral 1323027298 \
+      FL C:/projects/Pacman/pacman/vga1024x768.vhd EN work/vga_1024x768 1323027297

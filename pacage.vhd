@@ -21,7 +21,7 @@ package pacage is
   type GHOST_DISP_MODE is (NORM, SCATTER, FRIGHTENED, EYES);
   
   --relative speeds used for move clocks
-  subtype SPEED is natural range 0 to 22; 
+  subtype SPEED is natural range 0 to 40; 
   constant SPEED_40 : SPEED := 8; 
   constant SPEED_45 : SPEED := 9;
   constant SPEED_50  : SPEED := 10;
@@ -36,6 +36,7 @@ package pacage is
   constant SPEED_95  : SPEED := 19;
   constant SPEED_100 : SPEED := 20;
   constant SPEED_105 : SPEED := 21;
+  constant SPEED_200 : SPEED := 40;
   
   --ghost names to indices
   constant I_BLINKY : natural := 0;
@@ -48,7 +49,7 @@ package pacage is
 	constant PINKY_SCATTER_TARGET : POINT := (0,0);
 	constant INKY_SCATTER_TARGET : POINT := (27,31);
 	constant CLYDE_SCATTER_TARGET : POINT := (0,31);
-	constant HOME_TARGET : POINT := (12,13); -- this is where ghost go when they are killed in scatter mode
+	constant HOME_TARGET : POINT := (13,11); -- this is where ghost go when they are killed in scatter mode
 	constant HOME : POINT := HOME_TARGET;
 	
 	--65MHZ time constants

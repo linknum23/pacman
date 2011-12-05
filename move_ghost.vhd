@@ -66,6 +66,10 @@ architecture Behavioral of move_ghost is
 	signal pinky_move_flag, pinky_clr_flag : std_logic;
 	signal inky_move_flag, inky_clr_flag : std_logic;
 	signal clyde_move_flag, clyde_clr_flag : std_logic;
+	signal blinky_move_flag_pre: std_logic;
+	signal pinky_move_flag_pre: std_logic;
+	signal inky_move_flag_pre: std_logic;
+	signal clyde_move_flag_pre: std_logic;
   
   type ghostarr is array (natural range <>) of GHOST_INFO;
   signal ghosts : ghostarr(0 to 3) := (
@@ -378,14 +382,11 @@ begin
 				--xconv := to_unsigned(ghosts(index).PT.X, 5);
 				--yconv := to_unsigned(ghosts(index).PT.Y, 5);
 			  if ghosts(index).CAGED = true then
-				--check to see if Y index is a multiple of 16
 				-- this does the cage bounce
-				 if yconv(4 downto 0) = "00000" then
-					if ghosts(index).DIR = UP then
+				 if yconv(7 downto 0) < "11000100" then --12x16+4
 						ghosts(index).DIR <= DOWN;
-					else
+				 elsif yconv(7 downto 0) > "11011100" then --15x16-4
 						ghosts(index).DIR <= UP;
-					end if;
 				 end if;
 				 
 				 --update ghost mode
@@ -423,6 +424,27 @@ begin
 					when FRIGHTENED =>
 					   if ghosts(index).MODE /= EYES then
 							ghosts(index).MODE <= FRIGHTENED;
+						else 
+						   if ghost_rc = HOME then
+							   ghosts(index).MODE <= NORM;
+								case index is 
+								   when I_BLINKY =>
+										ghosts(index).PT <= HOME;
+								   when I_PINKY =>
+										ghosts(index).PT <= PINKY_START_POINT;
+									when I_INKY =>
+										ghosts(index).PT <= INKY_START_POINT;
+									when I_CLYDE =>
+										ghosts(index).PT <= CLYDE_START_POINT;
+									when others =>
+									null;
+								end case;
+								
+							   if index /= I_BLINKY then
+									ghosts(index).CAGED <= true;
+								end if;
+								
+							end if;
 						end if;
 					when others =>
 						ghosts(index).MODE <= NORM;
@@ -559,31 +581,71 @@ begin
   port map(
 	clk_50mhz => clk,
 	uspeed => blinky_speed,
-	flag => blinky_move_flag,
+	flag => blinky_move_flag_pre,
 	clr_flag => blinky_clr_flag
   );
     pspeeds : speed_clock 
   port map(
 	clk_50mhz => clk,
 	uspeed => pinky_speed,
-	flag => pinky_move_flag,
+	flag => pinky_move_flag_pre,
 	clr_flag => pinky_clr_flag
   );
     ispeeds : speed_clock 
   port map(
 	clk_50mhz => clk,
 	uspeed => inky_speed,
-	flag => inky_move_flag,
+	flag => inky_move_flag_pre,
 	clr_flag => inky_clr_flag
   );
     cspeeds : speed_clock 
   port map(
 	clk_50mhz => clk,
 	uspeed => clyde_speed,
-	flag => clyde_move_flag,
+	flag => clyde_move_flag_pre,
 	clr_flag => clyde_clr_flag
   );
   
+  process (clk) 
+  begin
+	  if (rising_edge(clk)) then 
+		 if rst = '1' then
+			blinky_move_flag <= '0';
+			pinky_move_flag <= '0';
+			inky_move_flag <= '0';
+			clyde_move_flag <= '0';
+		 else
+			if gameinfo.game_in_progress = '1' then
+				blinky_move_flag <= blinky_move_flag_pre;
+				pinky_move_flag <= pinky_move_flag_pre;
+				inky_move_flag <= inky_move_flag_pre;
+				clyde_move_flag <= clyde_move_flag_pre;
+			else
+				if ghosts(I_BLINKY).mode = EYES then
+					blinky_move_flag <= blinky_move_flag_pre;
+				else
+					blinky_move_flag <= '0';
+				end if;
+				if ghosts(I_PINKY).mode = EYES then
+					pinky_move_flag <= pinky_move_flag_pre;
+				else
+					pinky_move_flag <= '0';
+				end if;
+				if ghosts(I_INKY).mode = EYES then
+					inky_move_flag <= inky_move_flag_pre;
+				else
+					inky_move_flag <= '0';
+				end if;
+				if ghosts(I_CLYDE).mode = EYES then
+					clyde_move_flag <= clyde_move_flag_pre;
+				else
+					clyde_move_flag <= '0';
+				end if;
+				
+			end if;
+		 end if;
+	  end if;
+  end process;
 
 end Behavioral;
 

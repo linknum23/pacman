@@ -59,6 +59,8 @@ constant L12_to_14_ELROY2_THRESH : natural range 0 to 244 := 244-40;
 constant L15_to_18_ELROY2_THRESH : natural range 0 to 244 := 244-50;
 constant L19_to_255_ELROY2_THRESH : natural range 0 to 244 := 244-60;
 
+constant GHOST_DEATH_RETURN_SPEED : SPEED := SPEED_200;
+
 signal tunnel_speed, fright_speed, normal_speed, elroy_1_speed, elroy_2_speed : SPEED;
 signal elroy_1_thresh, elroy_2_thresh : natural range 0 to 244;
 
@@ -121,7 +123,9 @@ signal elroy_1_thresh, elroy_2_thresh : natural range 0 to 244;
 					elroy_1_thresh, elroy_2_thresh)
   begin
   --speed setting for all of the ghosts
-  if blinky.MODE = FRIGHTENED then
+  if blinky.MODE = EYES then
+    blinky_speed <= GHOST_DEATH_RETURN_SPEED;
+  elsif blinky.MODE = FRIGHTENED then
     blinky_speed <= fright_speed;
   elsif blinky_is_in_tunnel then
 	 blinky_speed <= tunnel_speed;
@@ -133,7 +137,9 @@ signal elroy_1_thresh, elroy_2_thresh : natural range 0 to 244;
     blinky_speed <= normal_speed;
   end if;
   
-  if pinky.MODE = FRIGHTENED then
+  if pinky.MODE = EYES then
+    pinky_speed <= GHOST_DEATH_RETURN_SPEED;
+  elsif pinky.MODE = FRIGHTENED then
     pinky_speed <= fright_speed;
   elsif pinky_is_in_tunnel then
 	 pinky_speed <= tunnel_speed;
@@ -141,7 +147,9 @@ signal elroy_1_thresh, elroy_2_thresh : natural range 0 to 244;
     pinky_speed <= normal_speed;
   end if;
   
-  if inky.MODE = FRIGHTENED then
+  if inky.MODE = EYES then
+    inky_speed <= GHOST_DEATH_RETURN_SPEED;
+  elsif inky.MODE = FRIGHTENED then
     inky_speed <= fright_speed;
   elsif inky_is_in_tunnel then
 	 inky_speed <= tunnel_speed;
@@ -149,7 +157,9 @@ signal elroy_1_thresh, elroy_2_thresh : natural range 0 to 244;
     inky_speed <= normal_speed;
   end if;
   
-  if clyde.MODE = FRIGHTENED then
+  if clyde.MODE = EYES then
+    clyde_speed <= GHOST_DEATH_RETURN_SPEED;
+  elsif clyde.MODE = FRIGHTENED then
     clyde_speed <= fright_speed;
   elsif clyde_is_in_tunnel then
 	 clyde_speed <= tunnel_speed;
