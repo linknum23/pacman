@@ -129,6 +129,7 @@ architecture Behavioral of move_ghost is
   signal move,last_move,do_move	: std_logic := '0';
   signal in_no_up_turns_zone  								: boolean := false;
   signal random_num                                    : natural range 0 to 32;
+  signal direction_precalculated : boolean;
   
   signal blinky_release,pinky_release,inky_release,clyde_release : boolean;
 begin
@@ -424,25 +425,26 @@ begin
           when UPDATE_DIR =>
 				--xconv := to_unsigned(ghosts(index).PT.X, 5);
 				--yconv := to_unsigned(ghosts(index).PT.Y, 5);
+				direction_precalculated <= false;
 			  if ghosts(index).CAGED = true then
-				-- this does the cage bounce
-				 if yconv(7 downto 0) < "11010000" then --13x16
+					-- this does the cage bounce
+					if yconv(7 downto 0) < "11010000" then --13x16
 						ghosts(index).DIR <= DOWN;
 						--ghosts(index).PT.Y <= 12*16+4;--to_integer(unsigned("11000100"));
-				 elsif yconv(7 downto 0) > "11110000" then --15x16
+					elsif yconv(7 downto 0) > "11110000" then --15x16
 						--ghosts(index).PT.Y <= to_integer(unsigned("11011100"));
 						ghosts(index).DIR <= UP;
-				end if;
+					end if;
 				 
-				 --update ghost mode
-				 case  gameinfo.GHOSTMODE is
-					when FRIGHTENED =>
-					   if ghosts(index).MODE /= EYES and ghosts(index).CAGED = false then
-							ghosts(index).MODE <= FRIGHTENED;
-						end if;
-					when others =>
-						ghosts(index).MODE <= NORM;
-				 end case;
+					 --update ghost mode
+					 case  gameinfo.GHOSTMODE is
+						when FRIGHTENED =>
+							if ghosts(index).MODE /= EYES and ghosts(index).CAGED = false then
+								ghosts(index).MODE <= FRIGHTENED;
+							end if;
+						when others =>
+							ghosts(index).MODE <= NORM;
+					 end case;
 				 
 				 move_state <= UPDATE_LOC;
 				 
@@ -491,6 +493,9 @@ begin
 							   if index /= I_BLINKY then
 									ghosts(index).CAGED <= true;
 									ghosts(index).DIR <= UP;
+									direction_precalculated <= true;
+								else
+								   ghosts(index).DIR <= L;
 								end if;
 								
 							end if;
@@ -536,7 +541,13 @@ begin
 				else
 					min_ud <= UP;
 				end if;
-				move_state <= UPDATE_DIR_2;
+				-- a special case that the ghost's direction was set specifically
+				-- is handled here
+				if direction_precalculated then
+					move_state <= UPDATE_LOC;
+				else
+					move_state <= UPDATE_DIR_2;
+				end if;
 			 when UPDATE_DIR_2 =>
 				if min_lr = L then
 					--left
