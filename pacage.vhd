@@ -387,6 +387,10 @@ package pacage is
       pinky_tile_location  : in  POINT;
       inky_tile_location   : in  POINT;
       clyde_tile_location  : in  POINT;
+		blinky : in  GHOST_INFO;
+		pinky : in  GHOST_INFO;
+		inky   : in  GHOST_INFO;
+		clyde : in  GHOST_INFO;
       collision_index      : out natural range 0 to 3;
       collision            : out std_logic
       );

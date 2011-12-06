@@ -117,6 +117,10 @@ begin
       pinky_tile_location  => pinky_tile_loc_int,
       inky_tile_location   => inky_tile_loc_int,
       clyde_tile_location  => clyde_tile_loc_int,
+		blinky   => blinky_info_int,
+      pinky    => pinky_info_int,
+      inky     => inky_info_int,
+      clyde    => clyde_info_int, 
       collision_index      => collision_index_int,
       collision            => collision_int
       );
