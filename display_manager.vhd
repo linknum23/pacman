@@ -29,6 +29,8 @@ architecture Behavioral of display_manager is
   signal ghost_valid  : std_logic := '0';
   signal font_valid   : std_logic := '0';
   signal life_valid   : std_logic := '0';
+  signal start_valid  : std_logic := '0';
+  signal splash_valid : std_logic := '0';
 
   --color signals
   signal grid_color_data   : COLOR;
@@ -36,6 +38,8 @@ architecture Behavioral of display_manager is
   signal ghost_color_data  : COLOR;
   signal font_color_data   : COLOR;
   signal life_color_data   : COLOR;
+  signal start_color_data  : COLOR;
+  signal splash_color_data : COLOR;
 
   --state enable and done signals
   -- these are used to notify a subcomponent when they can read from the rom
@@ -69,7 +73,7 @@ architecture Behavioral of display_manager is
   signal grid_rom_request            : std_logic := '0';
   signal grid_rom_request_response   : std_logic := '0';
   signal grid_data, grid_rom_data_in : std_logic_vector(4 downto 0);
-  signal grid_rom_we                 : std_logic := '0';
+  signal grid_rom_we, dot_reset      : std_logic := '0';
   signal direction_tile_location     : POINT;
 
   signal squiggle : std_logic;
@@ -105,7 +109,6 @@ begin
       valid_location        => grid_valid,
       data                  => grid_color_data
       );
-
 
   -------------------------------------------------
   --Mr. Pacman himself. The man, the myth, the legend. That's right baby.
@@ -228,13 +231,29 @@ begin
       valid_location        => life_valid
       );
 
+  startsc : font_start_screen
+    generic map (
+      GAME_SIZE   => GAME_SIZE,
+      GAME_OFFSET => GAME_OFFSET
+      )
+    port map(
+      clk                   => clk,
+      clk_25                => clk_25,
+      rst                   => rst,
+      current_draw_location => current_draw_location,
+      gameinfo              => gameinfo,
+      data                  => start_color_data,
+      valid_location        => start_valid
+      );
+
+
 -------------------------------------------------
 --grid and its mux
 -------------------------------------------------
   the_grid : game_grid
     port map(
       clk      => clk,
-      rst      => rst,
+      rst      => dot_reset,
       data_in  => grid_rom_data_in,
       we       => grid_rom_we,
       cs       => '1',
@@ -261,13 +280,15 @@ begin
     end if;
   end process;
 
-------------------------------------------------
--- basic state controller for pacman
---  this should be put in a seperate file when it gets bigger
--------------------------------------------------------
+
   process(clk)
+    variable dot_rst : std_logic := '0';
   begin
     if clk'event and clk = '1' then
+      dot_reset <= '0';
+      if gameinfo.dot_reset = '1' then
+        dot_rst := '1';
+      end if;
       if in_vbp = '0' or rst = '1' then
         vga_en <= '1';
         gstate <= VGA_READ;
@@ -287,14 +308,6 @@ begin
             else
               gstate <= VGA_READ;
             end if;
-          when GHOST_UPDATE =>
-            ghost_read <= '1';
-            if ghost_done = '1' then
-              pacman_en <= '1';
-              gstate    <= PACMAN_UPDATE;
-            else
-              gstate <= GHOST_UPDATE;
-            end if;
           when PACMAN_UPDATE =>
             pacman_en <= '1';
             if pacman_done = '1' then
@@ -313,33 +326,48 @@ begin
               gstate <= GAME_UPDATE;
             end if;
           when PAUSE =>
-                                           --wait until we get out of the backporch
+            if dot_rst = '1' then
+              dot_reset <= '1';
+              dot_rst   := '0';
+            end if;
+            --wait until we get out of the backporch
             gstate <= PAUSE;
+          when others => null;
         end case;
       end if;
     end if;
   end process;
 
 
-                                        -------------------------------------------------
-                                        --mux the output color for the display
-                                        -------------------------------------------------
-  process(ghost_valid, ghost_color_data, pacman_color_data,
-          pacman_valid, grid_color_data, grid_valid, font_valid, font_color_data)
+  -------------------------------------------------
+  --mux the output color for the display
+  -------------------------------------------------
+  process(ghost_valid, ghost_color_data, pacman_color_data, pacman_valid, grid_color_data, grid_valid, font_valid, font_color_data,
+          splash_valid, splash_color_data, start_color_data, start_valid, gameinfo.gamescreen, life_valid, life_color_data)
   begin
     data.R <= "000";
     data.G <= "000";
     data.B <= "00";
-    if ghost_valid = '1' then
-      data <= ghost_color_data;
-    elsif pacman_valid = '1' then
-      data <= pacman_color_data;
-    elsif font_valid = '1' then
+    if font_valid = '1' then
       data <= font_color_data;
-    elsif life_valid = '1' then
-      data <= life_color_data;
-    elsif grid_valid = '1' then
-      data <= grid_color_data;
+    else
+      if gameinfo.gamescreen = START_SCREEN then
+        if start_valid = '1' then
+          data <= start_color_data;
+        end if;
+      else
+        if splash_valid = '1' then
+          data <= splash_color_data;
+        elsif ghost_valid = '1' then
+          data <= ghost_color_data;
+        elsif pacman_valid = '1' then
+          data <= pacman_color_data;
+        elsif life_valid = '1' then
+          data <= life_color_data;
+        elsif grid_valid = '1' then
+          data <= grid_color_data;
+        end if;
+      end if;
     end if;
   end process;
 

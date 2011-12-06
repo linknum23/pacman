@@ -1,19 +1,33 @@
-Running: C:\Xilinx\13.3\ISE_DS\ISE\bin\nt\unwrapped\fuse.exe -intstyle ise -incremental -o C:/projects/Pacman/pacman/top_level_tb_isim_beh.exe -prj C:/projects/Pacman/pacman/top_level_tb_beh.prj work.top_level_tb 
+Running: fuse.exe -relaunch -intstyle "ise" -incremental -o "C:/projects/Pacman/pacman/top_level_tb_isim_beh.exe" -prj "C:/projects/Pacman/pacman/top_level_tb_beh.prj" "work.top_level_tb" 
 ISim O.76xd (signature 0x2f00eba5)
 Number of CPUs detected in this system: 4
 Turning on mult-threading, number of parallel sub-compilation jobs: 8 
 Determining compilation order of HDL files
 Parsing VHDL file "C:/projects/Pacman/pacman/pacage.vhd" into library work
 Parsing VHDL file "C:/projects/Pacman/pacman/speed_clock.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/ghost_speed_selector.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/simple_ghost_rom.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/simple_game_board.vhd" into library work
 Parsing VHDL file "C:/projects/Pacman/pacman/pacman_target_selection.vhd" into library work
 Parsing VHDL file "C:/projects/Pacman/pacman/pacman_rom.vhd" into library work
 Parsing VHDL file "C:/projects/Pacman/pacman/number_rom.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/move_ghost.vhd" into library work
 Parsing VHDL file "C:/projects/Pacman/pacman/grid.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/ghost_tunnel_check.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/ghost_target_updater.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/ghost_rom.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/ghost_frightened_blink.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/font_rom.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/collision_machine.vhd" into library work
 Parsing VHDL file "C:/projects/Pacman/pacman/score_manager.vhd" into library work
 Parsing VHDL file "C:/projects/Pacman/pacman/pacman_manager.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/pacman_lives.vhd" into library work
 Parsing VHDL file "C:/projects/Pacman/pacman/grid_display.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/ghost_display.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/ghost_ai.vhd" into library work
 Parsing VHDL file "C:/projects/Pacman/pacman/game_machine.vhd" into library work
 Parsing VHDL file "C:/projects/Pacman/pacman/game_grid.vhd" into library work
+Parsing VHDL file "C:/projects/Pacman/pacman/font_start_screen.vhd" into library work
 Parsing VHDL file "C:/projects/Pacman/pacman/vga1024x768.vhd" into library work
 Parsing VHDL file "C:/projects/Pacman/pacman/nes_controller.vhd" into library work
 Parsing VHDL file "C:/projects/Pacman/pacman/ipcore_dir/dcm.vhd" into library work
@@ -23,8 +37,8 @@ Parsing VHDL file "C:/projects/Pacman/pacman/top_level.vhd" into library work
 Parsing VHDL file "C:/projects/Pacman/pacman/top_level_tb.vhd" into library work
 Starting static elaboration
 Completed static elaboration
-Fuse Memory Usage: 75656 KB
-Fuse CPU Usage: 390 ms
+Fuse Memory Usage: 76680 KB
+Fuse CPU Usage: 452 ms
 Compiling package standard
 Compiling package std_logic_1164
 Compiling package numeric_std
@@ -52,9 +66,23 @@ Compiling architecture behavioral of entity speed_clock [speed_clock_default]
 Compiling architecture behavioral of entity pacman_target_selection [\pacman_target_selection((288,13...]
 Compiling architecture behavioral of entity pacman_rom [pacman_rom_default]
 Compiling architecture behavioral of entity pacman_manager [\pacman_manager((288,136),(448,4...]
+Compiling architecture behavioral of entity ghost_rom [ghost_rom_default]
+Compiling architecture behavioral of entity simple_ghost_rom [simple_ghost_rom_default]
+Compiling architecture behavioral of entity ghost_display [\ghost_display((288,136))\]
+Compiling architecture behavioral of entity collision_machine [collision_machine_default]
+Compiling architecture behavioral of entity ghost_frightened_blink [ghost_frightened_blink_default]
+Compiling architecture behavioral of entity simple_game_board [simple_game_board_default]
+Compiling architecture behavioral of entity ghost_target_updater [ghost_target_updater_default]
+Compiling architecture behavioral of entity ghost_speed_selector [ghost_speed_selector_default]
+Compiling architecture behavioral of entity move_ghost [\move_ghost((288,136),(448,496))...]
+Compiling architecture behavioral of entity ghost_tunnel_check [ghost_tunnel_check_default]
+Compiling architecture behavioral of entity ghost_ai [\ghost_ai((288,136),(448,496))\]
 Compiling architecture behavioral of entity game_machine [game_machine_default]
 Compiling architecture behavioral of entity number_rom [number_rom_default]
-Compiling architecture behavioral of entity score_manager [\score_manager((288,136),(448,49...]
+Compiling architecture behavioral of entity score_manager [\score_manager((448,496),(288,13...]
+Compiling architecture behavioral of entity pacman_lives [\pacman_lives((288,136),(448,496...]
+Compiling architecture behavioral of entity font_rom [font_rom_default]
+Compiling architecture behavioral of entity font_start_screen [\font_start_screen((448,496),(28...]
 Compiling architecture behavioral of entity game_grid [game_grid_default]
 Compiling architecture behavioral of entity display_manager [display_manager_default]
 Compiling architecture behavioral of entity nes_controller [nes_controller_default]
@@ -62,7 +90,7 @@ Compiling architecture behavioral of entity top_level [top_level_default]
 Compiling architecture behavior of entity top_level_tb
 Time Resolution for simulation is 1ps.
 Waiting for 1 sub-compilation(s) to finish...
-Compiled 58 VHDL Units
+Compiled 86 VHDL Units
 Built simulation executable C:/projects/Pacman/pacman/top_level_tb_isim_beh.exe
-Fuse Memory Usage: 111756 KB
-Fuse CPU Usage: 1187 ms
+Fuse Memory Usage: 113804 KB
+Fuse CPU Usage: 1218 ms

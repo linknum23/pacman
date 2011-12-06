@@ -65,34 +65,65 @@ architecture Behavioral of game_grid is
     row30
     );
 
-  type   dot_grid is array (integer range 0 to 31) of std_logic_vector(0 to 27);
-  signal used_dot_grid      : dot_grid  := (others => (others => '0'));
-  signal out_of_range       : std_logic := '0';
-  signal newaddrx, newaddry : integer range 0 to 30;
-  signal rom_data           : std_logic_vector(4 downto 0);
-  signal bit_rom_data       : std_logic_vector(0 to 27);
-  signal data_to_write      : std_logic_vector(0 to 27);
+  type     dot_grid is array (integer range 0 to 30) of std_logic_vector(0 to 27);
+  signal   used_dot_grid                : dot_grid                  := (others => (others => '0'));
+  signal   out_of_range                 : std_logic                 := '0';
+  signal   newaddrx, newaddry, rst_addr : integer range 0 to 30;
+  signal   rom_data                     : std_logic_vector(4 downto 0);
+  signal   bit_rom_data                 : std_logic_vector(0 to 27);
+  signal   data_to_write                : std_logic_vector(0 to 27);
+  constant ZERO                         : std_logic_vector(0 to 27) := (others => '0');
+  signal   rst_en,wen                      : std_logic                 := '0';
 
 begin
   --infer a block ram!
   rom_data <= grid(newaddry)(newaddrx);
+  wen <= we or rst_en;
 
   data_out <= rom_data when addr.X >= 0 and addr.Y >= 0 and bit_rom_data(newaddrx) = '0' else "10000";
 
   newaddrx <= 0 when addr.X < 0 else addr.X;
-  newaddry <= 0 when addr.Y < 0 else addr.Y;
 
-  process(newaddrx, bit_rom_data)
+  process(rst_en, rst_addr, newaddrx, bit_rom_data, addr.Y)
   begin
-    data_to_write           <= bit_rom_data;
-    data_to_write(newaddrx) <= '1';
+    if rst_en = '1' then
+      newaddry      <= rst_addr;
+      data_to_write <= ZERO;
+    else
+      data_to_write           <= bit_rom_data;
+      data_to_write(newaddrx) <= '1';
+
+      if addr.Y < 0 then
+        newaddry <= 0;
+      else
+        newaddry <= addr.Y;
+      end if;
+    end if;
+  end process;
+
+  process(clk)
+    variable count : integer range 0 to 31 := 0;
+  begin
+    if clk = '1' and clk'event then
+      if rst = '1' then
+        rst_en <= '1';
+        count  := 0;
+      end if;
+      if rst_en = '1' then
+        rst_addr <= count;
+        if count = 31 then
+          rst_en <= '0';
+        end if;
+        count := count + 1;
+      end if;
+    end if;
   end process;
 
   process(clk)
   begin
     if clk = '1' and clk'event then
       if cs = '1' then
-        if we = '1' then
+        if wen = '1' then
           --writing into rom        
           used_dot_grid(newaddry) <= data_to_write;
           -- else

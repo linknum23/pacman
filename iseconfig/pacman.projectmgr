@@ -7,17 +7,19 @@
    <ItemView engineview="SynthesisOnly" guiview="Source" compilemode="AutoCompile" >
       <ClosedNodes>
          <ClosedNodesVersion>2</ClosedNodesVersion>
+         <ClosedNode>/display_manager - Behavioral C:|projects|Pacman|pacman|display_manager.vhd</ClosedNode>
          <ClosedNode>/display_manager - Behavioral |home|bryant|Documents|flowpaths_checkout|flowpaths|Pacman|pacman|display_manager.vhd</ClosedNode>
          <ClosedNode>/ghost_ai - Behavioral C:|projects|Pacman|pacman|ghost_ai.vhd</ClosedNode>
          <ClosedNode>/ghost_ai - Behavioral |home|bryant|Documents|flowpaths_checkout|flowpaths|Pacman|pacman|ghost_ai.vhd</ClosedNode>
          <ClosedNode>/ghost_display - Behavioral C:|projects|Pacman|pacman|ghost_display.vhd</ClosedNode>
          <ClosedNode>/pacman_TB - behavior C:|projects|Pacman|pacman|pacman_TB.vhd</ClosedNode>
          <ClosedNode>/pacman_manager - Behavioral |home|bryant|Documents|flowpaths_checkout|flowpaths|Pacman|pacman|pacman_manager.vhd</ClosedNode>
-         <ClosedNode>/top_level - Behavioral C:|projects|Pacman|pacman|top_level.vhd</ClosedNode>
+         <ClosedNode>/top_level - Behavioral C:|projects|Pacman|pacman|top_level.vhd/display - display_manager - Behavioral</ClosedNode>
          <ClosedNode>/top_level - Behavioral C:|projects|Pacman|pacman|top_level.vhd/display - display_manager - Behavioral/ai - ghost_ai - Behavioral</ClosedNode>
          <ClosedNode>/top_level - Behavioral C:|projects|Pacman|pacman|top_level.vhd/display - display_manager - Behavioral/board - grid_display - Behavioral</ClosedNode>
          <ClosedNode>/top_level - Behavioral C:|projects|Pacman|pacman|top_level.vhd/display - display_manager - Behavioral/fonts - score_manager - Behavioral</ClosedNode>
          <ClosedNode>/top_level - Behavioral C:|projects|Pacman|pacman|top_level.vhd/display - display_manager - Behavioral/gd - ghost_display - Behavioral</ClosedNode>
+         <ClosedNode>/top_level - Behavioral C:|projects|Pacman|pacman|top_level.vhd/display - display_manager - Behavioral/lives - pacman_lives - Behavioral</ClosedNode>
          <ClosedNode>/top_level - Behavioral C:|projects|Pacman|pacman|top_level.vhd/display - display_manager - Behavioral/the_pacman - pacman_manager - Behavioral</ClosedNode>
          <ClosedNode>/top_level - Behavioral |home|bryant|Documents|flowpaths_checkout|flowpaths|Pacman|pacman|top_level.vhd/board - grid_display - Behavioral</ClosedNode>
          <ClosedNode>/top_level - Behavioral |home|bryant|Documents|flowpaths_checkout|flowpaths|Pacman|pacman|top_level.vhd/display - display_manager - Behavioral</ClosedNode>
@@ -54,7 +56,7 @@
       <SelectedItems/>
       <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
       <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
-      <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000000000000010000000000000000000000000000000000000236000000040101000100000000000000000000000064ffffffff000000810000000000000004000001250000000100000000000000290000000100000000000000840000000100000000000000640000000100000000</ViewHeaderState>
+      <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000000000000010000000000000000000000000000000000000391000000040101000100000000000000000000000064ffffffff000000810000000000000004000001250000000100000000000000290000000100000000000000840000000100000000000001bf0000000100000000</ViewHeaderState>
       <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
       <CurrentItem>C:\projects\Pacman\pacman\blinker_tb.vhd</CurrentItem>
    </ItemView>
@@ -76,6 +78,7 @@
          <ClosedNode>Configure Target Device</ClosedNode>
          <ClosedNode>Design Utilities</ClosedNode>
          <ClosedNode>Design Utilities/Compile HDL Simulation Libraries</ClosedNode>
+         <ClosedNode>Implement Design</ClosedNode>
          <ClosedNode>Implement Design/Map</ClosedNode>
          <ClosedNode>Implement Design/Place &amp; Route</ClosedNode>
          <ClosedNode>Implement Design/Place &amp; Route/Back-annotate Pin Locations</ClosedNode>
@@ -86,13 +89,13 @@
          <ClosedNode>User Constraints</ClosedNode>
       </ClosedNodes>
       <SelectedItems>
-         <SelectedItem>Design Summary/Reports</SelectedItem>
+         <SelectedItem>Generate Programming File</SelectedItem>
       </SelectedItems>
       <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
       <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
       <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000100000000000000000000000000000000000000000000000148000000010000000100000000000000000000000064ffffffff000000810000000000000001000001480000000100000000</ViewHeaderState>
       <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
-      <CurrentItem>Design Summary/Reports</CurrentItem>
+      <CurrentItem>Generate Programming File</CurrentItem>
    </ItemView>
    <ItemView engineview="SynthesisOnly" sourcetype="DESUT_UCF" guiview="Process" >
       <ClosedNodes>
@@ -125,6 +128,7 @@
          <ClosedNode>/move_ghost_tb1 - behavior C:|projects|Pacman|pacman|move_ghost_tb1.vhd</ClosedNode>
          <ClosedNode>/move_ghost_tb1 - behavior |home|bryant|Documents|flowpaths_checkout|flowpaths|Pacman|pacman|move_ghost_tb1.vhd</ClosedNode>
          <ClosedNode>/nes_controller_TB - behavior C:|projects|Pacman|pacman|nes_controller_TB.vhd</ClosedNode>
+         <ClosedNode>/pacman_TB - behavior C:|projects|Pacman|pacman|pacman_TB.vhd</ClosedNode>
          <ClosedNode>/pacman_TB - behavior C:|projects|Pacman|pacman|pacman_TB.vhd/uut - pacman_manager - Behavioral</ClosedNode>
          <ClosedNode>/pacman_TB - behavior |home|bryant|Documents|flowpaths_checkout|flowpaths|Pacman|pacman|pacman_TB.vhd</ClosedNode>
          <ClosedNode>/score_manager - Behavioral C:|projects|Pacman|pacman|score_manager.vhd</ClosedNode>
@@ -133,6 +137,7 @@
          <ClosedNode>/top_level_tb - behavior C:|projects|Pacman|pacman|top_level_tb.vhd/uut - top_level - Behavioral/display - display_manager - Behavioral/board - grid_display - Behavioral</ClosedNode>
          <ClosedNode>/top_level_tb - behavior C:|projects|Pacman|pacman|top_level_tb.vhd/uut - top_level - Behavioral/display - display_manager - Behavioral/fonts - score_manager - Behavioral</ClosedNode>
          <ClosedNode>/top_level_tb - behavior C:|projects|Pacman|pacman|top_level_tb.vhd/uut - top_level - Behavioral/display - display_manager - Behavioral/gd - ghost_display - Behavioral</ClosedNode>
+         <ClosedNode>/top_level_tb - behavior C:|projects|Pacman|pacman|top_level_tb.vhd/uut - top_level - Behavioral/display - display_manager - Behavioral/lives - pacman_lives - Behavioral</ClosedNode>
          <ClosedNode>/top_level_tb - behavior C:|projects|Pacman|pacman|top_level_tb.vhd/uut - top_level - Behavioral/display - display_manager - Behavioral/the_pacman - pacman_manager - Behavioral</ClosedNode>
          <ClosedNode>/top_level_tb - behavior |home|bryant|Documents|flowpaths_checkout|flowpaths|Pacman|pacman|top_level_tb.vhd/uut - top_level - Behavioral/display - display_manager - Behavioral/board - grid_display - Behavioral</ClosedNode>
          <ClosedNode>/vga1024x768_tb - behavior C:|projects|Pacman|pacman|vga1024x768_tb.vhd</ClosedNode>
@@ -142,7 +147,7 @@
       </SelectedItems>
       <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
       <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
-      <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000100000000000000000000000000000000020200000001000000010000006400000203000000020000000000000000000000000200000064ffffffff000000810000000300000002000002030000000100000003000000000000000100000003</ViewHeaderState>
+      <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000100000000000000000000000000000000020200000001000000010000006400000200000000020000000000000000000000000200000064ffffffff000000810000000300000002000002000000000100000003000000000000000100000003</ViewHeaderState>
       <UserChangedColumnWidths orientation="horizontal" >true</UserChangedColumnWidths>
       <CurrentItem>top_level_tb - behavior (C:/projects/Pacman/pacman/top_level_tb.vhd)</CurrentItem>
    </ItemView>
@@ -165,13 +170,13 @@
          <ClosedNodesVersion>1</ClosedNodesVersion>
       </ClosedNodes>
       <SelectedItems>
-         <SelectedItem></SelectedItem>
+         <SelectedItem>Simulate Behavioral Model</SelectedItem>
       </SelectedItems>
       <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
       <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
-      <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000100000000000000000000000000000000000000000000000102000000010000000100000000000000000000000064ffffffff000000810000000000000001000001020000000100000000</ViewHeaderState>
+      <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000100000000000000000000000000000000000000000000000148000000010000000100000000000000000000000064ffffffff000000810000000000000001000001480000000100000000</ViewHeaderState>
       <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
-      <CurrentItem></CurrentItem>
+      <CurrentItem>Simulate Behavioral Model</CurrentItem>
    </ItemView>
    <SourceProcessView>000000ff000000000000000200000140000000ed01000000060100000002</SourceProcessView>
    <CurrentView>Implementation</CurrentView>

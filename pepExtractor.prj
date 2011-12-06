@@ -1,1 +1,2 @@
-work	"nes_controller.vhd"
+work	"game_grid.vhd"
+work	"pacage.vhd"

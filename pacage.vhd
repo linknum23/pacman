@@ -16,14 +16,15 @@ package pacage is
     B : std_logic_vector(1 downto 0);
   end record;
 
+  type GAME_SCREEN is (START_SCREEN, PLAYER_ONE_READY, READY, IN_GAME, GHOST_DEAD_SCREEN, PACMAN_DEAD_SCREEN, LEVEL_COMPLETE_SCREEN, POST_SCREEN, PAUSE1, PAUSE2, PAUSE3, PAUSE4, PAUSE5, PAUSE6, PAUSE7);
   type DIRECTION is (L, R, UP, DOWN, NONE, STILL);
   type GHOST_MODE is (NORMAL, SCATTER, FRIGHTENED);
   type GHOST_DISP_MODE is (NORM, SCATTER, FRIGHTENED, EYES);
-  
-    --relative speeds used for move clocks
-    subtype  SPEED is natural range 0 to 40; 
-    constant SPEED_40 : SPEED := 8; 
-                                               constant SPEED_45 : SPEED := 9;
+
+  --relative speeds used for move clocks
+  subtype  SPEED is natural range 0 to 40;
+  constant SPEED_40  : SPEED := 8;
+  constant SPEED_45  : SPEED := 9;
   constant SPEED_50  : SPEED := 10;
   constant SPEED_55  : SPEED := 11;
   constant SPEED_60  : SPEED := 12;
@@ -36,24 +37,24 @@ package pacage is
   constant SPEED_95  : SPEED := 19;
   constant SPEED_100 : SPEED := 20;
   constant SPEED_105 : SPEED := 21;
-  constant SPEED_200 : SPEED := 40; 
-                                
-                                --ghost names to indices
- constant I_BLINKY : natural := 0; 
-                                      constant I_PINKY : natural := 1; 
-                                     constant I_INKY : natural := 2; 
-                                                                         constant I_CLYDE : natural := 3; 
-                                                                       
+  constant SPEED_200 : SPEED := 40;
+
+  --ghost names to indices
+  constant I_BLINKY : natural := 0;
+  constant I_PINKY  : natural := 1;
+  constant I_INKY   : natural := 2;
+  constant I_CLYDE  : natural := 3;
+
                                         --ghost targets 
-                                                                       constant BLINKY_SCATTER_TARGET : POINT := (27, 0); 
-                                                                                                            constant PINKY_SCATTER_TARGET : POINT := (0, 0); 
-                                                                                                                            constant INKY_SCATTER_TARGET : POINT := (27, 31); 
-                                                                                                                                                               constant CLYDE_SCATTER_TARGET : POINT := (0, 31); 
-                                                                                                                                                                                constant HOME_TARGET : POINT := (13, 11);  -- this is where ghost go when they are killed in scatter mode
-  constant HOME : POINT := HOME_TARGET; 
-                           
-                           --65MHZ time constants
-constant HALF_SECOND : std_logic_vector(24 downto 0) := "1111011111110100100100000";  --"0000000000000110010110010";--
+  constant BLINKY_SCATTER_TARGET : POINT := (27, 0);
+  constant PINKY_SCATTER_TARGET  : POINT := (0, 0);
+  constant INKY_SCATTER_TARGET   : POINT := (27, 31);
+  constant CLYDE_SCATTER_TARGET  : POINT := (0, 31);
+  constant HOME_TARGET           : POINT := (13, 11);  -- this is where ghost go when they are killed in scatter mode
+  constant HOME                  : POINT := HOME_TARGET;
+
+  --65MHZ time constants
+  constant HALF_SECOND  : std_logic_vector(24 downto 0) := "1111011111110100100100000";  --"0000000000000110010110010";--
   constant ONE_6_SECOND : std_logic_vector(23 downto 0) := "101001010100110110110010";  --  "000000000000010000111011"; --
 
 
@@ -91,7 +92,38 @@ constant HALF_SECOND : std_logic_vector(24 downto 0) := "11110111111101001001000
     big_dot_eaten     : std_logic;
     ghost_eaten       : std_logic;
     pacman_dead       : std_logic;
+    gamescreen        : GAME_SCREEN;
+    ghost_pause       : std_logic;
+    pacman_pause      : std_logic;
+    ghost_disable     : std_logic;
+    pacman_disable    : std_logic;
+    ready_enable      : std_logic;
+    player_one_enable : std_logic;
+    dot_reset         : std_logic;
   end record;
+
+  component font_start_screen is
+    generic (
+      GAME_SIZE   : POINT := (448, 496);
+      GAME_OFFSET : POINT := (100, 100)
+      );
+    port(
+      clk, clk_25           : in  std_logic;
+      rst                   : in  std_logic;
+      current_draw_location : in  POINT;
+      gameinfo              : in  GAME_INFO;
+      data                  : out COLOR;
+      valid_location        : out std_logic
+      );
+  end component;
+
+  component font_rom is
+    port(
+      addr  : in  POINT;
+      value : in  integer;
+      data  : out std_logic
+      );
+  end component;
 
   component score_manager is
     generic (
@@ -239,7 +271,7 @@ constant HALF_SECOND : std_logic_vector(24 downto 0) := "11110111111101001001000
       inky_info   : out GHOST_INFO;
       clyde_info  : out GHOST_INFO;
       collision   : out std_logic;
-      squiggle    : out std_logic; 
+      squiggle    : out std_logic;
       blink       : out std_logic
       );
   end component;
@@ -363,18 +395,18 @@ constant HALF_SECOND : std_logic_vector(24 downto 0) := "11110111111101001001000
       flag      : out std_logic;
       clr_flag  : in  std_logic
       );
-  end component; 
-    
-    component ghost_tunnel_check is 
-                                      port(
-                                           blinky_tile_loc     : in  POINT; 
-                                           pinky_tile_loc      : in  POINT; 
-                                           inky_tile_loc       : in  POINT; 
-                                           clyde_tile_loc      : in  POINT; 
-                                           blinky_is_in_tunnel : out boolean; 
-                                           pinky_is_in_tunnel  : out boolean; 
-                                           inky_is_in_tunnel   : out boolean; 
-                                           clyde_is_in_tunnel  : out boolean
-                                           );
-    end component;
+  end component;
+
+  component ghost_tunnel_check is
+    port(
+      blinky_tile_loc     : in  POINT;
+      pinky_tile_loc      : in  POINT;
+      inky_tile_loc       : in  POINT;
+      clyde_tile_loc      : in  POINT;
+      blinky_is_in_tunnel : out boolean;
+      pinky_is_in_tunnel  : out boolean;
+      inky_is_in_tunnel   : out boolean;
+      clyde_is_in_tunnel  : out boolean
+      );
+  end component;
 end package;

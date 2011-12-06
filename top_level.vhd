@@ -54,8 +54,8 @@ architecture Behavioral of top_level is
 
   component display_manager is
     port (
-      clk                   : in  std_logic;
-		clk_25                : in std_logic;
+      clk                   : in  std_logic; 
+      clk_25                : in  std_logic;
       rst                   : in  std_logic;
       game_en               : in  std_logic;
       in_vbp                : in  std_logic;
@@ -108,17 +108,17 @@ begin
   process(clk_65mhz)
   begin
     if clk_65mhz = '1' and clk_65mhz'event then
-		if vidon = '0' then
-			R_reg  <= "000"; 
-	        G_reg  <= "000"; 
-	        B_reg  <= "00";
-		else
-			R_reg  <= color_data.R; 
-	        G_reg  <= color_data.G; 
-	        B_reg  <= color_data.B;
-		end if;
-		HS_reg <= hs;
-		VS_reg <= vs;		  
+      if vidon = '0' then
+        R_reg <= "000";
+        G_reg <= "000";
+        B_reg <= "00";
+      else
+        R_reg <= color_data.R;
+        G_reg <= color_data.G;
+        B_reg <= color_data.B;
+      end if;
+      HS_reg <= hs;
+      VS_reg <= vs;
     end if;
   end process;
 
@@ -176,8 +176,8 @@ begin
 
   display : display_manager
     port map (
-      clk                   => clk_65mhz,
-		clk_25                => clk_25mhz,
+      clk                   => clk_65mhz, 
+      clk_25                => clk_25mhz,
       rst                   => rst,
       game_en               => rst,
       in_vbp                => in_vbp,

@@ -38,14 +38,15 @@ architecture Behavioral of pacman_target_selection is
   signal state : STATE_TYPE := START;
 
   --locations
-  signal current_pixel_position          : POINT     := (GAME_OFFSET.X + (14*16)-8, GAME_OFFSET.Y + (23*16));  --14, 23
-  signal current_internal_pixel_position : POINT     := (0, 0);
-  signal current_tile_position           : POINT     := (0, 0);
-  signal current_offset_position         : POINT     := (0, 0);
-  signal tile_lined_up_X                 : std_logic := '0';
-  signal tile_lined_up_Y                 : std_logic := '0';
-  signal next_location                   : POINT     := (0, 0);
-  signal attempted_next_location         : POINT     := (0, 0);
+  constant DEFAULT_POSITION                : POINT     := (GAME_OFFSET.X + (14*16)-8, GAME_OFFSET.Y + (23*16));
+  signal   current_pixel_position          : POINT     := DEFAULT_POSITION;  --14, 23
+  signal   current_internal_pixel_position : POINT     := (0, 0);
+  signal   current_tile_position           : POINT     := (0, 0);
+  signal   current_offset_position         : POINT     := (0, 0);
+  signal   tile_lined_up_X                 : std_logic := '0';
+  signal   tile_lined_up_Y                 : std_logic := '0';
+  signal   next_location                   : POINT     := (0, 0);
+  signal   attempted_next_location         : POINT     := (0, 0);
 
   --directions
   signal curr_direction      : DIRECTION := L;
@@ -88,21 +89,23 @@ begin
       rom_use_done <= '0';
       case state is
         when START =>
-          --check to see if pacman has a new direction
-          if direction_selection /= curr_direction then
-            --attempting a new direction or NONE
-            if (direction_selection = L or direction_selection = R) and tile_lined_up_Y = '1' then
-              state               <= CHECK_NEW_DIRECTION;
-              attempted_direction <= direction_selection;
-            elsif (direction_selection = DOWN or direction_selection = UP) and tile_lined_up_X = '1' then
-              state               <= CHECK_NEW_DIRECTION;
-              attempted_direction <= direction_selection;
+          if gameinfo.pacman_pause = '0' then
+            --check to see if pacman has a new direction
+            if direction_selection /= curr_direction then
+              --attempting a new direction or NONE
+              if (direction_selection = L or direction_selection = R) and tile_lined_up_Y = '1' then
+                state               <= CHECK_NEW_DIRECTION;
+                attempted_direction <= direction_selection;
+              elsif (direction_selection = DOWN or direction_selection = UP) and tile_lined_up_X = '1' then
+                state               <= CHECK_NEW_DIRECTION;
+                attempted_direction <= direction_selection;
+              else
+                state <= CHECK_OLD_DIRECTION;
+              end if;
             else
+              --using an old direction
               state <= CHECK_OLD_DIRECTION;
             end if;
-          else
-            --using an old direction
-            state <= CHECK_OLD_DIRECTION;
           end if;
         when CHECK_OLD_DIRECTION =>
           --check if tile is completely lined up
@@ -174,6 +177,11 @@ begin
       elsif current_pixel_position.X > GAME_OFFSET.X + GAME_SIZE.X + 8 then
         current_pixel_position.X <= GAME_OFFSET.X - 24;
       end if;
+
+      if gameinfo.reset_level = '1' then
+        current_pixel_position <= DEFAULT_POSITION;
+      end if;
+      
     end if;
   end process;
 

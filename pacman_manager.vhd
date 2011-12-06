@@ -105,7 +105,7 @@ begin
 
 
   --output the valid flag
-  valid_location <= pac_rom_bit when current_draw_location.X > GAME_OFFSET.X and current_draw_location.X < GAME_OFFSET.X + GAME_SIZE.X else '0';
+  valid_location <= pac_rom_bit when current_draw_location.X > GAME_OFFSET.X and current_draw_location.X < GAME_OFFSET.X + GAME_SIZE.X and gameinfo.pacman_disable = '0' else '0';
 
   --output pacman's current direction register to be used by others
   current_direction <= pcurrent_direction;
@@ -152,7 +152,9 @@ begin
     variable up_down      : std_logic            := '0';
   begin
     if wacka_clk = '1' and wacka_clk'event then
-      if move_in_progress = '1' then
+      if gameinfo.gamescreen = READY or gameinfo.gamescreen = PAUSE6 or gameinfo.gamescreen = PAUSE7 then
+        offset.Y <= PAC_CLOSED_OFFSET;
+      elsif move_in_progress = '1' then
         case offset_count is
           when 0 =>
             offset.Y <= PAC_CLOSED_OFFSET;

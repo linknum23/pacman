@@ -96,10 +96,10 @@ begin
   rom_addr.X <= to_integer(game_location_unsigned_X(TILE_SIZE.X-1 downto 0));
   rom_addr.Y <= to_integer(game_location_unsigned_Y(TILE_SIZE.X-1 downto 0));
 
-  process(data_type, dot_on, gameinfo.level_complete)
+  process(data_type, dot_on, gameinfo.gamescreen)
   begin
     if data_type <= 16 then
-      if (gameinfo.level_complete = '1' and dot_on = '0') then
+      if (gameinfo.gamescreen = PAUSE7 and dot_on = '0') then
         data.R <= "111";
         data.G <= "111";
         data.B <= "11";
