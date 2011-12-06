@@ -32,6 +32,7 @@ fright_time <= FRIGHT_TIME_BY_LEVEL(to_integer(unsigned(gamemode.level)))+1;--ke
 process (clk_65)
 begin
 	if rising_edge(clk_65) then
+	    if gamemode.ghost_pause = '0' then
 		last_mode <= gamemode.GHOSTMODE;
 		blink <= '0';
 		if (last_mode = NORMAL or last_mode = SCATTER) and gamemode.GHOSTMODE = FRIGHTENED then
@@ -53,6 +54,7 @@ begin
 			if sec_count < fright_time/4+1  and sec_count > 0 then --1.5 secs for level 1
 				blink <= blink_sug;
 			end if;
+		end if;
 		end if;
 	end if;
 end process;
