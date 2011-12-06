@@ -79,7 +79,7 @@ begin
     data <= '0';
     newy := '0' & why(why'high downto 1);
     newx := '0' & ex(ex'high downto 1);
-    if newy < 16 and newy >= 0 and newx < 16 and newx >= 0 then
+    if newy < 32 and newy >= 0 and newx < 32 and newx >= 0 then
       data <= rom(to_integer(newy))(to_integer(newx));
     end if;
   end process;

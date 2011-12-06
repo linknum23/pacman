@@ -48,9 +48,9 @@ architecture Behavioral of move_ghost is
   constant CLYDE_START_POINT : POINT := (X => 15*COL_SIZE+6, y => 14*ROW_SIZE+7);
 
   constant BLINKY_INIT : GHOST_INFO := (DIR => L, PT => START_POINT, MODE => NORM, CAGED => false);
-  constant PINKY_INIT  : GHOST_INFO := (DIR => UP, PT => START_POINT, MODE => NORM, CAGED => false);
-  constant INKY_INIT   : GHOST_INFO := (DIR => UP, PT => START_POINT, MODE => NORM, CAGED => false);
-  constant CLYDE_INIT  : GHOST_INFO := (DIR => UP, PT => START_POINT, MODE => NORM, CAGED => false);
+  constant PINKY_INIT  : GHOST_INFO := (DIR => UP, PT => PINKY_START_POINT, MODE => NORM, CAGED => true);
+  constant INKY_INIT   : GHOST_INFO := (DIR => UP, PT => INKY_START_POINT, MODE => NORM, CAGED => true);
+  constant CLYDE_INIT  : GHOST_INFO := (DIR => UP, PT => CLYDE_START_POINT, MODE => NORM, CAGED => true);
 
   signal blinky2 : GHOST_INFO := BLINKY_INIT;
   signal pinky2  : GHOST_INFO := PINKY_INIT;
@@ -95,6 +95,20 @@ architecture Behavioral of move_ghost is
 	inky_speed : out SPEED;
 	clyde_speed : out SPEED);
   end component;
+  
+   component ghost_cage_release is 
+  port(
+	blinky_info : in GHOST_INFO;
+	pinky_info : in GHOST_INFO;
+	inky_info : in GHOST_INFO;
+	clyde_info : in GHOST_INFO;
+	gameinfo : in GAME_INFO;
+	blinky_release : out boolean;
+	pinky_release : out boolean;
+	inky_release : out boolean;
+	clyde_release : out boolean
+ );
+ end component;
 
   signal ghost_rc                                      : POINT;
   type   state is (START, SDONE, DO_NEXT, GET_RC,CALC_TARGET_DISTS,
@@ -114,6 +128,9 @@ architecture Behavioral of move_ghost is
   signal clocks                                        : std_logic_vector(22 downto 0):= (others => '0');
   signal move,last_move,do_move	: std_logic := '0';
   signal in_no_up_turns_zone  								: boolean := false;
+  signal random_num                                    : natural range 0 to 32;
+  
+  signal blinky_release,pinky_release,inky_release,clyde_release : boolean;
 begin
 
 
@@ -121,6 +138,9 @@ begin
   pinky_info  <= ghosts(I_PINKY);
   inky_info   <= ghosts(I_INKY);
   clyde_info  <= ghosts(I_CLYDE);
+  
+  --not so random number
+  random_num<= to_integer(unsigned("0000" &clocks(5 downto 2)));
   
   --clock divider
   process(clk)
@@ -152,9 +172,9 @@ begin
   
   --iterate through each ghost making simple movements
   simple_move : process(clk, rst)
-  variable index : INTEGER range -1 to 3;
-    variable xconv : unsigned(8 downto 0);
-  variable yconv : unsigned(8 downto 0);
+     variable index : INTEGER range -1 to 3;
+     variable xconv : unsigned(8 downto 0);
+     variable yconv : unsigned(8 downto 0);
   begin
     if rising_edge(clk) then
 		last_move <= move;
@@ -180,11 +200,7 @@ begin
           when DO_NEXT =>
             if index < 3 then
               index := index + 1;
-              if ghosts(index).CAGED = false then
-                move_state <= GET_RC;
-              else
-                move_state <= UPDATE_DIR;
-              end if;
+              move_state <= GET_RC;
             else
               move_state <= SDONE;
 				  do_move <= '0';
@@ -251,11 +267,38 @@ begin
 				end if;
 				
 			 when CALC_TARGET_DISTS =>
+			 
 				--stop clearing
 				blinky_clr_flag <= '0';
 				pinky_clr_flag <= '0';
 				inky_clr_flag <= '0';
 				clyde_clr_flag <= '0';
+				
+				--implement cage release here
+				if blinky_release then 
+				   if ghosts(I_BLINKY).CAGED and gameinfo.GHOSTMODE /= FRIGHTENED then
+						ghosts(I_BLINKY).CAGED <= false;
+						ghosts(I_BLINKY).PT <= START_POINT;
+					end if;
+				end if;
+				if pinky_release then 
+				   if ghosts(I_PINKY).CAGED and gameinfo.GHOSTMODE /= FRIGHTENED then
+						ghosts(I_PINKY).CAGED <= false;
+						ghosts(I_PINKY).PT <= START_POINT;
+					end if;
+				end if;
+				if inky_release then 
+				   if ghosts(I_INKY).CAGED and gameinfo.GHOSTMODE /= FRIGHTENED then
+						ghosts(I_INKY).CAGED <= false;
+						ghosts(I_INKY).PT <= START_POINT;
+					end if;
+				end if;
+				if clyde_release then 
+				   if ghosts(I_CLYDE).CAGED and gameinfo.GHOSTMODE /= FRIGHTENED then
+						ghosts(I_CLYDE).CAGED <= false;
+						ghosts(I_CLYDE).PT <= START_POINT;
+					end if;
+				end if;
 			 
 				-- using a square pipeline to compute the squares
 				-- after 2 clocks it has a result
@@ -307,7 +350,7 @@ begin
             --left dist logic
             if loc_valid then
                if ghosts(index).MODE = FRIGHTENED then
-						tdist_left <= to_integer(unsigned("0000" &clocks(5 downto 2)));
+						tdist_left <= random_num;
 					else
 						tdist_left <= y_sqdiff+sq_out;
 					end if;
@@ -332,7 +375,7 @@ begin
             --right dist logic
             if loc_valid then
               if ghosts(index).MODE = FRIGHTENED then
-					tdist_right <= to_integer(unsigned("0000" &clocks(5 downto 2)));
+					tdist_right <= random_num;
 				  else
 						tdist_right <= y_sqdiff+sq_out;
 					end if;
@@ -356,7 +399,7 @@ begin
             --up dist logic
             if loc_valid and not in_no_up_turns_zone then
               if ghosts(index).MODE = FRIGHTENED then
-					tdist_up <= to_integer(unsigned("0000" &clocks(5 downto 2)));
+						tdist_up <= random_num;
 					else
 						tdist_up <= x_sqdiff+sq_out;
 					end if;
@@ -369,7 +412,7 @@ begin
 				--down dist calc
             if loc_valid then
 					if ghosts(index).MODE = FRIGHTENED then
-						tdist_down <= to_integer(unsigned("0000" &clocks(5 downto 2)));
+						tdist_down <= random_num;
 					else
 						tdist_down <= x_sqdiff+sq_out;
 					end if;
@@ -383,16 +426,18 @@ begin
 				--yconv := to_unsigned(ghosts(index).PT.Y, 5);
 			  if ghosts(index).CAGED = true then
 				-- this does the cage bounce
-				 if yconv(7 downto 0) < "11000100" then --12x16+4
+				 if yconv(7 downto 0) < "11010000" then --13x16
 						ghosts(index).DIR <= DOWN;
-				 elsif yconv(7 downto 0) > "11011100" then --15x16-4
+						--ghosts(index).PT.Y <= 12*16+4;--to_integer(unsigned("11000100"));
+				 elsif yconv(7 downto 0) > "11110000" then --15x16
+						--ghosts(index).PT.Y <= to_integer(unsigned("11011100"));
 						ghosts(index).DIR <= UP;
-				 end if;
+				end if;
 				 
 				 --update ghost mode
 				 case  gameinfo.GHOSTMODE is
 					when FRIGHTENED =>
-					   if ghosts(index).MODE /= EYES then
+					   if ghosts(index).MODE /= EYES and not ghosts(index).CAGED then
 							ghosts(index).MODE <= FRIGHTENED;
 						end if;
 					when others =>
@@ -425,6 +470,7 @@ begin
 					   if ghosts(index).MODE /= EYES then
 							ghosts(index).MODE <= FRIGHTENED;
 						else 
+						   --ghost reset after eyes
 						   if ghost_rc = HOME then
 							   ghosts(index).MODE <= NORM;
 								case index is 
@@ -605,6 +651,19 @@ begin
 	flag => clyde_move_flag_pre,
 	clr_flag => clyde_clr_flag
   );
+  
+  releaser : ghost_cage_release
+  port map(
+  	blinky_info => ghosts(I_BLINKY),
+	pinky_info   => ghosts(I_PINKY),
+	inky_info  => ghosts(I_INKY),
+	clyde_info => ghosts(I_CLYDE),
+	gameinfo=>gameinfo,
+	blinky_release=>blinky_release,
+	pinky_release=>pinky_release,
+	inky_release=>inky_release,
+	clyde_release=>clyde_release
+ );
   
   process (clk) 
   begin

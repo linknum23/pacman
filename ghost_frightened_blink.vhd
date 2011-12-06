@@ -16,7 +16,7 @@ architecture Behavioral of ghost_frightened_blink is
   type int_array is array (integer range <>) of integer range -1 to 2000;
   --fright times
   constant FRIGHT_TIME_BY_LEVEL  : int_array (0 to 20)            := (12, 10, 8, 6, 4, 10, 4, 4, 2, 10, 4, 2, 2, 6, 2, 2, 2, 2, 2, 2, 2);
-  signal sec_count : integer range 0 to 12:= 0;
+  signal sec_count,fright_time : integer range 0 to 12:= 0;
   signal   fright_second_counter,count : std_logic_vector(27 downto 0) := (others => '0');
 
   --second counter
@@ -24,6 +24,8 @@ architecture Behavioral of ghost_frightened_blink is
   signal last_mode : GHOST_MODE;
 begin
 
+
+fright_time <= FRIGHT_TIME_BY_LEVEL(to_integer(unsigned(gamemode.level)))+1;--keeps the blink going a lil longer than needed
 
 --if count < 1.5 sec blink at rate of 6 hz
 --count in seconds
@@ -34,7 +36,7 @@ begin
 		blink <= '0';
 		if (last_mode = NORMAL or last_mode = SCATTER) and gamemode.GHOSTMODE = FRIGHTENED then
 			if gamemode.level < 21 then
-				sec_count <= FRIGHT_TIME_BY_LEVEL(to_integer(unsigned(gamemode.level)))+1;--keeps the blink going a lil longer than needed
+				sec_count <= fright_time;
 			else
 				sec_count <= 0;
 			end if;
@@ -48,7 +50,7 @@ begin
 			fright_second_counter <= (others => '0');
 		else
 			fright_second_counter <= fright_second_counter + 1;
-			if sec_count < 4  and sec_count > 0 then --1.5 secs
+			if sec_count < fright_time/4+1  and sec_count > 0 then --1.5 secs for level 1
 				blink <= blink_sug;
 			end if;
 		end if;

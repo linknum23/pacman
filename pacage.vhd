@@ -222,6 +222,8 @@ package pacage is
       ghostmode             : in  GHOST_MODE;
       fright_blink          : in  std_logic;
       current_draw_location : in  POINT;
+      collision             : in  std_logic;
+      collision_index      : in natural range 0 to 3;
       ghost_valid           : out std_logic;
       squiggle              : in  std_logic;
       ghost_color           : out COLOR
@@ -272,7 +274,8 @@ package pacage is
       clyde_info  : out GHOST_INFO;
       collision   : out std_logic;
       squiggle    : out std_logic;
-      blink       : out std_logic
+      blink       : out std_logic;
+	  collision_index : out natural range 0 to 3
       );
   end component;
 

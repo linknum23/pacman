@@ -29,7 +29,8 @@ entity ghost_ai is
                         clyde_tile_loc  : out POINT; 
                         squiggle        : out std_logic;
 								blink           : out std_logic;
-                        collision       : out std_logic
+                        collision       : out std_logic;
+								collision_index : out natural range 0 to 3
                         );
 end ghost_ai;
 
@@ -46,9 +47,10 @@ architecture Behavioral of ghost_ai is
   signal calc_move_done    : std_logic;
   
   signal collision_int : std_logic;
+  signal collision_index_int : integer range 0 to 3;
 
   signal move_rom_addr, target_rom_addr : POINT;
-  signal collision_index                : natural range 0 to 3;
+  
 
   signal blinky_target       : POINT;
   signal pinky_target        : POINT;
@@ -104,6 +106,7 @@ begin
   clyde_tile_loc_int.Y  <= to_integer(to_unsigned(clyde_info_int.PT.Y, 9) srl 4);
   
   collision <= collision_int;
+  collision_index <= collision_index_int;
 
   collision_check : collision_machine
     port map(
@@ -114,7 +117,7 @@ begin
       pinky_tile_location  => pinky_tile_loc_int,
       inky_tile_location   => inky_tile_loc_int,
       clyde_tile_location  => clyde_tile_loc_int,
-      collision_index      => collision_index,
+      collision_index      => collision_index_int,
       collision            => collision_int
       );
 		
@@ -192,7 +195,7 @@ begin
       clyde_info    => clyde_info_int, 
       squiggle      => squiggle,
 		collision     => collision_int,
-		collision_index => collision_index
+		collision_index => collision_index_int
       );
 		
 tunnel_check : ghost_tunnel_check 

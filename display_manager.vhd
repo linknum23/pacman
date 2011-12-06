@@ -38,6 +38,7 @@ architecture Behavioral of display_manager is
   signal ghost_color_data  : COLOR;
   signal font_color_data   : COLOR;
   signal life_color_data   : COLOR;
+
   signal start_color_data  : COLOR;
   signal splash_color_data : COLOR;
 
@@ -63,7 +64,7 @@ architecture Behavioral of display_manager is
   signal pacman_direction : DIRECTION := NONE;
 
   signal collision : std_logic;
-
+   signal collision_index : integer range 0 to 3;
   --direction signals
   signal pacman_direction_selection, direction : DIRECTION;
 
@@ -151,6 +152,8 @@ begin
       ghostmode             => gameinfo.ghostmode,
       fright_blink          => fright_blink,
       current_draw_location => current_draw_location,
+		collision             => collision,
+		collision_index       => collision_index,
       ghost_valid           => ghost_valid,
       ghost_color           => ghost_color_data,
       squiggle              => squiggle
@@ -177,8 +180,9 @@ begin
       inky_info   => inky,
       clyde_info  => clyde,
       collision   => collision,
+		collision_index => collision_index,
       squiggle    => squiggle,
-      blink       => fright_blink
+		blink       => fright_blink
       );
 
   machine : game_machine

@@ -17,6 +17,8 @@ port(
   ghostmode       : in GHOST_MODE;
   fright_blink		: in std_logic;
   current_draw_location       : in  POINT;
+  collision       : in std_logic;
+  collision_index : in natural range 0 to 3;
   ghost_valid     : out std_logic;
   ghost_color 		: out COLOR;
   squiggle : in std_logic
@@ -176,28 +178,28 @@ begin
 		clyde_draw_loc_x1 <= clyde_draw_loc_x;
 		clyde_draw_loc_y1 <= clyde_draw_loc_y;
 		
-		if blinky_in_range = '1' then -- and blinky_is_valid  = '1' then
+		if blinky_in_range = '1' then-- and blinky_is_valid  = '1' then
 			ghost_location.X <= blinky_draw_loc_x1;
 			ghost_location.Y <= blinky_draw_loc_y1;
 			dir <= blinky_info.DIR;
 			gbody_color <= BLINKY_BODY_COLOR;
 			gmode <= blinky_info.MODE;
 			no_ghost_here <= '0';
-		elsif pinky_in_range = '1' then -- and blinky_is_valid = '1'  then
+		elsif pinky_in_range = '1' then--  and blinky_is_valid = '1'  then
 			ghost_location.X <= pinky_draw_loc_x1;
 			ghost_location.Y <= pinky_draw_loc_y1;
 			dir <= pinky_info.DIR;
 			gbody_color <= PINKY_BODY_COLOR;
 			gmode <= pinky_info.MODE;
 			no_ghost_here <= '0';
-		elsif inky_in_range = '1' then -- and blinky_is_valid = '1' then 
+		elsif inky_in_range = '1'  then-- and blinky_is_valid = '1' then 
 			ghost_location.X <= inky_draw_loc_x1;
 			ghost_location.Y <= inky_draw_loc_y1;
 			dir <= inky_info.DIR;
 			gbody_color <= INKY_BODY_COLOR;
 			gmode <= inky_info.MODE;
 			no_ghost_here <= '0';
-		elsif clyde_in_range = '1' then -- and blinky_is_valid = '1'  then
+		elsif clyde_in_range = '1' then-- and blinky_is_valid = '1'  then
 			ghost_location.X <= clyde_draw_loc_x1;
 			ghost_location.Y <= clyde_draw_loc_y1;
 			dir <= clyde_info.DIR;
