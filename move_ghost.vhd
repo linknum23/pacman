@@ -437,7 +437,7 @@ begin
 				 --update ghost mode
 				 case  gameinfo.GHOSTMODE is
 					when FRIGHTENED =>
-					   if ghosts(index).MODE /= EYES and not ghosts(index).CAGED then
+					   if ghosts(index).MODE /= EYES and ghosts(index).CAGED = false then
 							ghosts(index).MODE <= FRIGHTENED;
 						end if;
 					when others =>
@@ -467,8 +467,10 @@ begin
 				   --update ghost mode
 				 case  gameinfo.GHOSTMODE is
 					when FRIGHTENED =>
-					   if ghosts(index).MODE /= EYES then
-							ghosts(index).MODE <= FRIGHTENED;
+					   if ghosts(index).MODE /= EYES  then
+						   if  ghosts(index).CAGED = false then
+							   ghosts(index).MODE <= FRIGHTENED;
+							end if;
 						else 
 						   --ghost reset after eyes
 						   if ghost_rc = HOME then
