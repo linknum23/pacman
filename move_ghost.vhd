@@ -477,7 +477,7 @@ begin
 							   ghosts(index).MODE <= NORM;
 								case index is 
 								   when I_BLINKY =>
-										ghosts(index).PT <= HOME;
+										ghosts(index).PT <= START_POINT;
 								   when I_PINKY =>
 										ghosts(index).PT <= PINKY_START_POINT;
 									when I_INKY =>
@@ -490,6 +490,7 @@ begin
 								
 							   if index /= I_BLINKY then
 									ghosts(index).CAGED <= true;
+									ghosts(index).DIR <= UP;
 								end if;
 								
 							end if;
