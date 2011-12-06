@@ -178,7 +178,7 @@ begin
   begin
     if rising_edge(clk) then
 		last_move <= move;
-      if rst = '1' then
+      if rst = '1' or gameinfo.reset_level = '1' then
         ghosts(I_BLINKY) <= BLINKY_INIT;
         ghosts(I_PINKY)  <= PINKY_INIT;
         ghosts(I_INKY)   <= INKY_INIT;
@@ -674,32 +674,32 @@ begin
 			inky_move_flag <= '0';
 			clyde_move_flag <= '0';
 		 else
-			if gameinfo.game_in_progress = '1' then
+			if gameinfo.ghost_pause = '0' then
 				blinky_move_flag <= blinky_move_flag_pre;
 				pinky_move_flag <= pinky_move_flag_pre;
 				inky_move_flag <= inky_move_flag_pre;
 				clyde_move_flag <= clyde_move_flag_pre;
 			else
-				if ghosts(I_BLINKY).mode = EYES then
-					blinky_move_flag <= blinky_move_flag_pre;
-				else
+				--if ghosts(I_BLINKY).mode = EYES then
+				--	blinky_move_flag <= blinky_move_flag_pre;
+				--else
 					blinky_move_flag <= '0';
-				end if;
-				if ghosts(I_PINKY).mode = EYES then
-					pinky_move_flag <= pinky_move_flag_pre;
-				else
+				--end if;
+				--if ghosts(I_PINKY).mode = EYES then
+				--	pinky_move_flag <= pinky_move_flag_pre;
+				--else
 					pinky_move_flag <= '0';
-				end if;
-				if ghosts(I_INKY).mode = EYES then
-					inky_move_flag <= inky_move_flag_pre;
-				else
+				--end if;
+				--if ghosts(I_INKY).mode = EYES then
+				--	inky_move_flag <= inky_move_flag_pre;
+				--else
 					inky_move_flag <= '0';
-				end if;
-				if ghosts(I_CLYDE).mode = EYES then
-					clyde_move_flag <= clyde_move_flag_pre;
-				else
+				--end if;
+				--if ghosts(I_CLYDE).mode = EYES then
+				--	clyde_move_flag <= clyde_move_flag_pre;
+				--else
 					clyde_move_flag <= '0';
-				end if;
+				--end if;
 				
 			end if;
 		 end if;

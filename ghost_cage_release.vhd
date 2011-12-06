@@ -29,7 +29,7 @@ use IEEE.NUMERIC_STD.all;
  
  process(gameinfo.game_in_progress, gameinfo.level, gameinfo.number_eaten_dots) 
  begin
-   if gameinfo.game_in_progress = '1' then
+   if gameinfo.ghost_pause = '0' then
 	pinky_release <= true;
 	if gameinfo.level > 1 then 
 	   	inky_release <= true;
