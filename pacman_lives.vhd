@@ -20,7 +20,7 @@ entity pacman_lives is
 end pacman_lives;
 
 architecture Behavioral of pacman_lives is
-  constant LIVES_SIZE   : POINT := (96, 32);
+  constant LIVES_SIZE   : POINT := (160, 32);
   constant LIVES_OFFSET : POINT := (GAME_OFFSET.X, GAME_OFFSET.Y + GAME_SIZE.Y + 5);
 
   signal valid                            : std_logic             := '0';
@@ -50,7 +50,7 @@ begin
 
   current_tile_offset.X <= to_integer(current_draw_location_unsigned_X(4 downto 0)) when valid = '1' else -1;
   current_tile_offset.Y <= to_integer(current_draw_location_unsigned_Y(4 downto 0)) when valid = '1' else -1;
-  current_tile.X        <= to_integer(current_draw_location_unsigned_X(6 downto 5)) when valid = '1' else -1;
+  current_tile.X        <= to_integer(current_draw_location_unsigned_X(7 downto 5)) when valid = '1' else -1;
   --current_tile.Y        <= to_integer(current_draw_location_unsigned_Y(6 downto 4)) when valid = '1' else -1;
   process(clk)
   begin
@@ -67,7 +67,11 @@ begin
   process(current_tile.X, gameinfo.number_lives_left)
 
   begin
-    if current_tile.X = 2 and gameinfo.number_lives_left > 2 then
+    if current_tile.X = 4 and gameinfo.number_lives_left > 4 then
+      life_valid <= '1';
+    elsif current_tile.X = 3 and gameinfo.number_lives_left > 3 then
+      life_valid <= '1';
+    elsif current_tile.X = 2 and gameinfo.number_lives_left > 2 then
       life_valid <= '1';
     elsif current_tile.X = 1 and gameinfo.number_lives_left > 1 then
       life_valid <= '1';

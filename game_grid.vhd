@@ -6,13 +6,14 @@ use work.pacage.all;
 
 entity game_grid is
   port(
-    clk      : in  std_logic;
-    rst      : in  std_logic;
-    addr     : in  POINT;
-    cs       : in  std_logic;
-    we       : in  std_logic;
-    data_in  : in  std_logic_vector(4 downto 0);
-    data_out : out std_logic_vector(4 downto 0)
+    clk            : in  std_logic;
+    rst            : in  std_logic;
+    addr           : in  POINT;
+    cs             : in  std_logic;
+    we             : in  std_logic;
+    reset_rom_done : out std_logic;
+    data_in        : in  std_logic_vector(4 downto 0);
+    data_out       : out std_logic_vector(4 downto 0)
     );
 end game_grid;
 
@@ -73,12 +74,12 @@ architecture Behavioral of game_grid is
   signal   bit_rom_data                 : std_logic_vector(0 to 27);
   signal   data_to_write                : std_logic_vector(0 to 27);
   constant ZERO                         : std_logic_vector(0 to 27) := (others => '0');
-  signal   rst_en,wen                      : std_logic                 := '0';
+  signal   rst_en, wen                  : std_logic                 := '0';
 
 begin
   --infer a block ram!
-  rom_data <= grid(newaddry)(newaddrx);
-  wen <= we or rst_en;
+  rom_data <= grid(newaddry)(newaddrx); 
+       wen <= we or rst_en;
 
   data_out <= rom_data when addr.X >= 0 and addr.Y >= 0 and bit_rom_data(newaddrx) = '0' else "10000";
 
@@ -105,6 +106,7 @@ begin
     variable count : integer range 0 to 31 := 0;
   begin
     if clk = '1' and clk'event then
+      reset_rom_done <= '0';
       if rst = '1' then
         rst_en <= '1';
         count  := 0;
@@ -112,7 +114,8 @@ begin
       if rst_en = '1' then
         rst_addr <= count;
         if count = 31 then
-          rst_en <= '0';
+          rst_en         <= '0';
+          reset_rom_done <= '1';
         end if;
         count := count + 1;
       end if;

@@ -32,8 +32,18 @@ architecture Behavioral of game_machine is
   signal   fright_second         : std_logic_vector(2 downto 0)  := (others => '1');
   signal   fright_second_counter : std_logic_vector(26 downto 0) := (others => '0');
 
+  --fruit
+  signal   fruit_second          : std_logic_vector(3 downto 0)  := (others => '0');
+  signal   fruit_second_counter  : std_logic_vector(26 downto 0) := (others => '0');
+  type     fruit_array is array (integer range 0 to 20) of FRUIT;
+  constant FRUIT_BY_LEVEL        : fruit_array                   := (CHERRY, STRAW, PEACH, PEACH, APPLE, APPLE, GRAPES, GRAPES, GALAXIAN, GALAXIAN, BELL, BELL, KEY, KEY, KEY, KEY, KEY, KEY, KEY, KEY, KEY);
+  type     int_arrayl is array (integer range <>) of integer range 0 to 5000;
+  constant FRUIT_POINTS_BY_LEVEL : int_arrayl(0 to 20)           := (100, 300, 500, 500, 700, 700, 1000, 1000, 2000, 2000, 3000, 3000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000);
+  signal   disable_fruit         : std_logic                     := '0';
+  signal   fruit_en_type         : FRUIT                         := NONE;
+
   --second counter
-  constant ONE_SECOND    : integer := 10;  --65000000;
+  constant ONE_SECOND    : integer := 65000000;
   constant ONE_60_SECOND : integer := ONE_SECOND/60;
 
   constant scatter_time_1 : int_array := (7, 7, 5);     --7 7 5
@@ -57,8 +67,8 @@ architecture Behavioral of game_machine is
   signal   dots_eaten                     : integer range 0 to 244    := 0;
   signal   last_pacman_tile_location      : POINT                     := (0, 0);
   signal   address_to_check               : POINT;
-  signal   number_lives_left              : integer range 0 to 3      := 3;
-  signal   level_num                      : integer range 0 to 254    := 0;
+  signal   number_lives_left              : integer range 0 to 5      := 3;
+  signal   level_num                      : integer range 0 to 255    := 0;
   signal   fright_mode_en, in_fright_mode : std_logic                 := '0';
   signal   in_scatter_mode                : std_logic                 := '0';
   signal   level_reset_en                 : std_logic                 := '0';
@@ -66,6 +76,7 @@ architecture Behavioral of game_machine is
   signal   game_in_progress               : std_logic                 := '1';
   signal   ghost_eaten, big_dot_eaten     : std_logic                 := '0';
   signal   small_dot_eaten, pacman_dead   : std_logic                 := '0';
+  signal   BONUS_SCORE                    : integer                   := 10000;
 
   signal gamescreen : GAME_SCREEN := START_SCREEN;
 
@@ -77,6 +88,7 @@ architecture Behavioral of game_machine is
   signal cstate              : cstate_type                   := WAIT_FOR_COLLISION;
   signal pause_clock         : std_logic_vector(25 downto 0) := (others => '0');
   signal running_ghost_score : std_logic_vector(10 downto 0) := "00011001000";  --200
+  signal out_ghost_score     : std_logic_vector(10 downto 0) := "00011001000";  --200
 
   --game transition
   signal game_pause_clock  : std_logic_vector(28 downto 0) := (others => '0');
@@ -87,6 +99,8 @@ architecture Behavioral of game_machine is
   signal ready_enable      : std_logic                     := '0';
   signal player_one_enable : std_logic                     := '0';
   signal dot_reset         : std_logic                     := '0';
+  signal rst_lives         : std_logic                     := '0';
+  
   
 begin
   gameinfo.number_eaten_dots <= dots_eaten;
@@ -109,6 +123,8 @@ begin
   gameinfo.player_one_enable <= player_one_enable;
   gameinfo.dot_reset         <= dot_reset;
   gameinfo.gamescreen        <= gamescreen;
+  gameinfo.ghost_score       <= out_ghost_score;
+  gameinfo.fruit_type        <= fruit_en_type;
 
   -----------------------------
   --Keep track of dot eating
@@ -171,26 +187,24 @@ begin
     if clk'event and clk = '1' then
       level_reset_en <= '0';
       dot_reset      <= '0';
+      rst_lives      <= '0';
       case gamescreen is
         when START_SCREEN =>
-          ghost_pause       <= '1';
-          pacman_pause      <= '1';
-          ghost_disable     <= '1';
-          pacman_disable    <= '1';
-          ready_enable      <= '0';
-          player_one_enable <= '0';
+          ghost_pause    <= '1';
+          pacman_pause   <= '1';
+          ghost_disable  <= '1';
+          pacman_disable <= '1';
           if buttons.START_BUTTON = '1' then
             gamescreen <= PLAYER_ONE_READY;
-            dot_reset  <= '1';
           end if;
         when PLAYER_ONE_READY =>
-          ghost_pause       <= '1';
-          pacman_pause      <= '1';
-          ghost_disable     <= '1';
-          pacman_disable    <= '1';
-          ready_enable      <= '1';
-          player_one_enable <= '1';
-          gamescreen        <= PAUSE1;
+          ghost_pause    <= '1';
+          pacman_pause   <= '1';
+          ghost_disable  <= '1';
+          pacman_disable <= '1';
+          rst_lives      <= '1';
+          dot_reset      <= '1';
+          gamescreen     <= PAUSE1;
         when PAUSE1 =>
           game_pause_clock <= game_pause_clock + 1;
           if game_pause_clock = 2*ONE_SECOND - 1 then
@@ -198,14 +212,12 @@ begin
             gamescreen       <= READY;
           end if;
         when READY =>
-          ghost_pause       <= '1';
-          pacman_pause      <= '1';
-          ghost_disable     <= '0';
-          pacman_disable    <= '0';
-          ready_enable      <= '1';
-          player_one_enable <= '0';
-          level_reset_en    <= '1';
-          gamescreen        <= PAUSE2;
+          ghost_pause    <= '1';
+          pacman_pause   <= '1';
+          ghost_disable  <= '0';
+          pacman_disable <= '0';
+          level_reset_en <= '1';
+          gamescreen     <= PAUSE2;
         when PAUSE2 =>
           game_pause_clock <= game_pause_clock + 1;
           if game_pause_clock = 2*ONE_SECOND - 1 then
@@ -213,12 +225,10 @@ begin
             gamescreen       <= IN_GAME;
           end if;
         when IN_GAME =>
-          ghost_pause       <= '0';
-          pacman_pause      <= '0';
-          ghost_disable     <= '0';
-          pacman_disable    <= '0';
-          ready_enable      <= '0';
-          player_one_enable <= '0';
+          ghost_pause    <= '0';
+          pacman_pause   <= '0';
+          ghost_disable  <= '0';
+          pacman_disable <= '0';
           if ghost_eaten = '1' then
             gamescreen <= GHOST_DEAD_SCREEN;
           elsif pacman_dead = '1' then
@@ -226,17 +236,12 @@ begin
           elsif level_complete = '1' then
             gamescreen <= LEVEL_COMPLETE_SCREEN;
           end if;
-          if number_lives_left = 0 then
-            gamescreen <= POST_SCREEN;
-          end if;
         when GHOST_DEAD_SCREEN =>
-          ghost_pause       <= '1';
-          pacman_pause      <= '1';
-          ghost_disable     <= '0';
-          pacman_disable    <= '1';
-          ready_enable      <= '0';
-          player_one_enable <= '0';
-          gamescreen        <= PAUSE3;
+          ghost_pause    <= '1';
+          pacman_pause   <= '1';
+          ghost_disable  <= '0';
+          pacman_disable <= '1';
+          gamescreen     <= PAUSE3;
         when PAUSE3 =>
           game_pause_clock <= game_pause_clock + 1;
           if game_pause_clock = ONE_SECOND -1 then
@@ -244,13 +249,11 @@ begin
             gamescreen       <= IN_GAME;
           end if;
         when PACMAN_DEAD_SCREEN =>
-          ghost_pause       <= '1';
-          pacman_pause      <= '1';
-          ghost_disable     <= '0';
-          pacman_disable    <= '0';
-          ready_enable      <= '0';
-          player_one_enable <= '0';
-          gamescreen        <= PAUSE4;
+          ghost_pause    <= '1';
+          pacman_pause   <= '1';
+          ghost_disable  <= '0';
+          pacman_disable <= '0';
+          gamescreen     <= PAUSE4;
         when PAUSE4 =>
           game_pause_clock <= game_pause_clock + 1;
           if game_pause_clock = ONE_SECOND -1 then
@@ -258,25 +261,24 @@ begin
             gamescreen       <= PAUSE5;
           end if;
         when PAUSE5 =>
-          ghost_pause       <= '1';
-          pacman_pause      <= '1';
-          ghost_disable     <= '1';
-          pacman_disable    <= '0';
-          ready_enable      <= '0';
-          player_one_enable <= '0';
-          game_pause_clock  <= game_pause_clock + 1;
+          ghost_pause      <= '1';
+          pacman_pause     <= '1';
+          ghost_disable    <= '1';
+          pacman_disable   <= '0';
+          game_pause_clock <= game_pause_clock + 1;
           if game_pause_clock = 3*ONE_SECOND -1 then
             game_pause_clock <= (others => '0');
             gamescreen       <= READY;
+            if number_lives_left < 1 then
+              gamescreen <= POST_SCREEN;
+            end if;
           end if;
         when LEVEL_COMPLETE_SCREEN =>
-          ghost_pause       <= '1';
-          pacman_pause      <= '1';
-          ghost_disable     <= '0';
-          pacman_disable    <= '0';
-          ready_enable      <= '0';
-          player_one_enable <= '0';
-          gamescreen        <= PAUSE6;
+          ghost_pause    <= '1';
+          pacman_pause   <= '1';
+          ghost_disable  <= '0';
+          pacman_disable <= '0';
+          gamescreen     <= PAUSE6;
         when PAUSE6 =>
           game_pause_clock <= game_pause_clock + 1;
           if game_pause_clock = 2*ONE_SECOND -1 then
@@ -284,27 +286,35 @@ begin
             gamescreen       <= PAUSE7;
           end if;
         when PAUSE7 =>
-          ghost_pause       <= '1';
-          pacman_pause      <= '1';
-          ghost_disable     <= '1';
-          pacman_disable    <= '0';
-          ready_enable      <= '0';
-          player_one_enable <= '0';
-          game_pause_clock  <= game_pause_clock + 1;
+          ghost_pause      <= '1';
+          pacman_pause     <= '1';
+          ghost_disable    <= '1';
+          pacman_disable   <= '0';
+          game_pause_clock <= game_pause_clock + 1;
           if game_pause_clock = 3*ONE_SECOND -1 then
             game_pause_clock <= (others => '0');
             gamescreen       <= READY;
             dot_reset        <= '1';
           end if;
         when POST_SCREEN =>
-          ghost_pause       <= '0';
-          pacman_pause      <= '1';
-          ghost_disable     <= '0';
-          pacman_disable    <= '1';
-          ready_enable      <= '0';
-          player_one_enable <= '0';
+          ghost_pause    <= '0';
+          pacman_pause   <= '1';
+          ghost_disable  <= '0';
+          pacman_disable <= '1';
           if buttons.START_BUTTON = '1' then
-            gamescreen <= START_SCREEN;
+            gamescreen <= PAUSE8;
+          end if;
+        when PAUSE8 =>
+          ghost_pause      <= '1';
+          pacman_pause     <= '1';
+          ghost_disable    <= '1';
+          pacman_disable   <= '1';
+          game_pause_clock <= game_pause_clock + 1;
+          if game_pause_clock = 2*ONE_SECOND -1 then
+            game_pause_clock <= (others => '0');
+            dot_reset        <= '1';
+            level_reset_en   <= '1';
+            gamescreen       <= START_SCREEN;
           end if;
         when others => null;
       end case;
@@ -323,30 +333,73 @@ begin
         --increment score by 10
         game_score <= game_score + 10;
       end if;
+      if rst_lives = '1' then
+        number_lives_left   <= 3;
+        level_num           <= 0;
+        game_score          <= 0;
+        dots_eaten          <= 0;
+        running_ghost_score <= "00011001000";
+        BONUS_SCORE         <= 10000;
+        disable_fruit       <= '1';
+      end if;
+
+      if pacman_tile_location = (14, 17) and fruit_en_type /= NONE and disable_fruit = '0' then
+        --fruit eaten
+        if level_num < 20 then
+          game_score <= game_score + FRUIT_POINTS_BY_LEVEL(level_num);
+        else
+          game_score <= game_score + FRUIT_POINTS_BY_LEVEL(20);
+        end if;
+        disable_fruit <= '1';
+      else
+        disable_fruit <= '0';
+      end if;
+
+      if big_dot_eaten = '1' or small_dot_eaten = '1' then
+        dots_eaten <= dots_eaten + 1;
+      end if;
+
+      if dots_eaten = MAX_DOTS then
+        level_complete <= '1';
+        level_num      <= level_num + 1;
+        dots_eaten     <= 0;
+      else
+        level_complete <= '0';
+      end if;
+
+      if game_score = BONUS_SCORE then
+        BONUS_SCORE <= BONUS_SCORE + 10000;
+        if number_lives_left < 6 then
+          number_lives_left <= number_lives_left + 1;
+        end if;
+      end if;
 
       case cstate is
         when WAIT_FOR_COLLISION =>
           ghost_eaten <= '0';
           pacman_dead <= '0';
           --wait for a collision and decide what to do
-          if collision = '1' then
-            if in_fright_mode = '1' then
-              cstate <= GHOST_DEAD;
-            else
-              cstate <= PAC_DEAD;
+          if gamescreen = IN_GAME then
+            if collision = '1' then
+              if in_fright_mode = '1' then
+                cstate <= GHOST_DEAD;
+              else
+                cstate <= PAC_DEAD;
+              end if;
             end if;
-          else
-            cstate <= WAIT_FOR_COLLISION;
           end if;
         when GHOST_DEAD =>
           game_score          <= game_score + to_integer(unsigned(running_ghost_score));
+          out_ghost_score     <= running_ghost_score;
           running_ghost_score <= running_ghost_score(9 downto 0) & '0';  --x by 2
           ghost_eaten         <= '1';
           cstate              <= WAIT_SEC;
         when PAC_DEAD =>
-          number_lives_left <= number_lives_left - 1;
-          pacman_dead       <= '1';
-          cstate            <= WAIT_SEC;
+          if number_lives_left > 0 then
+            number_lives_left <= number_lives_left - 1;
+            pacman_dead       <= '1';
+            cstate            <= WAIT_SEC;
+          end if;
         when WAIT_SEC =>
           pause_clock <= pause_clock + 1;
           if pause_clock = ONE_SECOND -1 then
@@ -361,25 +414,44 @@ begin
     end if;
   end process;
 
------------------------------
---level completion and resetting
+  -----------------------------
+--control when fruit shows and what type
 -----------------------------
   process(clk)
+    variable fruit_type : FRUIT     := NONE;
+    variable enable     : std_logic := '0';
   begin
     if clk = '1' and clk'event then
-      if big_dot_eaten = '1' or small_dot_eaten = '1' then
-        dots_eaten <= dots_eaten + 1;
-      end if;
-
-      if dots_eaten = MAX_DOTS then
-        level_complete <= '1';
-        level_num      <= level_num + 1;
-        dots_eaten     <= 0;
-      else
-        level_complete <= '0';
+      if gamescreen = IN_GAME then
+        if level_num < 20 then
+          fruit_type := FRUIT_BY_LEVEL(level_num);
+        else
+          --above level 21 use the the same time
+          fruit_type := FRUIT_BY_LEVEL(20);
+        end if;
+        if dots_eaten = 70 or dots_eaten = 170 then
+          fruit_en_type <= fruit_type;
+          enable        := '1';
+        end if;
+        if enable = '1' and disable_fruit = '0' then
+          fruit_second_counter <= fruit_second_counter + 1;
+          if fruit_second_counter = ONE_SECOND - 1 then
+            fruit_second         <= fruit_second + 1;
+            fruit_second_counter <= (others => '0');
+          end if;
+          if fruit_second >= 10 then
+            fruit_second         <= (others => '0');
+            fruit_second_counter <= (others => '0');
+            fruit_en_type        <= NONE;
+            enable               := '0';
+          end if;
+        else
+          fruit_en_type <= NONE;
+        end if;
       end if;
     end if;
   end process;
+
 
 -----------------------------
 --control when fright mode is enabled based on eating big dots
@@ -388,25 +460,31 @@ begin
     variable fright_time : integer range 1 to 6 := 6;
   begin
     if clk = '1' and clk'event then
-      if level_num < 21 then
-        fright_time := FRIGHT_TIME_BY_LEVEL(level_num);
-      else
-        --above level 21 use the the same time
-        fright_time := FRIGHT_TIME_BY_LEVEL(20);
-      end if;
-      if fright_second <= fright_time then
-        in_fright_mode        <= '1';
-        --we keep track of the time within the second we started and increment on that
-        fright_second_counter <= fright_second_counter + 1;
-        if fright_second_counter = ONE_SECOND -1 then
-          fright_second         <= fright_second + 1;
-          fright_second_counter <= (others => '0');
+      if gamescreen = IN_GAME then
+        if level_num < 21 then
+          fright_time := FRIGHT_TIME_BY_LEVEL(level_num);
+        else
+          --above level 21 use the the same time
+          fright_time := FRIGHT_TIME_BY_LEVEL(20);
         end if;
-      else
-        in_fright_mode <= '0';
-      end if;
-      if fright_mode_en = '1' then
-        fright_second <= (others => '0');
+        if fright_second <= fright_time then
+          in_fright_mode        <= '1';
+          --we keep track of the time within the second we started and increment on that
+          fright_second_counter <= fright_second_counter + 1;
+          if fright_second_counter = ONE_SECOND -1 then
+            fright_second         <= fright_second + 1;
+            fright_second_counter <= (others => '0');
+          end if;
+        else
+          in_fright_mode <= '0';
+        end if;
+        if fright_mode_en = '1' then
+          in_fright_mode <= '0';
+          fright_second  <= (others => '0');
+        elsif level_reset_en = '1' then
+          in_fright_mode <= '0';
+          fright_second  <= (others => '1');
+        end if;
       end if;
     end if;
   end process;
@@ -432,35 +510,36 @@ begin
         scatter_time    <= 0;
         scatter_counter <= (others => '0');
       end if;
-      if scatter_time < SCATTER_CHASE_TIME(5)(level_index) + 5 then  --add 5 to be out of range for all
-        scatter_counter <= scatter_counter + 1;
-        if scatter_counter = ONE_SECOND - 1 then
-          scatter_time    <= scatter_time + 1;
-          scatter_counter <= (others => '0');
-        end if;
-      end if;
-
-      in_scatter_mode <= '0';
-
-      if scatter_time < SCATTER_CHASE_TIME(0)(level_index) then
-        in_scatter_mode <= '1';
-      elsif scatter_time >= SCATTER_CHASE_TIME(1)(level_index) and scatter_time < SCATTER_CHASE_TIME(2)(level_index) then
-        in_scatter_mode <= '1';
-      elsif scatter_time >= SCATTER_CHASE_TIME(3)(level_index) and scatter_time < SCATTER_CHASE_TIME(4)(level_index) then
-        in_scatter_mode <= '1';
-      else
-        if level_index = 0 then
-          if scatter_time >= SCATTER_CHASE_TIME(5)(level_index) and scatter_time < SCATTER_CHASE_TIME(6)(level_index) then
-            in_scatter_mode <= '1';
+      if gamescreen = IN_GAME then
+        if scatter_time < SCATTER_CHASE_TIME(5)(level_index) + 5 then  --add 5 to be out of range for all
+          scatter_counter <= scatter_counter + 1;
+          if scatter_counter = ONE_SECOND - 1 then
+            scatter_time    <= scatter_time + 1;
+            scatter_counter <= (others => '0');
           end if;
+        end if;
+
+        in_scatter_mode <= '0';
+
+        if scatter_time < SCATTER_CHASE_TIME(0)(level_index) then
+          in_scatter_mode <= '1';
+        elsif scatter_time >= SCATTER_CHASE_TIME(1)(level_index) and scatter_time < SCATTER_CHASE_TIME(2)(level_index) then
+          in_scatter_mode <= '1';
+        elsif scatter_time >= SCATTER_CHASE_TIME(3)(level_index) and scatter_time < SCATTER_CHASE_TIME(4)(level_index) then
+          in_scatter_mode <= '1';
         else
-          if scatter_time = SCATTER_CHASE_TIME(5)(level_index) and scatter_counter < ONE_60_SECOND then
-            in_scatter_mode <= '1';
+          if level_index = 0 then
+            if scatter_time >= SCATTER_CHASE_TIME(5)(level_index) and scatter_time < SCATTER_CHASE_TIME(6)(level_index) then
+              in_scatter_mode <= '1';
+            end if;
+          else
+            if scatter_time = SCATTER_CHASE_TIME(5)(level_index) and scatter_counter < ONE_60_SECOND then
+              in_scatter_mode <= '1';
+            end if;
           end if;
         end if;
       end if;
     end if;
-
   end process;
 end Behavioral;
 

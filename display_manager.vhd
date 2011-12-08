@@ -5,7 +5,7 @@ use work.pacage.all;
 
 entity display_manager is
   port (
-    clk                   : in  std_logic;
+    clk                   : in  std_logic; 
     clk_25                : in  std_logic;
     rst                   : in  std_logic;
     game_en               : in  std_logic;
@@ -23,14 +23,15 @@ architecture Behavioral of display_manager is
   constant GAME_OFFSET : POINT := ((1024-GAME_SIZE.X)/2, (768-GAME_SIZE.Y)/2);
 
   --valid signals
-  signal grid_valid   : std_logic := '0';
-  signal space_valid  : std_logic := '0';
-  signal pacman_valid : std_logic := '0';
-  signal ghost_valid  : std_logic := '0';
-  signal font_valid   : std_logic := '0';
-  signal life_valid   : std_logic := '0';
-  signal start_valid  : std_logic := '0';
-  signal splash_valid : std_logic := '0';
+  signal grid_valid        : std_logic := '0';
+  signal space_valid       : std_logic := '0';
+  signal pacman_valid      : std_logic := '0';
+  signal ghost_valid       : std_logic := '0';
+  signal font_valid        : std_logic := '0';
+  signal life_valid        : std_logic := '0';
+  signal start_valid       : std_logic := '0';
+  signal ghost_score_valid : std_logic := '0';
+  signal fruit_valid       : std_logic := '0';
 
   --color signals
   signal grid_color_data   : COLOR;
@@ -38,9 +39,10 @@ architecture Behavioral of display_manager is
   signal ghost_color_data  : COLOR;
   signal font_color_data   : COLOR;
   signal life_color_data   : COLOR;
+  signal fruit_color_data  : COLOR;
 
-  signal start_color_data  : COLOR;
-  signal splash_color_data : COLOR;
+  signal start_color_data       : COLOR;
+  signal ghost_score_color_data : COLOR;
 
   --state enable and done signals
   -- these are used to notify a subcomponent when they can read from the rom
@@ -63,8 +65,8 @@ architecture Behavioral of display_manager is
 
   signal pacman_direction : DIRECTION := NONE;
 
-  signal collision : std_logic;
-   signal collision_index : integer range 0 to 3;
+  signal collision                             : std_logic;
+  signal collision_index                       : integer range 0 to 3;
   --direction signals
   signal pacman_direction_selection, direction : DIRECTION;
 
@@ -76,6 +78,7 @@ architecture Behavioral of display_manager is
   signal grid_data, grid_rom_data_in : std_logic_vector(4 downto 0);
   signal grid_rom_we, dot_reset      : std_logic := '0';
   signal direction_tile_location     : POINT;
+  signal pacman_pixel                : POINT;
 
   signal squiggle : std_logic;
 
@@ -85,6 +88,8 @@ architecture Behavioral of display_manager is
   --state controller
   type   game_state is (VGA_READ, PAUSE, GHOST_UPDATE, PACMAN_UPDATE, GAME_UPDATE);
   signal gstate : game_state := VGA_READ;
+
+  signal reset_rom_done : std_logic := '0';
 
 begin
 
@@ -130,6 +135,7 @@ begin
       current_draw_location => current_draw_location,
       rom_data_in           => grid_data,
       gameinfo              => gameinfo,
+      current_pixel         => pacman_pixel,
       tile_location         => pacman_tile_location,
       rom_location          => pacman_rom_tile_location,
       current_direction     => pacman_direction,
@@ -151,9 +157,9 @@ begin
       clyde_info            => clyde,
       ghostmode             => gameinfo.ghostmode,
       fright_blink          => fright_blink,
-      current_draw_location => current_draw_location,
-		collision             => collision,
-		collision_index       => collision_index,
+      current_draw_location => current_draw_location, 
+      collision             => collision, 
+      collision_index       => collision_index,
       ghost_valid           => ghost_valid,
       ghost_color           => ghost_color_data,
       squiggle              => squiggle
@@ -165,24 +171,24 @@ begin
       GAME_OFFSET => GAME_OFFSET
       )
     port map (
-      clk         => clk,
-      clk_25      => clk_25,
-      en          => ghost_en,
-      rst         => rst,
-      rom_addr    => ghost_tile_location,
-      rom_data    => grid_data(4),
-      gameinfo    => gameinfo,
-      pman_loc    => pacman_tile_location,
-      pman_dir    => pacman_direction,
-      done        => ghost_done,
-      blinky_info => blinky,
-      pinky_info  => pinky,
-      inky_info   => inky,
-      clyde_info  => clyde,
-      collision   => collision,
-		collision_index => collision_index,
-      squiggle    => squiggle,
-		blink       => fright_blink
+      clk             => clk, 
+      clk_25          => clk_25,
+      en              => ghost_en,
+      rst             => rst,
+      rom_addr        => ghost_tile_location,
+      rom_data        => grid_data(4),
+      gameinfo        => gameinfo,
+      pman_loc        => pacman_tile_location,
+      pman_dir        => pacman_direction,
+      done            => ghost_done,
+      blinky_info     => blinky,
+      pinky_info      => pinky,
+      inky_info       => inky,
+      clyde_info      => clyde,
+      collision       => collision, 
+      collision_index => collision_index,
+      squiggle        => squiggle,
+      blink           => fright_blink
       );
 
   machine : game_machine
@@ -220,6 +226,22 @@ begin
       valid_location        => font_valid
       );
 
+  ghostscores : ghost_score_display
+    generic map (
+      GAME_SIZE   => GAME_SIZE,
+      GAME_OFFSET => GAME_OFFSET
+      )
+    port map(
+      clk                   => clk,
+      rst                   => rst,
+      current_draw_location => current_draw_location,
+      pacman_pixel          => pacman_pixel,
+      pacman_tile           => pacman_tile_location,
+      gameinfo              => gameinfo,
+      data                  => ghost_score_color_data,
+      valid_location        => ghost_score_valid
+      );
+
   --lives
   lives : pacman_lives
     generic map (
@@ -233,6 +255,21 @@ begin
       gameinfo              => gameinfo,
       data                  => life_color_data,
       valid_location        => life_valid
+      );
+
+  --lives
+  fruits : fruit_display
+    generic map (
+      GAME_SIZE   => GAME_SIZE,
+      GAME_OFFSET => GAME_OFFSET
+      )
+    port map(
+      clk                   => clk,
+      rst                   => rst,
+      current_draw_location => current_draw_location,
+      gameinfo              => gameinfo,
+      data                  => fruit_color_data,
+      valid_location        => fruit_valid
       );
 
   startsc : font_start_screen
@@ -256,13 +293,14 @@ begin
 -------------------------------------------------
   the_grid : game_grid
     port map(
-      clk      => clk,
-      rst      => dot_reset,
-      data_in  => grid_rom_data_in,
-      we       => grid_rom_we,
-      cs       => '1',
-      addr     => rom_tile_location,
-      data_out => grid_data
+      clk            => clk,
+      rst            => dot_reset,
+      data_in        => grid_rom_data_in,
+      we             => grid_rom_we,
+      cs             => '1',
+      reset_rom_done => reset_rom_done,
+      addr           => rom_tile_location,
+      data_out       => grid_data
       );
 
   process(vga_en, grid_tile_location, ghost_tile_location, pacman_rom_tile_location, ghost_en, pacman_en, game_machine_en, game_machine_tile_location, game_machine_we, game_machine_data_out)
@@ -306,18 +344,17 @@ begin
           when VGA_READ =>
             vga_en <= '1';
             if in_vbp = '1' then
-              gstate    <= PACMAN_UPDATE;  --gstate   <= GHOST_UPDATE;
-              vga_en    <= '0';
-              pacman_en <= '1';            --ghost_en <= '1';
+              gstate   <= PACMAN_UPDATE;  --gstate   <= GHOST_UPDATE;
+              vga_en   <= '0';
+              ghost_en <= '1';            --ghost_en <= '1';
             else
               gstate <= VGA_READ;
             end if;
           when PACMAN_UPDATE =>
             pacman_en <= '1';
             if pacman_done = '1' then
-              direction_en <= '1';
-              pacman_en    <= '0';
-              gstate       <= GAME_UPDATE;
+              pacman_en <= '0';
+              gstate    <= GAME_UPDATE;
             else
               gstate <= PACMAN_UPDATE;
             end if;
@@ -347,7 +384,7 @@ begin
   --mux the output color for the display
   -------------------------------------------------
   process(ghost_valid, ghost_color_data, pacman_color_data, pacman_valid, grid_color_data, grid_valid, font_valid, font_color_data,
-          splash_valid, splash_color_data, start_color_data, start_valid, gameinfo.gamescreen, life_valid, life_color_data)
+          ghost_score_valid, ghost_score_color_data, start_color_data, start_valid, gameinfo.gamescreen, life_valid, life_color_data, gameinfo.ghost_disable, fruit_color_data, fruit_valid)
   begin
     data.R <= "000";
     data.G <= "000";
@@ -360,12 +397,16 @@ begin
           data <= start_color_data;
         end if;
       else
-        if splash_valid = '1' then
-          data <= splash_color_data;
-        elsif ghost_valid = '1' then
+        if start_valid = '1' then
+          data <= start_color_data;
+        elsif ghost_score_valid = '1' then
+          data <= ghost_score_color_data;
+        elsif ghost_valid = '1' and gameinfo.ghost_disable = '0' then
           data <= ghost_color_data;
         elsif pacman_valid = '1' then
           data <= pacman_color_data;
+        elsif fruit_valid = '1' then
+          data <= fruit_color_data;
         elsif life_valid = '1' then
           data <= life_color_data;
         elsif grid_valid = '1' then

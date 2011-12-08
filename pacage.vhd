@@ -16,10 +16,11 @@ package pacage is
     B : std_logic_vector(1 downto 0);
   end record;
 
-  type GAME_SCREEN is (START_SCREEN, PLAYER_ONE_READY, READY, IN_GAME, GHOST_DEAD_SCREEN, PACMAN_DEAD_SCREEN, LEVEL_COMPLETE_SCREEN, POST_SCREEN, PAUSE1, PAUSE2, PAUSE3, PAUSE4, PAUSE5, PAUSE6, PAUSE7);
+  type GAME_SCREEN is (START_SCREEN, PLAYER_ONE_READY, READY, IN_GAME, GHOST_DEAD_SCREEN, PACMAN_DEAD_SCREEN, LEVEL_COMPLETE_SCREEN, POST_SCREEN, PAUSE1, PAUSE2, PAUSE3, PAUSE4, PAUSE5, PAUSE6, PAUSE7, PAUSE8);
   type DIRECTION is (L, R, UP, DOWN, NONE, STILL);
   type GHOST_MODE is (NORMAL, SCATTER, FRIGHTENED);
   type GHOST_DISP_MODE is (NORM, SCATTER, FRIGHTENED, EYES);
+  type FRUIT is (NONE, CHERRY, STRAW, PEACH, APPLE, GRAPES, GALAXIAN, BELL, KEY);
 
   --relative speeds used for move clocks
   subtype  SPEED is natural range 0 to 40;
@@ -82,7 +83,7 @@ package pacage is
   record
     ghostmode         : GHOST_MODE;
     game_in_progress  : std_logic;
-    number_lives_left : integer range 0 to 3;
+    number_lives_left : integer range 0 to 5;
     number_eaten_dots : integer range 0 to 244;
     score             : integer range 0 to 999999;
     level             : std_logic_vector(8 downto 0);
@@ -100,7 +101,57 @@ package pacage is
     ready_enable      : std_logic;
     player_one_enable : std_logic;
     dot_reset         : std_logic;
+    ghost_score       : std_logic_vector(10 downto 0);
+    fruit_type        : FRUIT;
   end record;
+
+  component ghost_score_rom is
+    port(
+      addr  : in  POINT;
+      value : in  integer;
+      data  : out std_logic
+      );
+  end component;
+
+  component fruit_rom is
+    port(
+      addr  : in  POINT;
+      value : in  integer;
+      data  : out std_logic_vector(0 to 1)
+      );
+  end component;
+
+  component fruit_display is
+    generic (
+      GAME_SIZE   : POINT := (448, 496);
+      GAME_OFFSET : POINT := ((1024-448)/2, (768-496)/2)
+      );
+    port(
+      clk                   : in  std_logic;
+      rst                   : in  std_logic;
+      current_draw_location : in  POINT;
+      gameinfo              : in  GAME_INFO;
+      data                  : out COLOR;
+      valid_location        : out std_logic
+      );
+  end component;
+
+  component ghost_score_display is
+    generic (
+      GAME_SIZE   : POINT := (448, 496);
+      GAME_OFFSET : POINT := (100, 100)
+      );
+    port(
+      clk                   : in  std_logic;
+      rst                   : in  std_logic;
+      current_draw_location : in  POINT;
+      pacman_tile           : in  POINT;
+      pacman_pixel          : in  POINT;
+      gameinfo              : in  GAME_INFO;
+      data                  : out COLOR;
+      valid_location        : out std_logic
+      );
+  end component;
 
   component font_start_screen is
     generic (
@@ -223,7 +274,7 @@ package pacage is
       fright_blink          : in  std_logic;
       current_draw_location : in  POINT;
       collision             : in  std_logic;
-      collision_index      : in natural range 0 to 3;
+      collision_index       : in  natural range 0 to 3;
       ghost_valid           : out std_logic;
       squiggle              : in  std_logic;
       ghost_color           : out COLOR
@@ -244,6 +295,7 @@ package pacage is
       gameinfo              : in  GAME_INFO;
       tile_location         : out POINT;
       rom_location          : out POINT;
+      current_pixel         : out POINT;
       current_direction     : out DIRECTION;
       data                  : out COLOR;
       valid_location        : out std_logic;
@@ -258,35 +310,36 @@ package pacage is
       GAME_SIZE   : POINT
       );
     port (
-      clk         : in  std_logic;
-      clk_25      : in  std_logic;
-      en          : in  std_logic;
-      rst         : in  std_logic;
-      rom_addr    : out POINT;
-      rom_data    : in  std_logic;
-      gameinfo    : in  GAME_INFO;
-      pman_loc    : in  POINT;
-      pman_dir    : in  DIRECTION;
-      done        : out std_logic;
-      blinky_info : out GHOST_INFO;
-      pinky_info  : out GHOST_INFO;
-      inky_info   : out GHOST_INFO;
-      clyde_info  : out GHOST_INFO;
-      collision   : out std_logic;
-      squiggle    : out std_logic;
-      blink       : out std_logic;
-	  collision_index : out natural range 0 to 3
+      clk             : in  std_logic;
+      clk_25          : in  std_logic;
+      en              : in  std_logic;
+      rst             : in  std_logic;
+      rom_addr        : out POINT;
+      rom_data        : in  std_logic;
+      gameinfo        : in  GAME_INFO;
+      pman_loc        : in  POINT;
+      pman_dir        : in  DIRECTION;
+      done            : out std_logic;
+      blinky_info     : out GHOST_INFO;
+      pinky_info      : out GHOST_INFO;
+      inky_info       : out GHOST_INFO;
+      clyde_info      : out GHOST_INFO;
+      collision       : out std_logic;
+      squiggle        : out std_logic;
+      blink           : out std_logic;
+      collision_index : out natural range 0 to 3
       );
   end component;
 
   component game_grid is
     port(
-      clk      : in  std_logic;
-      rst      : in  std_logic;
-      addr     : in  POINT;
-      we, cs   : in  std_logic;
-      data_in  : in  std_logic_vector(4 downto 0);
-      data_out : out std_logic_vector(4 downto 0)
+      clk            : in  std_logic;
+      rst            : in  std_logic;
+      addr           : in  POINT;
+      we, cs         : in  std_logic;
+      reset_rom_done : out std_logic;
+      data_in        : in  std_logic_vector(4 downto 0);
+      data_out       : out std_logic_vector(4 downto 0)
       );
   end component;
 
@@ -386,11 +439,11 @@ package pacage is
       blinky_tile_location : in  POINT;
       pinky_tile_location  : in  POINT;
       inky_tile_location   : in  POINT;
-      clyde_tile_location  : in  POINT;
-		blinky : in  GHOST_INFO;
-		pinky : in  GHOST_INFO;
-		inky   : in  GHOST_INFO;
-		clyde : in  GHOST_INFO;
+      clyde_tile_location  : in  POINT; 
+      blinky               : in  GHOST_INFO;
+      pinky                : in  GHOST_INFO;
+      inky                 : in  GHOST_INFO;
+      clyde                : in  GHOST_INFO;
       collision_index      : out natural range 0 to 3;
       collision            : out std_logic
       );

@@ -30,7 +30,7 @@ architecture Behavioral of score_manager is
   end component;
 
   constant SCORE_SIZE   : POINT := (288, 32);
-  constant SCORE_OFFSET : POINT := (GAME_OFFSET.X, GAME_OFFSET.Y - SCORE_SIZE.Y-16);
+  constant SCORE_OFFSET : POINT := (GAME_OFFSET.X+1, GAME_OFFSET.Y - SCORE_SIZE.Y-16);
 
   signal valid                                    : std_logic                     := '0';
   signal current_tile                             : POINT                         := (0, 0);
@@ -55,7 +55,17 @@ begin
       clocks <= clocks + 1;
     end if;
   end process;
-  flash_clk <= clocks(19);
+
+  process(clocks(18))
+  begin
+    if clocks(18) = '1' and clocks(18)'event then
+      if gameinfo.gamescreen = START_SCREEN then
+        flash_clk <= '1';
+      else
+        flash_clk <= (not flash_clk);
+      end if;
+    end if;
+  end process;
 
   numberz : number_rom
     port map(

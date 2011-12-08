@@ -138,8 +138,8 @@ begin
   ld(3) <= buttons.DOWN_BUTTON;
   ld(4) <= buttons.UP_BUTTON;
   ld(5) <= buttons.LEFT_BUTTON;
-  ld(6) <= '0';
-  ld(7) <= '0';
+  ld(6) <= gameinfo.level(0);
+  ld(7) <= gameinfo.level(1);
 
 
   clks : clock_divider

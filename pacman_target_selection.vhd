@@ -106,6 +106,11 @@ begin
               --using an old direction
               state <= CHECK_OLD_DIRECTION;
             end if;
+          elsif gameinfo.gamescreen /= IN_GAME then
+            rom_use_done <= rom_enable;
+            if gameinfo.gamescreen = PAUSE2 then
+              curr_direction <= L;
+            end if;
           end if;
         when CHECK_OLD_DIRECTION =>
           --check if tile is completely lined up

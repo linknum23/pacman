@@ -48,7 +48,7 @@ architecture Behavioral of grid_display is
   signal game_location_unsigned_X : unsigned(11 downto 0);
   signal game_location_unsigned_Y : unsigned(11 downto 0);
 
-  signal dot_on : std_logic := '0';
+  signal dot_on, flash : std_logic := '0';
 begin
   roms : grid_roms
     port map(
@@ -99,7 +99,7 @@ begin
   process(data_type, dot_on, gameinfo.gamescreen)
   begin
     if data_type <= 16 then
-      if (gameinfo.gamescreen = PAUSE7 and dot_on = '0') then
+      if (gameinfo.gamescreen = PAUSE7 and flash = '0') then
         data.R <= "111";
         data.G <= "111";
         data.B <= "11";
@@ -131,6 +131,13 @@ begin
   begin
     if clocks(22)'event and clocks(22) = '1' then
       dot_on <= not dot_on;
+    end if;
+  end process;
+
+  process(clocks(23))
+  begin
+    if clocks(23)'event and clocks(23) = '1' then
+      flash <= not flash;
     end if;
   end process;
 

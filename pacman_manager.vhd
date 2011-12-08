@@ -19,6 +19,7 @@ entity pacman_manager is
     tile_location         : out POINT;
     rom_location          : out POINT;
     current_direction     : out DIRECTION;
+    current_pixel         : out POINT;
     data                  : out COLOR;
     valid_location        : out std_logic;
     rom_enable            : in  std_logic;
@@ -40,7 +41,7 @@ architecture Behavioral of pacman_manager is
   signal next_location : POINT := (0, 0);
 
   signal validh, validv     : std_logic := '0';
-  signal offset             : POINT     := (0, 0);
+  signal offset, dieoffset  : POINT     := (0, 0);
   signal pcurrent_direction : DIRECTION := STILL;
   signal current_position   : POINT     := (0, 0);
 
@@ -53,6 +54,7 @@ architecture Behavioral of pacman_manager is
 
 begin
 
+  current_pixel <= current_position;
 
   --handle the movements
   movement_engine : pacman_target_selection
@@ -148,12 +150,14 @@ begin
   --based on the wacka speed,
   --toggle back an forth for mouth movement
   process(wacka_clk)
-    variable offset_count : integer range 0 to 2 := 0;
+    variable offset_count : integer range 0 to 7 := 0;
     variable up_down      : std_logic            := '0';
   begin
     if wacka_clk = '1' and wacka_clk'event then
-      if gameinfo.gamescreen = READY or gameinfo.gamescreen = PAUSE6 or gameinfo.gamescreen = PAUSE7 then
+      if gameinfo.gamescreen = PAUSE2 or gameinfo.gamescreen = PAUSE4 or gameinfo.gamescreen = PAUSE6 or gameinfo.gamescreen = PAUSE7 then
         offset.Y <= PAC_CLOSED_OFFSET;
+      elsif gameinfo.gamescreen = PAUSE5 then
+        offset.Y <= dieoffset.Y;
       elsif move_in_progress = '1' then
         case offset_count is
           when 0 =>
@@ -162,6 +166,7 @@ begin
             offset.Y <= PAC_HALF_OFFSET;
           when 2 =>
             offset.Y <= PAC_OPEN_OFFSET;
+
           when others => null;
         end case;
 
@@ -178,6 +183,38 @@ begin
         end if;
       else
         offset.Y <= PAC_HALF_OFFSET;
+      end if;
+    end if;
+  end process;
+
+  process(clocks(22))
+    variable offset_count : integer range 1 to 7 := 1;
+  begin
+    if clocks(22) = '1' and clocks(22)'event then
+      if gameinfo.gamescreen = PAUSE5 then
+        case offset_count is
+          when 1 =>
+            dieoffset.Y <= PAC_HALF_OFFSET;
+          when 2 =>
+            dieoffset.Y <= PAC_OPEN_OFFSET;
+          when 3 =>
+            dieoffset.Y <= 96;
+          when 4 =>
+            dieoffset.Y <= 128;
+          when 5 =>
+            dieoffset.Y <= 160;
+          when 6 =>
+            dieoffset.Y <= 192;
+          when 7 =>
+            dieoffset.Y <= 224;
+          when others => null;
+        end case;
+        if offset_count < 7 then
+          offset_count := offset_count + 1;
+        end if;
+      else
+        dieoffset.Y  <= PAC_HALF_OFFSET;
+        offset_count := 1;
       end if;
     end if;
   end process;
