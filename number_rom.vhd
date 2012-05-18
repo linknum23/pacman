@@ -17,7 +17,7 @@ architecture Behavioral of number_rom is
   type rom_array is array (integer range <>) of std_logic_vector (0 to 7);
   signal rom : rom_array (0 to 159) := (
     --0
-    "00000000",
+    "00000000", 
     "00011100",
     "00100110",
     "01100011",
