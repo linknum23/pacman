@@ -258,19 +258,19 @@ begin
       );
 
   --lives
-  fruits : fruit_display
-    generic map (
-      GAME_SIZE   => GAME_SIZE,
-      GAME_OFFSET => GAME_OFFSET
-      )
-    port map(
-      clk                   => clk,
-      rst                   => rst,
-      current_draw_location => current_draw_location,
-      gameinfo              => gameinfo,
-      data                  => fruit_color_data,
-      valid_location        => fruit_valid
-      );
+--  fruits : fruit_display
+--    generic map (
+--      GAME_SIZE   => GAME_SIZE,
+--      GAME_OFFSET => GAME_OFFSET
+--      )
+--    port map(
+--      clk                   => clk,
+--      rst                   => rst,
+--      current_draw_location => current_draw_location,
+--      gameinfo              => gameinfo,
+--      data                  => fruit_color_data,
+--      valid_location        => fruit_valid
+--      );
 
   startsc : font_start_screen
     generic map (
